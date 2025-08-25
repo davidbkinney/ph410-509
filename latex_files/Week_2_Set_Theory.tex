@@ -112,7 +112,7 @@ Thus, a product is a special type of relation.\par
 One can take the product of a set with itself $n$ times. For a set $X$, such a product is written $X^{n}$. For example:
 $$X^{2} = X\times X = \{(x,x^{\prime})\in U:x\in X \ \text{and} \ x^{\prime}\in X\},$$
 $$X^{3} = X\times X\times X = \{(x,x^{\prime},x^{\dagger})\in U:x\in X \ \text{and} \ x^{\prime}\in X \ \text{and} \ x^{\dagger}\in X\}.$$
-One often sees this in applications of mathematics to set theory, where, as we saw above, $\mathbbm{R}^{2}$ is the set of all pairs of real numbers.
+One often sees this in applications of set theory in mathematics or mathematical philosophy, where, as we saw above, $\mathbbm{R}^{2}$ is the set of all pairs of real numbers.
 
 \subsection{Functions}
 A \textbf{function} is a way of assigning each objects in one set to an object in another set. When introducing a function, we typically:
@@ -127,7 +127,7 @@ A \textbf{function} is a way of assigning each objects in one set to an object i
 
     \item Write the set containing elements to which elements in the domain are assigned (this second set is called the \textbf{range} of the function).
 \end{enumerate}
-For example, a function $f:X\rightarrow Y$ is a function such that every element of $X$ is assigned to (the term 'mapped to' is also sometimes used) an element of $Y$. The set $X$ is the domain of $f$, and the set $Y$ is the range of $f$. As an example, addition on the real numbers could be introduced as a function $a:\mathbbm{R}^{2}\rightarrow \mathbbm{R}$. That is, it assigns to every pair of real numbers a single real number (i.e., their sum). For any $x$ in the domain of a function $f$, we write $f(x)$ for the element of the range that $f$ assigns to $x$.\par
+For example, a function $f:X\rightarrow Y$ is a function such that every element of $X$ is assigned to (the term `mapped to' is also sometimes used) an element of $Y$. The set $X$ is the domain of $f$, and the set $Y$ is the range of $f$. As an example, addition on the real numbers could be introduced as a function $a:\mathbbm{R}^{2}\rightarrow \mathbbm{R}$. That is, it assigns to every pair of real numbers a single real number (i.e., their sum). For any $x$ in the domain of a function $f$, we write $f(x)$ for the element of the range that $f$ assigns to $x$.\par
 
 Sometimes, we wish to be more explicit about exactly how a function $f$ maps elements of its domain to its range. In such cases, we can define the function using the $\mapsto$ symbol. As an example, let $s:\mathbbm{R}\rightarrow\mathbbm{R}$ be the square function defined on the real numbers. We can write this function as $s:x\mapsto x^{2}$. This makes it explicit that $s$ assigns each real number to its square.\par 
 
@@ -143,8 +143,8 @@ A function $f:X\rightarrow Y$ can be re-written as the set $\{(x,y)\in X\times Y
 
 \section{Russell's Paradox}
 Set theory was first used in Georg Cantor's (1845-1918) groundbreaking work on transfinite cardinalities, which we'll discuss briefly below. However, Cantor's set theory was \textit{naive} in the sense that it assumed that for any predicate of natural language, there was a set $X$ in the universe of all sets such that all and only the elements $x\in X$ satisfy the predicate. This was called the \textbf{unrestricted comprehension principle}. In 1901, Bertrand Russell (1872-1970) discovered a paradox that undermines the unrestricted comprehension principle. Consider the predicate `is a set that does not contain itself.' We can ostensibly use set-builder notation to define the \textbf{Russell set} $R$ as follows:
-$$R=\{x:x\not\in x\}.$$
-This is the set of all sets that do not contain themselves. Now consider the question:\ is $R$ an element of itself? If it is, then it follows that $R\not\in R$. So, we might conclude that $R\not\in R$. But, of course, if $R\not\in R$ then $R$ \textit{is} an element of $R$. So, we seemed to have derived that $R\in R$ if and only if $R\not\in R$. This famous paradox is taken to demonstrate the inherent inconsistency of the unrestricted comprehension principle.\par 
+$$R=\{x\in U:x\not\in x\}.$$
+This is the set of all sets that do not contain themselves. Now consider the question:\ is $R$ an element of itself? If it is not, then it follows that $R\not\in R$. So, we might conclude that $R\not\in R$. But, of course, if $R\not\in R$ then $R$ \textit{is} an element of $R$. So, we seemed to have derived that $R\in R$ if and only if $R\not\in R$. This famous paradox is taken to demonstrate the inherent inconsistency of the unrestricted comprehension principle.\par 
 
 
 Russell's paradox, which may have been independently discovered by Ernst Zermelo (1871-1953), revealed that set theory would need firmer axiomatic foundations than the unrestricted comprehension principle. Zermelo began working on said axioms, and his work was taken up by Abraham Fraenkl (1891-1965). Their work has culminated in the now-standard \textbf{ZFC} (Zermelo-Fraenkl with Choice) axioms, which we will discuss in detail in the next section.\par 
@@ -168,20 +168,20 @@ The terminology here is confusing. The pairing axioms tells us we can define a s
 
 \subsection{Power Set}
 This axiom just states that every set has a power set. In first-order logic:
-$$\forall x \exists y \forall z \left[x\in y \iff \forall w (w\in z \Rightarrow w\in x)\right].$$
-Note that the formula $\forall w (w\in z \to w\in x)$ just states that $z\subseteq x$ (for all $w$, if $w$ is in $z$, then $w$ is in $x$). So, the power set axiom just says that for all sets $z$, there exists a set $y$ such that, for all sets $z$, $z$ is an element fo $y$ if and only if it is a subset of $x$. This is just the power set. One can prove that every set has a unique power set (and you will do this below). 
+$$\forall x \exists y \forall z \left[z\in y \iff \forall w (w\in z \Rightarrow w\in x)\right].$$
+Note that the formula $\forall w (w\in z \to w\in x)$ just states that $z\subseteq x$ (for all $w$, if $w$ is in $z$, then $w$ is in $x$). So, the power set axiom just says that for all sets $z$, there exists a set $y$ such that, for all sets $z$, $z$ is an element of $y$ if and only if it is a subset of $x$. This is just the power set. One can prove that every set has a unique power set (and you will do this below). 
 
 
 \subsection{Union}
-This axiom just states that for any two sets, we can define a third set that is the union of the first two. In first-order logic:
-$$\forall x \exists y \forall z \left[x\in y \iff \exists w (w\in x \wedge w\in y)\right].$$
-Since the union of any two sets is provably unique, we can, as we have done above, write $x\cup y$ for the union of two sets.
+This axiom just states that for any set, we can define a third set that is the union of all sets in that set. In first-order logic:
+$$\forall x \exists y \forall z \left[z\in y \iff \exists w (w\in x \wedge z\in w)\right].$$
+Since the union of any set of sets is provably unique, we can, as we have done above, write $x\cup y$ for the union of two sets.
 
 
 \subsection{Infinity}
 This axiom provides a procedure for constructing a set with infinitely many elements. In a first-order logic equipped with the union relation $\cup$, the axiom is written as follows:
 $$\exists x \left[\emptyset \in x \wedge \forall y (y\in x \Rightarrow y\cup \{y\}\in x)\right].$$
-To see what this axiom enables us to do, consider the set $x$ that it says exists. The axiom also says that $\emptyset\in x$. The axiom also says that $\emptyset \cup \{\emptyset\}$, which we can write $\{\emptyset,\{\emptyset\}\}$, is in $x$. But then it also says that $\{\emptyset,\{\emptyset\}\}\cup\{\{\emptyset,\{\emptyset\}\}\}$, which we can write $\{\{\emptyset,\{\emptyset\}\},\{\{\emptyset,\{\emptyset\}\}\}$, is in $x$. It should be clear that we could keep doing this forever, always defining new elements of $x$. So, there is no upper bound to the number of elements in $x$. 
+To see what this axiom enables us to do, consider the set $x$ that it says exists. The axiom also says that $\emptyset\in x$. The axiom also says that $\emptyset \cup \{\emptyset\}$, which we can write $\{\emptyset,\{\emptyset\}\}$, is in $x$. But then it also says that $\{\emptyset,\{\emptyset\}\}\cup\{\{\emptyset,\{\emptyset\}\}\}$, which we can write $\{\{\emptyset,\{\emptyset\}\},\{\{\emptyset,\{\emptyset\}\}\}$, is in $x$. It should be clear that we could keep doing this forever, always defining new elements of $x$. So, there is no finite upper bound to the number of elements in $x$. 
 
 
 \subsection{Separation}
@@ -206,10 +206,10 @@ $$\forall x \left[x\neq \emptyset \Rightarrow \exists y \left(y\in x \wedge \for
 
 
 \subsection{Choice}
-This final axiom, which has historically been the most controversial, is the axiom of choice. It states that for any set $x$ is a such that any two non-identical sets $y\in x$ and $y^{\prime}\in x$ have no common elements, there is a set that contains exactly one element of each $y\in x$. In other words, if $x$ is a set of mutually exclusive sets, we can form a new set by \textit{choosing} exactly one element from each set in $x$. In first order logic:
+This final axiom, which has historically been the most controversial, is the axiom of choice. It states that for any set $x$ such that any two non-identical, non-empty sets $y\in x$ and $y^{\prime}\in x$ have no common elements, there is a set that contains exactly one element of each $y\in x$. In other words, if $x$ is a set of mutually exclusive sets, we can form a new set by \textit{choosing} exactly one element from each set in $x$. In first order logic:
 \small
 $$\forall x \left[\forall y\forall y^{\prime}(y\in x \wedge y^{\prime} \in x \wedge y\neq\emptyset \wedge y^{\prime} \neq \emptyset \wedge y\neq y^{\prime}
-) \Rightarrow y\cap y^{\prime} = \emptyset \right]\Rightarrow \forall w\left[w\in x\Rightarrow(\exists c \exists!z(z\in w \wedge z\in c) \right].$$
+) \Rightarrow y\cap y^{\prime} = \emptyset \right]\Rightarrow \exists c\forall w\left[w\in x\Rightarrow(\exists!z(z\in w \wedge z\in c) \right].$$
 \normalsize
 Though it is beyond the scope of this course, it turns out the axiom of choice is needed to prove \textit{a lot} of important theorems in mathematics. However, it is controversial because it often allows us to prove the existence of mathematical objects without constructing a specific example of them.
 
@@ -222,7 +222,7 @@ If one adopts ZFC as the axioms of set theory, then one is committed to the idea
 Above, we noted that in set theory, numbers are sets. Let us now make this point explicit. This basic introduction to numbers as sets should serve as an illustration of the way in which set theory can provide firm foundations for mathematics.
 
 \subsection{Ordinals}
-In mathematics and ordinary life, we can use numbers to \textbf{order} or \textbf{rank} the elements in a set. That is, we can say which element is first, which one is second, which one is third, etc. \textbf{Ordinal numbers} are numbers used to rank elements in a set. For practical purposes, one can \textit{start} be thinking of ordinal numbers as the non-negative integers 0, 1, $\dots$, though we will soon introduce infinite ordinals.\par
+In mathematics and ordinary life, we can use numbers to \textbf{order} or \textbf{rank} the elements in a set. That is, we can say which element is first, which one is second, which one is third, etc. \textbf{Ordinal numbers} are numbers used to rank elements in a set. For practical purposes, one can \textit{start} by thinking of ordinal numbers as the non-negative counting numbers 0, 1, $\dots$, though we will soon introduce infinite ordinals.\par
 
 John von Neumann (1903 - 1957) introduced a way of writing ordinal numbers as sets. We begin by letting 0 be the empty set (i.e., let $0=\emptyset$). From there, we define a \textbf{successor} function on sets such that $s:x\mapsto x\cup\{x\}$. This gives a set-theoretic definition of every finite ordinal. Recall that $0=\emptyset$. This means that the successor of 0, is $s(0)=(\emptyset)=\emptyset\cup\{\emptyset\}=\{\emptyset\}$. We call the successor of 0, which is the ordinal 1, is $\{\emptyset\}$. To define 2, we obtain $s(1)=s(\{\emptyset\})=\{\emptyset\}\cup\{\{\emptyset\}\}=\{\emptyset,\{\emptyset\}\}$. Clearly, we can iterate this process arbitrarily many times to obtain any finite ordinal. Notice that $1=\{0\}$ and $2=\{0,1\}$. You will prove in the exercises that for any finite ordinal $n$, $n=\{0,1,\dots,n-1\}$. This establishes an important connection between ordinal ranking and the relation $\in$. For any ordinal $n$, if $m<n$, then $m\in n$. In this case, we say that $m$ is less than $n$ and $n$ is greater than $m$. The finite ordinals are just the \textbf{natural numbers} $\mathbbm{N}$.\par
 
@@ -241,20 +241,22 @@ Now we can define an addition function $g$ on a pairs $(a,b)$ of von Neumann ord
 \end{equation}
 To illustrate in a finite case, consider $g(2,3)$. Since $3=2+1$, we know that $g(2,3)=s(g(2,2))$. So, we'll need to calculate $g(2,2)$. Since $2=1+1$, $g(2,2)=s(g(2,1))$. So, we'll need to calculate $g(2,1)$. Since $1=0+1$, $g(2,1)=s(g(2,0))$. So, we'll need to calculate $g(2,0)$, which is $2$. Putting this all together, we get:
 $$g(2,3)=s(g(2,2))=s(s(g(2,1)))=s(s(s(g(2,0))))=s(s(s(2)))=5.$$
-There are infinite ordinals as well as finite ordinals. Let $\omega$ be the set of all finite ordinals. This is the least infinite ordinal. All finite ordinals are elements of $\omega$, but no infinite ordinal is an element of $\omega$. We can construct ordinals greater than $\omega$ via addition. For example, the ordinal $\omega + 1$ is the value of $g(\omega,1)$ defined above. You will prove in the exercises that $\omega\in(\omega+1)$ but $(\omega + 1)\not\in\omega$. It should be clear at this point that there are infinitely many infinite ordinals.
+There are infinite ordinals as well as finite ordinals. Let $\omega$ be the set of all finite ordinals. This is the least infinite ordinal. All finite ordinals are elements of $\omega$, but no infinite ordinal is an element of $\omega$. We can construct ordinals greater than $\omega$ via addition. For example, the ordinal $\omega + 1$ is the value of $g(\omega,1)$ defined above. You will prove in the exercises that $\omega\in(\omega+1)$ but $(\omega + 1)\not\in\omega$. It should be clear at this point that there are infinitely many infinite ordinals. Note that addition on the ordinals is \textbf{commutative}:\ $a+b=b+a$.
 
 
 \subsection{Integers}
 In mathematics, the \textbf{integers} $\mathbbm{Z}$ are the negative and positive whole numbers, along with zero. In set theory, integers are defined as sets of pairs of natural numbers that all share a common property. Specifically, for any natural number $n$, the corresponding positive integer $+n$ can be defined as a set of pairs:
-$+n=\{(a,b)\in\mathbbm{N}^{2}:n+b=a\}.$ For example, the positive integer $+3$ is the set $\{(a,b)\in\mathbbm{N}^{2}:3+b=a\}$. By contrast, the negative integer $-n$ is the set $-i=\{(a,b)\in\mathbbm{N}^{2}:a+n=b\}$ (e.g., $-3$ is $\{(a,b)\in\mathbbm{N}^{2}:a+3=b\}$.\par 
-
+$$+n=\{(a,b)\in\mathbbm{N}^{2}:n+b=a\}.$$ For example, the positive integer $+3$ is the set $$\{(a,b)\in\mathbbm{N}^{2}:3+b=a\}.$$ By contrast, the negative integer $-n$ is the set $$-n=\{(a,b)\in\mathbbm{N}^{2}:a+n=b\}.$$ For example, the negative integer $-3$ is the set: $$\{(a,b)\in\mathbbm{N}^{2}:a+3=b\}.$$
+To give a more unified definition of the integers, take any integer $i$, positive or negative, and pick one element $(a,b)$ of $i$. The integer $i$ can be written as follows:
+$$i=[(a,b)]=\{(c,d):a+d = b + c\}.$$
+One can think of this as defining integers in terms of pairs of natural numbers $(a,b)$ whose \textit{difference} $a-b$ is that integer. So $3$ is the set of pairs $\{(3,0),(4,1),\dots\}$ and $-3$ is the set of pairs $\{(0,3),(1,4),\dots\}$.
 
 We can extend the addition function to pairs of integers. Let $i$ and $j$ be integers. Their sum $i+j$ is the set
 $$\{(a,b)\in\mathbbm{N}^{2}:\exists(c,d)\exists(r,s) \left[(c,d)\in i \wedge (r,s)\in j\wedge g(c,r)=a\wedge g(d,s)=b\right]\},$$ 
-where $g$ is the addition function on the ordinals.
+where $g$ is the addition function on the ordinals. Addition on the integers is also commutative. One integer $i$ is greater than another integer $i^{\prime}$ if and only if: 1) $i$ is positive and $i^{\prime}$ is negative, 2) $(n,0)\in i$, $(n^{\prime},0)\in i^{\prime}$, and $n>n^{\prime}$, or 3) $(0,n)\in i$, $(0,n^{\prime})\in i^{\prime}$, and $n^{\prime}>n$. 
 
 \subsection{Rational Numbers}
-To mathematics, the \textbf{rational numbers} are ratios of integers. To define the rational numbers as sets, we first define a multiplication function $h$ on pairs of integers as follows:
+In mathematics, the \textbf{rational numbers} are ratios of integers. To define the rational numbers as sets, we first define a multiplication function $h$ on pairs of integers as follows:
 \begin{equation}
     h:(a,b)\mapsto a\cdot b = \begin{cases}
         0 & \text{if} \ b=0\\
@@ -264,9 +266,9 @@ To mathematics, the \textbf{rational numbers} are ratios of integers. To define 
 \end{equation}
 To illustrate, consider $h(3,2)$. Since $2=1+1$, $h(3,2)=h(3,1)+3$. So, now we need to calculate $h(3,1)$. Since $1=0+1$, $h(3+1)=h(3,0)+3$. So, now we need to calculate $h(3,0)$, which is $0$. Putting this all together, we get:
 $$h(3,2)=h(3,1)+3=(h(3,0)+3)+3=(0+3)+3=6.$$
-Each rational number $q$ can be expressed as a set of pairs of integers:
-$$\{(a,b)\in\mathbbm{Z}\times(\mathbbm{Z}\cup\{0\}):b\cdot q=a\}.$$
-This is the same thing as saying that a rational number $q$ is the set of all pairs of integers $(a,b)$ such that $\frac{a}{b}=q$. Note that the second term in the pair cannot be zero or else the relation would be undefined.
+Each rational number $q$ can be expressed as a ratio of integers $a$ and $b$. We denote such a ratio using the notation $[a/b]$, and define the ratio as the set:
+$$q = [a/b] = \{(c,d)\in\mathbbm{Z}\times(\mathbbm{Z}\cup\{0\}):a\cdot d= b\cdot c\}.$$
+This is the same thing as saying that a rational number $q$ that can be expressed as the ratio of integers $a$ and $b$ is the set of all pairs of integers $(c,d)$ such that $\frac{a}{b}=\frac{c}{d} = q$. Note that the second term in the pair cannot be zero or else the relation would be undefined. A rational number $q$ is positive if for all pairs of integers $(a,b)\in q$, $a$ and $b$ are both positive or both negative. Otherwise, $q$ is negative.
 
 \subsection{Real Numbers}
 Intuitively, the real numbers are the numbers used to measure \textit{continuous} quantities. Getting slightly more technical, we might say that the real numbers are used to measure quantities that can differ by an arbitrarily small amount. To get fully technical, we follow Richard Dedekind (1831-1916) and introduce the notion of a \textbf{Dedekind cut}. Let $\mathbbm{Q}$ be the set of all rational numbers. Let a rational number be positive if and only if for any pair of integers $(a,b)$ in the set that defines that rational number, either $a$ and $b$ are both positive or $a$ and $b$ are both negative. Define a relation $<$ on the rationals such that $<$ if and only if  $a\neq b$ and there exists a positive rational number $t$ such that $s = r + t$. A Dedekind cut is a set $A\subset\mathbbm{Q}$ such that:
@@ -279,7 +281,7 @@ Intuitively, the real numbers are the numbers used to measure \textit{continuous
 
     \item If $x\in A$, then there exists a $y$ such that $x<y$ (i.e., $A$ has no greatest element).
 \end{enumerate}
-A Dedekind cut is so-named because it\textit{cuts} the rationals in half. For any Dedekind cut $A$, let $b$ be the unique rational number such that, for all rational numbers $c$, if $c\in A$ if and only if $c<b$. This is the \textbf{least upper bound} on $A$. Now consider the complement of $A$ in $\mathbbm{Q}$, $B=\mathbbm{Q}\setminus A$. One and only one of the following must be true of $B$:\ $b\in B$ or $b\not\in B$. If $b\in B$, then we identify the Dedekind cut $A$ with the real (and rational) number $b$. If, on the other hand, $b\not\in B$, then Dedekind proved that there is a unique, irrational, real number that ``fills the gap'' between $A$ and $B$. Thus, every real number can be defined set-theoretically as a specific Dedekind cut.\par
+A Dedekind cut is so-named because it \textit{cuts} the rationals in half. For any Dedekind cut $A$, let $b$ be the unique rational number such that, for all rational numbers $c$, if $c\in A$ if and only if $c<b$. This is the \textbf{least upper bound} on $A$. Now consider the complement of $A$ in $\mathbbm{Q}$, $B=\mathbbm{Q}\setminus A$. One and only one of the following must be true of $B$:\ $b\in B$ or $b\not\in B$. If $b\in B$, then we identify the Dedekind cut $A$ with the real (and rational) number $b$. If, on the other hand, $b\not\in B$, then Dedekind proved that there is a unique, irrational, real number that ``fills the gap'' between $A$ and $B$. Thus, every real number can be defined set-theoretically as a specific Dedekind cut.\par
 
 To illustrate, consider the real (and rational) number 2. We can define 2 as the Dedekind cut $A=\{a\in\mathbbm{Q}:a<2\}$. The real number 2 is the least upper bound of $A$, and is an element of $B=\mathbbm{Q}\setminus A$. However, now consider the irrational real number $\sqrt{2}$. We define $\sqrt{2}$ as the Dedekind cut $A=\{a\in\mathbbm{Q}:a^{2}<2\}$. Clearly, $\sqrt{2}$ is the least upper bound of $A$. Now consider $B=(\mathbbm{Q}\setminus A)=\{a\in\mathbbm{Q}:a^{2}\geq2\}$. The real number $\sqrt{2}$ is also not a member of this $B$, since it is not a rational number. However, we say that $\sqrt{2}$ just \textit{is} the space between $A$ and $B$. Thus, we identify $\sqrt{2}$ with the Dedekind cut $\{a\in\mathbbm{Q}:a^{2}<2\}$.
 
@@ -309,13 +311,20 @@ It should be clear at this point that set theory is an \textit{extremely} rich s
 
     \item Use the ZFC axioms to prove that every set has a unique power set.
 
-    \item Prove that the existence of the Russell set is inconsistent with the axioms of ZFC. (Hint:\ It helps to first prove that there is no set of all sets, using either the power set or regularity axioms).
-
-    \item Prove using von Neumann ordinals that for any finite ordinal $n$, $n=\{0,1,\dots,n-1\}$. 
+    \item Prove that the existence of the Russell set is inconsistent with the axioms of ZFC. (\textit{Hint:\ It helps to first prove that there is no set of all sets, using either the power set or regularity axioms}).
 
     \item Prove that $\omega\in(\omega+1)$ but $(\omega + 1)\not\in\omega$. 
 
-    \item Prove that the set of rational numbers $\mathbbm{Q}$ has the cardinality $\aleph_{0}$.
+    \item Let the function $\textsf{fusc}:\mathbbm{Z}^{+}\rightarrow\mathbbm{Z}^{+}$, where $\mathbbm{Z}^{+}$ is the set of positive integers, be defined as follows:
+    \begin{equation*}
+    \textsf{fusc}:z\mapsto \textsf{fusc}(z) = \begin{cases}
+        0 & \text{if} \ z=0\\
+        1 & \text{if} \ z=1\\
+        \textsf{fusc}(2\cdot k) & \text{if} \ z\geq 1 \wedge z=2\cdot k\\
+        \textsf{fusc}((2\cdot k)+1) & \text{if} \ z\geq 1 \wedge z=\textsf{fusc}(k) + \textsf{fusc}(k+1)\\
+    \end{cases}
+    \end{equation*}
+        Let the \textbf{lowest terms pair} $(a,b)$ in any positive rational $q$ be the pair such that for any $(c,d)\in q$, $(c,d)=(\gamma \cdot a,\gamma \cdot b)$ where $\gamma$ is an integer greater than zero. It turns out that for any positive rational $q$, its lowest terms pair $(a,b)$ is such that $(a,b)=(\textsf{fusc}(z),\textsf{fusc}(z+1))$ for some $z$. Use this fact to prove that that rational numbers $\mathbbm{Q}$ have cardinality $\aleph_{0}$ (\textit{Hint:\ you'll have to find a way to deal with negative rationals!})
 \end{enumerate}
 
 \end{document}
