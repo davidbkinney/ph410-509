@@ -1,0 +1,667 @@
+\documentclass[11pt]{article}
+
+% Packages for math and proof writing
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{bbm}
+\usepackage{url}
+\usepackage{graphicx}
+
+% Theorem and proof environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+% Definitions, remarks, etc.
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Page formatting
+\usepackage[margin=1in]{geometry}
+
+\title{Week 1:\ \LaTeX, Propositional Logic, First-Order Logic, and Proofs}
+\author{David Kinney}
+\date{August 28th, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Welcome to Formal Methods for Philosophy! The goal of this course is to give you an introduction to at least some the tools, methods, and topics needed to be a formal philosopher. Importantly, my aim is to define “formal philosopher” very broadly; we will cover some further logic, but we will also cover some methods that fit squarely into the toolkit of the formal epistemologist (e.g., probability theory), the experimental philosopher (e.g., null-hypothesis significance testing and Bayesian statistics), the philosopher of AI and cognitive science (e.g., computation), and the philosopher of language (e.g., formal semantics). We will also do some Python programming, which is useful for running the kinds of simulations one sometimes sees in social epistemology, but is also just a very good skill to have nowadays. Except for Python week, we will work exclusively in \LaTeX, which is also something that it is helpful to know in some areas of the philosophy profession.\par 
+
+This document assumes familiarity with the syllabus for the course. So, if you have not read that yet, please do so, and then return here. Now that you're back, this document will provide an introduction to typesetting with \LaTeX, a review of propositional and first-order logic, and an introduction to writing proofs in the way that formal philosophers typically do. Let's get started!
+
+\section{\LaTeX}
+This document, and all the documents you will read for this course, are produced using the typesetting software \LaTeX. To pronounce the name of the software correctly, you should say `Lah-Tech' (the `X' at the end is actually the Greek letter Chi). However, lots of people (including me) say `Lay-Tech.' It will mark you as an outsider, however, if you call the software `Lay-Tex' (like the material). Consider the following analogy to how English speakers pronounce the name of the philosopher Wittgenstein:
+\begin{itemize}
+    \item Saying `Lah-Tech' is like saying `Vit-gen-shtein' (maximally correct but kind of pretentious).
+
+    \item Saying `Lay-Tech' is like saying `Vit-gen-stein' (not entirely correct but less pretentious).
+
+    \item Saying `Lay-Tex' is like saying `Wit-gen-stein' (marks you as something of an outsider).
+\end{itemize}
+Choose whichever of these you feel most comfortable with. Once you get the hang of \LaTeX, you will find that it is \textit{much} better for formatting logical and mathematical notation than Microsoft Word or Google Docs. The website Overleaf also makes it very easy to work in \LaTeX.
+
+\subsection{Overleaf}
+To get started with \LaTeX, the first thing you will want to do is make an Overleaf account. To do this, go to \url{overleaf.com}. At the bottom of the screen, you will see the text `Don't have an account?' and then a link to register. Click that link, and make a free account (sadly I don't believe that WashU gives us free premium accounts).\par 
+
+Once you've created an account, click on the left-most square where it says to create a new project, and select `Blank Project.' Once you do that, you'll be prompted to name your first project. Call it whatever you want. After naming your project, you will see a screen with three panels. The middle panel will have something like the following written in it:
+
+\begin{verbatim}
+    \documentclass{article}
+    \usepackage{graphicx} % Required for inserting images
+    
+    \title{Test}
+    \author{David Kinney}
+    \date{August 2025}
+    
+    \begin{document}
+    
+    \maketitle
+    
+    \section{Introduction}
+    
+    \end{document}
+\end{verbatim}
+This is the content of the file main.txt, and its where you will write all the code to create a well-typeset PDF. The template that Overleaf has given you already contains the building blocks that you need to start writing in \LaTeX. Underneath the part that says 
+\begin{verbatim}
+    \section{Introduction}
+\end{verbatim}
+type in `Hello, world!' and then hit the recompile button in the top-left corner of the rightmost panel. You should see the PDF rendered there change.\par
+
+To make another document in Overleaf, in the page \url{https://www.overleaf.com/project}, click ``New Project'' in the top-left corner and follow the same workflow. Your main.tex file will always auto-save.
+
+\subsection{The Parts of the main.tex File}
+\subsubsection{The Preamble}
+The first part of any main.tex file is called the preamble. In the template that Overleaf has given you, the following lines constitute the preamble:
+\begin{verbatim}
+    \documentclass{article}
+    \usepackage{graphicx}
+\end{verbatim}
+The preamble does two things. First, it tells Overleaf what kind of document you want to make. Second, it tells Overleaf about some environments and packages that you plan to use in your document. Together, these declarations to Overleaf will enable you to do certain things in the document you are writing. The pre-amble that Overleaf gives you as a template is super basic; it just says that you are writing a document, and that you will want to use the graphicx package to insert images. You will need a slightly more advanced preamble to do your problem sets. At least for the next few weeks, the following should be sufficient:
+\begin{verbatim}
+    \documentclass[11pt]{article}
+
+    % Packages for math and proof writing
+    \usepackage{amsmath, amssymb, amsthm}
+    \usepackage{bbm}
+    \usepackage{url}
+    
+    % Theorem and proof environments
+    \newtheorem{theorem}{Theorem}
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{proposition}[theorem]{Proposition}
+    \newtheorem{corollary}[theorem]{Corollary}
+    
+    % Definitions, remarks, etc.
+    \theoremstyle{definition}
+    \newtheorem{definition}[theorem]{Definition}
+    \newtheorem{example}[theorem]{Example}
+    
+    \theoremstyle{remark}
+    \newtheorem{remark}[theorem]{Remark}
+    
+    % Page formatting
+    \usepackage[margin=1in]{geometry}
+\end{verbatim}
+Especially if you are new to \LaTeX, I would advise just copy-pasting this into the top of your main.tex file to get started.
+
+\subsubsection{The Title}
+The next few lines in the template are pretty straightforward:
+\begin{verbatim}
+    \title{Test}
+    \author{David Kinney}
+    \date{August 2025}
+\end{verbatim}
+By changing the text in the brackets of each command, you can change the title, author name, and date of your document. Give it a go and then hit recompile to see what happens!
+
+
+\subsubsection{Beginning the Document}
+The next lines you will notice are the following:
+\begin{verbatim}
+    \begin{document}
+    
+    \maketitle
+\end{verbatim}
+The first of these tells Overleaf that your document is starting:\ everything you type after this line will effect what appears in the right-most panel when you recompile. The second line tells Overleaf to actually render the title that you defined above:\ that is, it tells Overleaf to make the title that you defined appear.\par 
+
+\subsubsection{Making a Section}
+Next, you'll notice the following line:
+\begin{verbatim}
+    \section{Introduction}
+\end{verbatim}
+A very cool feature of \LaTeX is that you can make section headings that will auto-number. You can also define sub-sections and sub-sub-sections using the following commands:
+
+\begin{verbatim}
+    \subsection{Input the Title of Your sub-section Here}
+
+    \subsubsection{Input the Title of Your sub-sub-section Here}
+\end{verbatim}
+There is a lot that one can do with sections (e.g., labeling them so that you can refer to them in a document without having to worry about re-numbering), but you likely won't need to use these features in this course.\par 
+
+\subsubsection{Ending the Document}
+The last line you will see is the following:
+\begin{verbatim}
+    \end{document}
+\end{verbatim}
+This tells Overleaf that your document is done. \textbf{Whenever you are working in Overleaf, you must always have this line already written out at the bottom of your main.tex file}. Otherwise, Overleaf won't know that your document is done, and will raise an error rather than rendering a PDF when you try to recompile.
+
+\subsection{Writing Non-Mathematical Text}
+As long as you're below the command where you begin the document and above the command where you end the document, you can write non-mathematical text the same way you would in a word processor. The following example shows you how to bold and italicize text:
+\begin{verbatim}
+    Writing non-mathematical text is easy. You can easily \textbf{make text bold} 
+    or \textit{italicize it}.
+\end{verbatim}
+When you recompile, the text immediately above will render as follows:
+\begin{quote}
+    Writing non-mathematical text is easy. You can easily \textbf{make text bold} or \textit{italicize it}.
+\end{quote}
+The same keyboard shortcuts you would use in other word processors to embolden and italicize text work in Overleaf. You can also highlight text and then use those same shortcuts to italicize it.\par 
+
+To begin a new paragraph, just write `\textbackslash par' at the end of your text, hit enter, and skip down one or more lines. The number of lines in your Overleaf file that you put between paragraphs does not affect how the text is rendered when you recompile. So, make whatever choice helps you to best visualize your writing as you go.\par
+
+\subsection{Writing Mathematical and Logical Text}
+Here is where the fun begins. At a basic level, there are two ways to write mathematical symbols in \LaTeX. The first, in-line math, is accomplished by putting typed text between two single dollar signs. The mathematical notation that you put between single dollar signs will appear ``in-line'' with the rest of the text. Here is an example:
+\begin{verbatim}
+    Consider the equation $a^{2} + b^{2} = c^{2}$.
+\end{verbatim}
+When you recompile, this will appear as follows:
+\begin{quote}
+    Consider the equation $a^{2} + b^{2} = c^{2}$. 
+\end{quote}
+Notice that in addition to formatting the equation as math, we used a karet symbol and brackets to introduce superscripts. We can similarly use an underscore and brackets to introduce subscripts:
+\begin{verbatim}
+    Consider a par of propositions $(p_{1}, p_{2})$.
+\end{verbatim}
+When you recompile, this will appear as follows:
+\begin{quote}
+    Consider a par of propositions $(p_{1}, p_{2})$. 
+\end{quote}
+In the second line of the preamble given on page 3, we loaded several packages for mathematical writing. This allows us to introduce a lot of special characters, by typing a backslash, followed immediately by the name of the character. One thing this allows us to do is to type Greek letters. Here is an example:
+\begin{verbatim}
+    The lower-case Greek alphabet begins with $\alpha$ and ends with $\omega$. 
+    The letter $\xi$ is especially cool-looking.\par
+    
+    Some examples of upper-case Greek letters that look cool are $\Lambda$, 
+    $\Theta$, and $\Omega$.\par 
+
+    There are two ways to write a lower-case phi. One is the standard $\phi$. 
+    Another, which one sees a lot in philosophy, is $\varphi$.
+\end{verbatim}
+When you recompile, this will appear as follows:
+\begin{quote}
+    The lower-case Greek alphabet begins with $\alpha$ and ends with $\omega$. 
+    The letter $\xi$ is especially cool-looking.\par
+    
+    Some examples of upper-case Greek letters that look cool are $\Lambda$, $\Theta$, 
+    and $\Omega$.\par 
+
+    There are two ways to write a lower-case phi. One is the standard $\phi$. 
+    Another, which one sees a lot in philosophy, is $\varphi$.
+\end{quote}
+The math packages don't have commands for every single Greek letter; it only has commands for those that look different from their Roman counterparts.\par
+
+Since we will be doing a lot of logic in this course, it will be helpful to know some how to write some logical symbols. Here are some examples:
+\begin{verbatim}
+    $\neg$ is used for negation.
+
+    $\vee$ is used for disjunction.
+
+    $\wedge$ is used for conjunction.
+
+    We will use this right arrow for the material conditional: $\Rightarrow$.
+
+    We will use this two-headed arrow for the material biconditional: $\iff$.
+
+    We will use a plain right arrow to define functions: $\rightarrow$.
+
+    In set theory, we will often use brackets to define sets. You need to put a  
+    backslash before those (i.e., $\{$ and $\}$) to distinguish them from 
+    brackets used to define things like subscripts and superscripts.
+\end{verbatim}
+Here is how this will appear when you recompile:
+\begin{quote}
+    $\neg$ is used for negation.
+
+    $\vee$ is used for disjunction.
+
+    $\wedge$ is used for conjunction.
+
+    We will use this right arrow for the material conditional: $\Rightarrow$.
+
+    We will use this two-headed arrow for the material biconditional: $\iff$.
+
+    We will use a plain right arrow to define functions: $\rightarrow$.
+
+    In set theory, we will often use brackets to define sets. You need to put a  
+    backslash before those (i.e., $\{$ and $\}$) to distinguish them from brackets
+    used to define things like subscripts and superscripts.
+\end{quote}
+I won't be able to cover every math command used in this course. But since all the .tex files of all readings are available on Github, it should be easy to look up how to do everything I do in the readings, which should be everything you need to complete your own assignments.\par 
+
+One annoying thing about in-line math is that it does not allow for mid-equation line breaks. So, if you try to type a long equation in-line, it can go outside the margin and become unreadable. Also, line breaks in equations make them difficult to follow anyway. So, if you have any mathematical expression that is longer, or that you just want to emphasize, you can center it and put it on a new line by putting it between double dollar signs. Here is an example:
+\begin{verbatim}
+    There is a famous equation associated with Einstein: $$E=mc^{2}.$$
+    But what does it really mean?
+\end{verbatim}
+Here's how this would appear after you recompile:
+\begin{quote}
+    There is a famous equation associated with Einstein: $$E=mc^{2}.$$ But what does it really mean?
+\end{quote}
+This way of presenting math is called ``display mode.'' It can also be helpful if you use larger operators like summations that don't always appear nicely in-line. For example, $\sum_{x\in X} p(x) = 1$ looks a bit ugly. But in display mode it renders nicely: $$\sum_{x\in X} p(x) = 1.$$
+Display mode is a very nice way of making your mathematical writing more legible.
+
+\subsection{Environments}
+Another thing we did in the preamble on page 3 was define a lot of different environments. Environments are useful for introducing all sorts of formatting into your text. To create an environment, you use `\textbackslash begin' and `\textbackslash end' commands, with everything in between those commands treated as part of the environment. We will go through just a few of them here:
+
+\subsubsection{Itemize}
+If you want to write a bulleted list, you can use the itemize environment. Here is an example:
+\begin{verbatim}
+    \begin{itemize}
+    
+    \item Eggs
+
+    \item Bread
+
+    \item Cheese
+
+    \item Milk
+
+    \end{itemize}
+\end{verbatim}
+Here is how this would appear after you recompile:
+\begin{quote}
+    \begin{itemize}
+    
+    \item Eggs
+
+    \item Bread
+
+    \item Cheese
+
+    \item Milk
+
+    \end{itemize}
+\end{quote}
+
+\subsubsection{Enumerate}
+If you want to make a numbered list, enumerate is the way to go. Here is an example:
+\begin{verbatim}
+    \begin{enumerate}
+    
+    \item Eggs
+
+    \item Bread
+
+    \item Cheese
+
+    \item Milk
+
+    \end{enumerate}
+\end{verbatim}
+Here is how this would appear after you recompile:
+\begin{quote}
+    \begin{enumerate}
+    
+    \item Eggs
+
+    \item Bread
+
+    \item Cheese
+
+    \item Milk
+
+    \end{enumerate}
+\end{quote}
+
+
+\subsubsection{Equations}
+The equations environment is really useful and gets used a lot. Here is an example of how it is used:
+\begin{verbatim}
+    \begin{equation}
+    E=mc^{2}
+    \end{equation}
+\end{verbatim}
+Here is how this would appear after you recompile:
+\begin{equation}
+E=mc^{2}
+\end{equation}
+There are a few things to note. First, when you're inside an equation environment, everything renders as if it was in math display mode; \textbf{there is no need to use dollar signs inside the equation environment}. Second, notice that the equation renders with a number next to it. This number will automatically reset each time you recompile, depending on whether you add earlier equations. You can combine this with the \textbackslash label and \textbackslash ref commands to always refer to equations by their number. Here is an example:
+\begin{verbatim}
+    Here is an equation:
+    \begin{equation}\label{eq:einstein}
+    E=mc^{2}
+    \end{equation}
+    Equation \ref{eq:einstein} is very famous.
+\end{verbatim}
+Here is how this would appear after you recompile:
+\begin{quote}
+    Here is an equation:
+    \begin{equation}\label{eq:einstein}
+        E=mc^{2}
+    \end{equation}
+    Equation \ref{eq:einstein} is very famous.
+\end{quote}
+Using this capability to reference equations can be very helpful in writing proofs.
+
+\subsubsection{Proofs}
+The proof environment is a nice way to distinguish proofs from the rest of your text. You will be producing a lot of proofs for your problem sets in this course, and I would like you to write them in the proof environment. Here is an example of a simple proof of the validity of modus tollens (i.e., $\left[(p\Rightarrow q) \wedge \neg q\right] \Rightarrow \neg p$) written in the proof environment:
+\begin{verbatim}
+    \begin{proof}
+    Suppose that $p\Rightarrow q$ is true and $\neg q$ is true. The fact that 
+    $\neg q$ is true implies that $q$ is false. According to the truth table
+    for $p\Rightarrow q$, the only way for $q$ to be false and $p\Rightarrow q$
+    to be true is if $p$ is false. So, the truth of 
+    $\left[(p\Rightarrow q) \wedge \neg q\right]$ implies that $p$ is false, 
+    which implies that $\neg p$ is true.
+    \end{proof}
+\end{verbatim}
+Here is how this would appear after you recompile:
+\begin{quote}
+    \begin{proof}
+    Suppose that $p\Rightarrow q$ is true and $\neg q$ is true. The fact that 
+    $\neg q$ is true implies that $q$ is false. According to the truth table
+    for $p\Rightarrow q$, the only way for $q$ to be false and $p\Rightarrow q$
+    to be true is if $p$ is false. So, the truth of 
+    $\left[(p\Rightarrow q) \wedge \neg q\right]$ implies that $p$ is false, 
+    which implies that $\neg p$ is true.
+    \end{proof}
+\end{quote}
+The italic `Proof' at the beginning of the proof and the box at the end appear automatically, and look cool.
+
+\subsubsection{Propositions, Theorems, Etc.}
+Recall these lines from the preamble on page 3:
+\begin{verbatim}
+    % Theorem and proof environments
+    \newtheorem{theorem}{Theorem}
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{proposition}[theorem]{Proposition}
+    \newtheorem{corollary}[theorem]{Corollary}
+    
+    % Definitions, remarks, etc.
+    \theoremstyle{definition}
+    \newtheorem{definition}[theorem]{Definition}
+    \newtheorem{example}[theorem]{Example}
+    
+    \theoremstyle{remark}
+    \newtheorem{remark}[theorem]{Remark}
+\end{verbatim}
+These lines allow you to define different environments for stating propositions, theorems, etc. You won't have to use these so much in your problem sets, but it is cool to know how to do. Here is an example of how to write a proposition:
+\begin{verbatim}
+    \begin{proposition}
+    The empty set is a subset of any set.
+    \end{proposition}
+\end{verbatim}
+Here is how this would appear after you recompile:
+\vspace{-24pt}
+\begin{quote}
+    \begin{proposition}
+    The empty set is a subset of any set.
+    \end{proposition}
+\end{quote}
+As with equations, the numbering will update automatically as you add propositions. You can also use labels, as you did with equations, to reference propositions elsewhere. One can follow a very similar procedure to state lemmas, remarks, examples, etc.
+
+\subsection{Your Problem Sets}
+Ultimately, I just want your problem sets to be written in readable \LaTeX. You do not have to follow any specific format or style, but I believe that at least some of what I have provided here should be helpful in doing that, especially if you are new to \LaTeX.
+
+\subsection{Downloading Files from Overleaf}
+I would like you to submit both the .pdf and main.tex files that you use to make your problem sets. There are two ways to download the PDF. The first is to click the down arrow left of the recompile button. The second is to click the Menu button in the top-left corner, and then click the PDF icon. To download the main.tex file, click on the Menu button and then click on the Source icon. This will download a .zip file that you can unzip to find the main.tex file.
+
+\subsection{Getting Help}
+As mentioned above, rather than give you a comprehensive list of how to produce every symbol we use in this course, I'm just going to post the .tex files for all the readings in a GitHub repository. This will make it easy for you to see how I have produced any symbols that you might need for your problem sets.\par
+
+You will find, from time to time, that your .tex file will not compile due to errors in your code. Sometimes the error message makes it easy to see what has gone wrong. Other times it is less easy to see the mistake. Thankfully, troubleshooting is \textit{massively} easier in the era of LLMs. Just copy-past the relevant parts of your code into a chatbot, tell it any error messages you are getting, and it will likely find the fix. Similarly, if you can't figure out how to do something you want to do from a typesetting perspective, just ask an LLM. \textbf{Use of LLMs for help with typesetting is entirely acceptable and even encouraged in this course.}
+
+\section{Propositional Logic}
+I am assuming that all of you will have some background in classical propositional logic. However, we will review it here as a warm-up for everything else we will be doing this semester, and because some of the basic connectives we introduce will feature throughout the course. This introduction will be, to use a technical term, decidedly loosy-goosey. In Week 6, we will return to classical propositional logic and give a far more technical definition of it. 
+
+\subsection{Atomic Propositions}
+Atomic propositions are the ``building blocks'' of propositional logic. We will represent them using lower-case letters (e.g., $p$, $q$, $r$, etc.) Atomic propositions can take one of two truth values:\ true or false, which we represent using the upper-case letters $T$ and $F$, respectively.
+
+\subsection{Connectives}
+We will use the following five connectives:
+\begin{itemize}
+    \item Negation, symbolized as $\neg$. Negation is applied to a single proposition, and negates that proposition. So, $\neg p$ just represents `not $p$.'
+
+    \item Disjunction, symbolized as $\vee$. Disjunction is applied to two propositions and translates into English as `or.' So, $p\vee q$ just represents `$p$ or $q$.'
+
+    \item Conjunction, symbolized as $\wedge$. Disjunction is applied to two propositions and translates into English as `and' (also, `but'). So, $p\wedge q$ just represents `$p$ and $q$.'
+
+    \item The material conditional, symbolized as $\Rightarrow$. The material conditional is applied to two propositions and translates into English as `if ..., then.' So $p\Rightarrow q$ just represents `if $p$, then $q$.' Many people use $\rightarrow$ to represent the material conditional, but we will reserve that for something else (namely, defining functions, which we will do next week). In the conditional $p\Rightarrow q$, $p$ is called the \textbf{antecedent} and $q$ is called the \textbf{consequent}. 
+
+    \item The material biconditional, symbolized as $\iff$. The material biconditional is applied to two propositions and translates into English as `if and only if.' So $p\iff q$ just represents `$p$ if and only if $q$.'
+\end{itemize}
+When atomic propositions are joined with connectives, they form \textit{compound propositions}. These can be joined with other propositions (compound or atomic) to form further compound propositions.  
+
+\subsection{Parentheses}
+Consider the compound proposition $p\vee q\wedge r$. It is ambiguous whether this is the disjunction of the atomic proposition $p$ and the compound proposition $q\wedge r$, or the conjunction of the compound proposition $p\vee q$ and the atomic proposition $r$. To resolve this ambiguity, we introduce parentheses. The disjunction of the atomic proposition $p$ and the compound proposition $q\wedge r$ is written $p\vee (q\wedge r)$. The conjunction of the compound proposition $p\vee q$ and the atomic proposition $r$ is written $(p\vee q)\wedge r$. The general rule of thumb is that if a string of letters and connectives is contained within an open parenthesis and a close parenthesis, then it should be treated as a compound proposition. We will also use the hard brackets [ ] as parentheses.\par 
+
+\subsection{Truth Tables}
+As mentioned above, every atomic proposition can take one of two truth values:\ true or false. The particular truth values taken by each atomic proposition in a compound proposition determine the overall truth value of the compound proposition. We represent the relationship between the truth values of atomic and compound propositions using truth tables. In each truth table, the left columns show a combination of truth values for the individual atomic propositions, and the right column shows the truth value of the entire compound proposition under than combination of values for the atomic propositions. Here are the truth tables for the simplest compound propositions that we can form with each connective:\par
+\vspace{12pt}
+\noindent
+Negation: 
+\[
+\begin{array}{c|c}
+p & \lnot p \\
+\hline
+T & F \\
+F & T \\
+\end{array}
+\]\par 
+\noindent
+Disjunction: 
+\[
+\begin{array}{c c|c}
+p & q & p \lor q \\
+\hline
+T & T & T \\
+T & F & T \\
+F & T & T \\
+F & F & F \\
+\end{array}
+\]\par
+\noindent
+Conjunction: 
+\[
+\begin{array}{c c|c}
+p & q & p \wedge q \\
+\hline
+T & T & T \\
+T & F & F \\
+F & T & F \\
+F & F & F \\
+\end{array}
+\]\par
+\noindent
+Material Conditional:
+\[
+\begin{array}{c c|c}
+p & q & p \Rightarrow q \\
+\hline
+T & T & T \\
+T & F & F \\
+F & T & T \\
+F & F & T \\
+\end{array}
+\]\par
+\noindent
+Material Biconditional:
+\[
+\begin{array}{c c|c}
+p & q & p \iff q \\
+\hline
+T & T & T \\
+T & F & F \\
+F & T & F \\
+F & F & T \\
+\end{array}
+\]\par
+\noindent
+I will assume familiarity with these truth tables. We can also create tables for more complex compound propositions that are themselves composed of smaller compound propositions. In these truth tables, the leftmost columns list the different combinations of truth values for the atomic propositions, the middle columns list the resulting combinations of truth values for the smaller compound propositions, and the right-most column lists the resulting truth value for the full compound proposition. Here is an example truth table for $(p\vee q)\Rightarrow(\neg p \wedge r)$.
+\[
+\begin{array}{c c c|c c c|c}
+p & q & r & p \lor q & \lnot p & \lnot p \land r & (p \lor q) \Rightarrow (\lnot p \land r) \\
+\hline
+T & T & T & T & F & F & F \\
+T & T & F & T & F & F & F \\
+T & F & T & T & F & F & F \\
+T & F & F & T & F & F & F \\
+F & T & T & T & T & T & T \\
+F & T & F & T & T & F & F \\
+F & F & T & F & T & T & T \\
+F & F & F & F & T & F & T \\
+\end{array}
+\]
+A compound proposition is a \textbf{tautology} if it takes the truth value $T$ for all possible combinations of truth value assignments to its composite propositions. For example, the proposition $\neg(p\wedge \neg p)$ is a tautology, as we can see from inspecting its truth table:
+\[
+\begin{array}{c|c|c|c}
+p & \neg p & p \wedge \neg p & \neg(p \wedge \neg p) \\
+\hline
+T & F & F & T \\
+F & T & F & T \\
+\end{array}
+\]
+Let $\varphi$ and $\psi$ be any two propositions, either atomic or compound. We will say that $\varphi$ \textbf{entails} $\psi$ if and only if $\varphi\Rightarrow\psi$ is a tautology.\par 
+
+\section{First-Order Logic}
+While its simplicity is a virtue, propositional logic is expressively limited in important ways. In particular, it has no \textit{syntactic} way of distinguishing between propositions that are true of only \textit{some} objects in a domain of discourse, and propositions that are true of \textit{all} objects in that domain. Of course, we can always \textit{interpret} an atomic proposition $p$ as being the proposition `all ravens are black' or `some sheep are black,' but this is in now way forced upon us by the logical formalism. First-order logic is designed to remedy this limitation of propositional logic. 
+
+\subsection{Syntax of First-Order Logic}
+In this section, I will introduce the key syntactic features of first-order logic:\ terms, predicates, variables, and quantifiers. 
+
+\subsubsection{Terms}
+A term in first-order logic represents a specific object or entity. We write down terms using lower-case letters, typically using letters that appear prior to `x' in the alphabet. So if we wanted to represent the aardvark at the St.\ Louis zoo (assuming that there is only one), we could use the letter $a$ to do so. Terms can also refer to abstract entities like specific numbers.\par
+
+
+\subsubsection{Predicates}
+A predicate in first-order logic represents a property that an object might have. Predicates are represented using capital letters. So the property `is a mammal,' which might apply to some object, could be written using the letter $M$. Predicates can be paired with terms to make propositions. Recalling that we've defined the term $a$ above to refer to the aardvark at the St.\ Louis zoo, the predicate-term pair $Ma$ would be read as saying `the aardvark at the St.\ Louis zoo is a mammal.'\par
+
+In this example, $M$ is a one-place predicate, because it is a property of a single object. But we can also define two-place predicates. For example, let $L$ be the two-place predicate `loves,' let $b$ be a term denoting someone named Belinda and let $c$ be a predicate denoting someone named Claus. We would read the predicate $Lbc$ as saying `Belinda loves Claus.' One can similarly define an $n$-place predicate for any positive integer $n$. 
+
+\subsubsection{Variables}
+Variables in first-order logic act as a kind of placeholder for a term to be filled in later. You can think of them similarly to unknowns in algebra. Variables are represented using lower-case letters, typically starting with $x$. If we need to use more than three variables in a formula, we will typically use $x$, $y$, and $z$ before switching to Greek letters. Sometimes, however, one sees $w$ or $v$ used as a variable. Again, think of typical practices in algebra. Variables can be paired with predicates to make statements. So, using the definition of the predicate $M$ given above, $Mx$ would be read as saying `$x$ is a mammal.' Of course, on its own, the phrase `$x$ is a mammal' doesn't tell us much, because we don't know what $x$ refers to. However, as we will see in a moment, the ability to use variables in first-order logic becomes valuable once we introduce quantifiers. We will note that one can also use variables in an $n$-place predicate for $n>1$. For example, $Lxy$ could mean $x$ loves $y$, where $x$ and $y$ are variables to be filled in.\par
+
+
+\subsubsection{Quantifiers}
+The reason we use variables in first-order logic is so that we can make statements about all objects or some objects, without saying exactly what those objects are. Consider the phrase `everything is a thing.' One way of saying this slightly more precisely is to say `for all $x$, $x$ is a thing.' To formalize this statement in first-order logic, we let $\forall$ be a symbol meaning `for all.' The symbol $\forall$ is called the \textbf{universal quantifier}, and can be applied to a variable. For example, if we see $\forall x$ in a formula of first-order logic, we read it as `for all $x$,' and we know that in the formula that comes after it, any statements about $x$ are meant to apply to all objects. For example, if we let the predicate $T$ mean `is a thing,' then we can formalize the claim `everything is a thing' as $\forall xTx$, which we read literally as `for all $x$, $x$ is a thing.' Once we write $\forall x$ in a formula of first-order logic, we say that $x$ is \textbf{in the scope} of the universal quantifier.\par 
+
+
+Sometimes, we don't want to talk about every object having some property; instead, we want to talk about some object having some property. Consider the phrase `something is red.' One way of saying this slightly more precisely is to say `there exists an $x$ such that $x$ is red.' To formalize this statement in first-order logic, we let $\exists$ be a symbol meaning `there exists.' For example, if we see $\exists x$ in a formula of first-order logic, we read it as `there exists an $x$ such that,' and we know that in the formula that comes after it, any statements about $x$ are meant to apply to at least one object. For example, if we let the predicate $R$ mean `is red,' then we can formalize the claim `something is red' as $\exists xRx$, which we read literally as `there exists an $x$ such that $x$ is red.' Once we write $\exists x$ in a formula of first-order logic, we say that $x$ is in the scope of the existential quantifier.\par
+
+
+Often, formulas of first-order logic require more than one quantifier and more than one variable. Consider the sentence `everybody loves someone.' One way of saying this slightly more precisely is to say `for all $x$, there exists a $y$ such that $x$ loves $y$.' Letting $L$ once again by the two-place predicate `loves,' we can write this in first-order logic as the formula $\forall x \exists y Lxy$. By contrast, `everyone loves everyone' would be written $\forall x \forall y Lxy$, `someone loves everyone' would be written $\exists x \forall y Lxy$, and  `someone loves someone' would be written $\exists x \exists y Lxy$. Note that terms can still play a role in formulas with quantifiers, but terms usually aren't in the scope of any quantifier. For example, consider the phrase `Jane loves everyone,' and let $j$ be a term denoting Jane. We can write this slightly more precisely as `for all $x$, Jane loves $x$,' and then formalize it in first-order logic as $\forall x Ljx$. When a variable does not fall in the scope of a quantifier, we say that it is a \textbf{free variable.}\par 
+
+
+One non-standard quantifier that we will use next week when discussing set theory is the quantifier $\exists!$. This should be read as `there is exactly one.' For example, if $G$ is the one-place predicate `is a god,' then the claim that there is exactly one god could be written $\exists!Gx$. One could also formalize this using identity predicates, as we will see below, but this non-standard quantifier will save us some time when formalizing the axioms of set theory.\par
+
+\subsubsection{Putting It All Together}
+We can use the same conenctives used in propositional logic to generate increasingly complex formulas of first-order logic. Consider the sentence `all prime numbers are either odd, or they are even and less than a number that is not less than two.' We can write this more precisely as follows:
+\begin{quote}
+For all $x$, if $x$ is a prime number, then either $x$ is odd or $x$ is even and there exists a number $y$ such that $x$ is less than $y$ and it is not the case that $y$ is less than two.
+\end{quote}
+Let $P$ be the predicate `is a prime number,' let $O$ be the predicate `is odd,' let $E$ be the predicate `is even,' let $L$ be the two-place predicate `is less than' and let $t$ be a term denoting the number two. Then we can formalize this claim in first-order logic using the following formula:
+$$\forall x Px \rightarrow \left[Ox \vee \exists y \left(Ex\&Lxy\&\neg Lyt\right)\right].$$
+Here we use brackets as a second level of parentheses, just like in arithmetic.\par
+
+
+One two-place predicate that we will use often is the \textbf{identity predicate} $I$. The predicate-variable combination $Ixy$ is read as `$x$ is identical to $y$.' To make this interpretation easier to recognize, we sometimes replace $Ixy$ in a formula with $x=y$, and $\neg Ixy$ with $x\neq y$. The identity predicate is important because it allows us to introduce numerical concepts into first-order logic. Consider the claim `there is exactly one number that is even and prime.' A more precise way of saying this is to say:
+\begin{quote}
+For any $x$, if $x$ is an even number and $y$ is an even number, and $x$ is a prime number and $y$ is a prime number, then $x$ is identical to $y$, and there exists a $z$ such that $z$ is even and $z$ is prime.
+\end{quote}
+This way of stating the claim more precisely brings out an important point. When we use two different variables in a formula, they don't \textit{necessarily} refer to different objects; if it is important to the meaning of the formula, then we have to say whether and when two or more variables do or don't refer to the same object. We can formalize the claim above as follows:
+$$\left[\forall x \forall y (Ex\&Ey\&Px\&Py)\rightarrow x=y\right] \& \exists z Ez\&Pz.$$
+As another example, consider the claim `there is more than one odd prime.' This can be written more precisely as `there exists an $x$ and there exists a $y$ such that $x$ is odd and $y$ is odd, $x$ is prime and $y$ is prime, and $x$ is not equal to $y$.' This more precise claim can be formalized in first-order logic as follows:\ $\exists x \exists y Ox\&Oy\&Px\&Py\&x\neq y$.\par
+
+\subsection{Semantics of First-Order Logic}
+In Week 4, we will study model theory and take a much deeper dive into the semantics of first-order logic. But for now, we just give a cursory overview.\par
+
+We begin by noting the the syntactic form of a first-order logic formula (i.e., the arrangement of quantifiers, predicates, variables, connectives, and terms) doesn't tell us, on its own, whether a sentence is true or false. For that, we need a something called a \textbf{structure}. Again, we will study structures in much more detail in Week 4, but for now you should think of a structure as a pair consisting of:\ 
+\begin{enumerate}
+    \item A universe $\mathcal{U}$, which contains a set of objects. 
+
+    \item A list $\mathcal{R}$ of properties those objects have and relations that hold between those objects (one can think of properties and relations as basically being the same things as predicates).
+\end{enumerate}
+For example, a very simple model might consist of a universe $\mathcal{U}$ containing two objects:\ the numbers 1 and 2. The list $\mathcal{R}$ might contain the following properties:
+\begin{itemize}
+    \item 1 is identical to 1
+
+    \item 1 is less than 2
+
+    \item 2 is identical to 2
+
+    \item 2 is greater than 1
+
+    \item 2 is even
+
+    \item 1 is odd
+
+    \item 2 is prime
+\end{itemize}
+A statement of first-order logic is true, in relation to some model, if, once we check the model, we see that what it says holds. So, let $P$ be the predicate `is prime' and let $L$ be the two place predicate `is less than.' Now consider the following first-order logic formula:
+$$\forall x (\forall y Lyx \rightarrow Px).$$
+This means:\ `for all $x$, if it is the case that for all $y$, $y$ is less than $x$, then $x$ is prime.' This is true on the model we have constructed above, since there is only one number---2---that all other numbers in the model are less than, and that number is prime. In this case, we say that the formula is \textbf{satisfied} by this structure. If our model also contained the number $4$, then the formula would be false, according to the model.\par 
+
+
+A formula with a free variable is satisfied for object $o$ in the universe of a structure $S$ just in case substituting the free variable with $o$ makes the resulting formula true in $S$. Using the same structure as the example above, consider the formula $\forall y Lyx \rightarrow Px$, in which $x$ appears as a free variable. The formula $\forall y Lyx \rightarrow Px$ is satisfied in $S$ for $x=2$.\par 
+
+
+These are very simple applications, but often in first-order logic we take our universe $\mathcal{U}$ to be an infinite set of objects (e.g., all natural numbers, all real numbers, all objects in the universe). In these cases, we have to define properties (e.g., being an odd number) in a more abstract way than just listing out every property (again, we will do this in Week 4).\par
+
+Some formulas of first-order logic are true according to \textit{every possible} structure. These formulas are the tautologies of foirst-order logic. For example, let $P$ be any predicate, and consider the statement $\forall x (Px\Rightarrow Px)$. This just says that for all $x$, if the predicate $P$ applies to $x$, then the predicate $P$ applies to $x$. It should be clear that one cannot realistically come up with a structure in which this fails to hold.\par 
+
+\section{Proofs}
+In an earlier logic class, you might have written proofs as structured, numbered lists, with parentheses after each item in the list saying which inference rules and earlier items were used to derive that item. Proofs that appear in the formal philosophy literature are almost never written this way. Consider the short proof shown in Figure~\ref{fig:pettigrew}, which appears in Richard Pettigrew's 2019 paper ``On the Expected Utility Objection to the Dutch Book Argument for Probabilism'' (don't worry about understanding it since it is presented out of context; just note its style). This proof is basically a piece of persuasive writing, with a bit of mathematical notation, that aims to convince you that the proposition is true. In this course, we will write proofs in a similar style. Nearly all the problems in your problem sets will ask you for proofs like this.\par
+\begin{figure}
+    \centering
+    \includegraphics[width=.8\linewidth]{proof_example.png}
+    \caption{Example of a proof in formal philosophy.}
+    \label{fig:pettigrew}
+\end{figure}
+
+
+
+Despite their putative rigor, writing proofs in this way is ultimately more of an art than a science. The goal is to convince the reader of what you are trying to prove by building up from premises that are uncontroversially true, and demonstrating that if those premises are true, then your conclusion must be true. Unlike in a philosophy paper, though, you cannot hedge your bets by saying that some premise is probably true, or that even though there may be counterarguments to one or more premises, those counterarguments aren't convincing. Rather, every premise you use has to be presented as an incontrovertible logical fact; and, indeed, the reader must be convinced that your premises and the steps you use to move from them to the conclusion are, indeed, incontrovertible.\par
+
+Earlier, we gave an example of a proof of modus tollens that fits the description of a good proof given above. Similarly, here is a proof of the tautology: $$(p\iff q) \iff \left[(p\Rightarrow q)\wedge (q\Rightarrow p)\right].$$
+\begin{proof}
+    Suppose that $(p\iff q)$ is true. This means either that $p$ and $q$ are both true, or $p$ and $q$ are both false. If $p$ and $q$ are both true, then $(p\Rightarrow q)$ and $(q\Rightarrow p)$ must be true, since any conditional with a true consequent is true. This would entail that $(p\Rightarrow q)\wedge (q\Rightarrow p)$ is true. If $p$ and $q$ are both false, then $(p\Rightarrow q)$ and $(q\Rightarrow p)$ must be true, since any conditional with a false antecedent is true. This would also entail that $(p\Rightarrow q)\wedge (q\Rightarrow p)$ is true. Thus, if $(p\iff q)$ is true, then $(p\Rightarrow q)\wedge (q\Rightarrow p)$. On the other hand, if $(p\iff q)$ is false, then one of $p$ or $q$ must be false while the other is true. This means that one of $(p\Rightarrow q)$ or $(q\Rightarrow p)$ has a true antecedent and false consequent, rendering it false. This would mean that $(p\Rightarrow q)\wedge (q\Rightarrow p)$ is false. Thus, if $(p\iff q)$ is false then $(p\Rightarrow q)\wedge (q\Rightarrow p)$ is false. This means that $(p\iff q)$ and $(p\Rightarrow q)\wedge (q\Rightarrow p)$ always have the same truth value, and so $(p\iff q) \iff \left[(p\Rightarrow q)\wedge (q\Rightarrow p)\right]$ is always true.
+\end{proof}
+\noindent
+This, to my mind, is a convincing proof. On the other hand, here is an unconvincing proof of the same proposition.
+\begin{proof}
+    The proposition $(p\iff q) \iff \left[(p\Rightarrow q)\wedge (q\Rightarrow p)\right]$ is true because $(p\iff q)$ is equivalent to $(p\Rightarrow q)\wedge (q\Rightarrow p)$.
+\end{proof}
+\noindent
+This proof begs the question; it assumes exactly what was meant to be proved. Now, in a proof of a different proposition, it might be fine to help oneself to the equivalence of $(p\iff q)$ and $(p\Rightarrow q)\wedge (q\Rightarrow p)$. But if that is what is to be proved, then one must do so via other means.\par
+
+
+I will close with an example of a proof of the following tautology of first-order logic: $$\left(\forall x Px\right)\Rightarrow\left(\neg\exists x \neg Px\right).$$
+This proof will use the method of \textbf{proof by contradiction}, which can be a very helpful proof strategy in many contexts. For a proof by contradiction, sometimes called a \textit{reductio ad absurdum}, we assume the negation of what we are trying to prove, and show that it leads to absurdity. 
+\begin{proof}
+    Let $S$ be any structure, and suppose that $\left(\forall x Px\right)\Rightarrow\left(\neg\exists x \neg Px\right)$ is false in $S$. This would mean that $\forall x Px$ is true in $S$ and that $\neg\exists x \neg Px$ is false in $S$. If $\neg\exists x \neg Px$ is false in $S$, then $\exists x \neg Px$ is true in $S$. So, there exists an object $s$ in the universe of $S$ that does not have property $P$. However, we have already derived that $\forall x Px$ is true in $S$, and so every in the universe of $S$ must property $P$. Contradiction!
+\end{proof}
+
+\section{Conclusion}
+You should now feel ready to start working in \LaTeX. You should also feel caught up on the propositional and first-order logic that you have learned previously, and understand the style of proofs that you will be expected to write in this course. 
+
+\section*{Problem Set}
+
+\begin{enumerate}
+    \item Prove, without simply creating a truth table, that $q$ entails  $(p\vee \neg p)$.
+
+    \item Prove, without simply creating a truth table, that $((p\vee q) \wedge (\neg p \vee q) \wedge (p\vee \neg q))$ entails $q$.
+
+    \item Prove, without simply creating a truth table, that $((p\Rightarrow q)\Rightarrow p)$ entails $p$.
+
+    \item Prove that $\neg\forall x Px$ entails $\exists x \neg Px$.
+
+    \item Prove that $\exists xPx\Rightarrow \forall y Qy$ entails $\forall xPx \Rightarrow \forall y Qy$. 
+\end{enumerate}
+
+\end{document}
