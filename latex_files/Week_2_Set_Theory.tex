@@ -30,7 +30,7 @@
 \maketitle
 
 \section{The Basics}
-Consider the universe $U$ of all sets. For now, we won't say what a set is, though we will eventually provide an axiomatic definition of a set. Following convention, we will in different contexts use lower-case letters (e.g., $x$, $y$, $z$) or upper-case letters (e.g., $X$, $Y$, $Z$) to represent sets. In what follows, we will discuss numbers, tuples, etc. For now, just trust that all of these objects are, perhaps covertly, sets.
+Consider the universe $U$ of all sets. For now, we won't say what a set is, though we will eventually provide an axiomatic definition of a set. Following convention, we will in different contexts use lower-case letters (e.g., $x$, $y$, $z$) or upper-case letters (e.g., $X$, $Y$, $Z$) to represent sets. In what follows, we will discuss numbers, tuples, etc. For now, just trust that all of these objects are, perhaps covertly, sets. 
 
 \subsection{The `Is an Element of' Relation}
 The first important symbol that we will introduce is the symbol $\in$, which represents the inclusion of one set in another. So, if a set $x$ is in the set $X$, then we will write $x\in X$ and say that $x$ is an \textbf{element} of $X$. By contrast, for any set $z$ and set $X$, $z\not\in X$ means that $z$ is \textit{not} in $X$.
@@ -40,7 +40,7 @@ One of often defines sets in philosophy using natural language (e.g., `let $P$ b
 \begin{enumerate}
     \item Write an open bracket $\{$ to signal that the definition of the set is beginning.
 
-    \item Write a statement of the types of sets that could belong in the set. For example, if know your set contains only real numbers, you might use $\mathbbm{R}$ to represent the set of real numbers and write $x\in\mathbbm{R}$ to signal that your set contains only real numbers.
+    \item Write a statement specifying a larger set that any element of your set must belong to. For example, if know your set contains only real numbers, you might use $\mathbbm{R}$ to represent the set of real numbers and write $x\in\mathbbm{R}$ to signal that your set contains only real numbers. Sometimes, we won't specify any superset that must must include all elements of our set. In that case, \textit{any} set is eligible to be in the set at this stage.
 
     \item Write a $|$ or $:$ symbol to signal that your set will now be defined. One sees both symbols used in the literature. Either symbol can be translated into English as `such that.' 
 
@@ -68,11 +68,11 @@ Let $X$ be a subset of $Y$. If, in addition, $X\neq Y$, then $X$ is a \textbf{pr
 
 \subsection{Union}
 Let $X$ and $Y$ be two sets. Their \textbf{union} is a third set, written $X\cup Y$, that contains all and only the elements of either $X$ or $Y$. More precisely, we can define $X\cup Y$ using set-builder notation as follows:
-$$X\cup Y = \{z\in U: z\in X \ \text{or} \ z\in Y\}.$$
+$$X\cup Y = \{z: z\in X \ \text{or} \ z\in Y\}.$$
 
 \subsection{Intersection}
 Let $X$ and $Y$ be two sets. Their \textbf{intersection} is a third set, written $X\cap Y$, that contains all and only the elements of both $X$ and $Y$. More precisely, we can define $X\cap Y$ using set-builder notation as follows:
-$$X\cap Y = \{z\in U: z\in X \ \text{and} \ z\in Y\}.$$
+$$X\cap Y = \{z: z\in X \ \text{and} \ z\in Y\}.$$
 
 \subsection{Complement}
 Let $Y$ be a set and consider $X\subseteq Y$. The \textbf{complement} of $X$ in $Y$, written $X^{c}$, is the set of all elements of $Y$ that are not in $X$. In set-builder notion:
@@ -101,17 +101,17 @@ A \textbf{relation} is a set of tuples, usually such that each tuple has the sam
 
 \subsection{Products}
 Let $X$ and $Y$ be sets. Their \textbf{product} $X\times Y$ is the set of all pairs whose first object is an element of $X$ and whose second object is an element of $Y$. In set-builder notation:
-$$X\times Y = \{(x,y)\in U: x\in X \ \text{and} \ y\in Y\}.$$
+$$X\times Y = \{(x,y): x\in X \ \text{and} \ y\in Y\}.$$
 The order in which a product is constructed matters. For example, the product 
-$$Y\times X = \{(y,x)\in U:x\in X \ \text{and} \ y\in Y\}$$ 
+$$Y\times X = \{(y,x):x\in X \ \text{and} \ y\in Y\}$$ 
 is not generally the same set as $X\times Y$. Products can be generated from $n$ sets to form sets of $n$-tuples. Some examples: 
-$$X\times Y \times Z = \{(x,y,z)\in U:x\in X \ \text{and} \ y\in Y \ \text{and} \ z\in Z\},$$
-$$X\times Y \times Z \times W = \{(x,y,z,w)\in U:x\in X \ \text{and} \ y\in Y \ \text{and} \ z\in Z \ \text{and} \ w\in W\}.$$
+$$X\times Y \times Z = \{(x,y,z):x\in X \ \text{and} \ y\in Y \ \text{and} \ z\in Z\},$$
+$$X\times Y \times Z \times W = \{(x,y,z,w):x\in X \ \text{and} \ y\in Y \ \text{and} \ z\in Z \ \text{and} \ w\in W\}.$$
 Thus, a product is a special type of relation.\par
 
 One can take the product of a set with itself $n$ times. For a set $X$, such a product is written $X^{n}$. For example:
-$$X^{2} = X\times X = \{(x,x^{\prime})\in U:x\in X \ \text{and} \ x^{\prime}\in X\},$$
-$$X^{3} = X\times X\times X = \{(x,x^{\prime},x^{\dagger})\in U:x\in X \ \text{and} \ x^{\prime}\in X \ \text{and} \ x^{\dagger}\in X\}.$$
+$$X^{2} = X\times X = \{(x,x^{\prime}):x\in X \ \text{and} \ x^{\prime}\in X\},$$
+$$X^{3} = X\times X\times X = \{(x,x^{\prime},x^{\dagger}):x\in X \ \text{and} \ x^{\prime}\in X \ \text{and} \ x^{\dagger}\in X\}.$$
 One often sees this in applications of set theory in mathematics or mathematical philosophy, where, as we saw above, $\mathbbm{R}^{2}$ is the set of all pairs of real numbers.
 
 \subsection{Functions}
@@ -143,7 +143,7 @@ A function $f:X\rightarrow Y$ can be re-written as the set $\{(x,y)\in X\times Y
 
 \section{Russell's Paradox}
 Set theory was first used in Georg Cantor's (1845-1918) groundbreaking work on transfinite cardinalities, which we'll discuss briefly below. However, Cantor's set theory was \textit{naive} in the sense that it assumed that for any predicate of natural language, there was a set $X$ in the universe of all sets such that all and only the elements $x\in X$ satisfy the predicate. This was called the \textbf{unrestricted comprehension principle}. In 1901, Bertrand Russell (1872-1970) discovered a paradox that undermines the unrestricted comprehension principle. Consider the predicate `is a set that does not contain itself.' We can ostensibly use set-builder notation to define the \textbf{Russell set} $R$ as follows:
-$$R=\{x\in U:x\not\in x\}.$$
+$$R=\{x:x\not\in x\}.$$
 This is the set of all sets that do not contain themselves. Now consider the question:\ is $R$ an element of itself? If it is not, then it follows that $R\not\in R$. So, we might conclude that $R\not\in R$. But, of course, if $R\not\in R$ then $R$ \textit{is} an element of $R$. So, we seemed to have derived that $R\in R$ if and only if $R\not\in R$. This famous paradox is taken to demonstrate the inherent inconsistency of the unrestricted comprehension principle.\par 
 
 
@@ -187,7 +187,7 @@ To see what this axiom enables us to do, consider the set $x$ that it says exist
 \subsection{Separation}
 This axiom is slightly more complicated. As a warm-up, let $\varphi(x)$ be a formula in first-order logic defined over the domain of sets with the single free variable $x$. Now suppose we use set-builder notation to define a set $\{x\in z : \varphi(x)\}$. This is just the subset of a set $z$ whose elements satisfy the formula $\varphi(x)$. As an example, $\varphi(x)$ could be the formula `$x$ is a multiple of 2.' One could then define the subset of the real numbers that are even integers using the following notation:\ $\{q\in\mathbbm{R}:\varphi(q)\}$.\par 
 
-The separation axiom provides a general statement of the kinds of conditions under which we can construct such a set. Let $\varphi(x,u_{1},\dots,u_{n})$ be a formula of first-order logic, defined over the domain of all sets, such that $x$ is a free variables, each of $u_{1},\dots,u_{n}$ may be a free variable, and no other variables are free in $\varphi$. The separation axiom says that for any set $z$, we can define a subset $r\subseteq z$ containing all and only those sets in $z$ that can be plugged in for $x$ to satisfy $\varphi(x,u_{1},\dots,u_{n})$. In first order logic:
+The separation axiom provides a general statement of the kinds of conditions under which we can construct such a set. Let $\varphi(x,u_{1},\dots,u_{n})$ be a formula of first-order logic, defined over the domain of all sets, such that $x$ is a free variable, each of $u_{1},\dots,u_{n}$ may be a free variable, and no other variables are free in $\varphi$. The separation axiom says that for any set $z$, we can define a subset $r\subseteq z$ containing all and only those sets in $z$ that can be plugged in for $x$ to satisfy $\varphi(x,u_{1},\dots,u_{n})$. In first order logic:
 $$\forall z\forall u_{1}\dots\forall u_{n}\exists y \forall r \left[r\in y \iff \left(r\in z \wedge \varphi(r,u_{1},\dots,u_{n}) \right) \right].$$
 In other words, for any formula $\varphi(x,u_{1},\dots,u_{n})$, any set $z$, and any sets $u_{1},\dots,u_{n}$, we can define a set $\{r\in z : \varphi(r,u_{1},\dots,u_{1})\}$. In other words, for any set $z$, we can \textit{separate} the elements of $z$ that satisfy some formula from the rest of $z$. 
 
