@@ -94,11 +94,11 @@ It turns out that for any tautology of classical propositional logic, one can wr
 To extend the Hilbert-Ackermann proof system to first-order logic, we first let $\mathcal{F}$ be the set of all WFFs in first-order logic and retain the three axiom schemas above. This meant that is we can generate axioms by substituting WFFs of first-order logic for any of the Greek letters in those schemas. Next, we add three further axiom schemas needed for the specific case of first-order logic.\par 
 
 
-To define the first of these axiom schemas, let $A(x)$ represent any formula of first-order logic with free variable $x$. Next let $t$ be any term used in any formula of first-order logic, or any variable that is \textbf{free for $x$ in $A$}, meaning that when you substitute $t$ for $x$, no variable in $t$ becomes bound by a quantifier that it was not bound by before (this is especially important if $t$ is a variable). The axiom schema \textbf{Q1} is as follows:
+To define the first of these axiom schemas, let $A(x)$ represent any formula of first-order logic with free variable $x$. Next let $t$ be any term used in any formula of first-order logic, or any variable that is \textbf{free for $x$ in $A$}, meaning that when you substitute $t$ for any free occurrences of $x$ (i.e., any appearances of $x$ where it is not in the scope of a quantifier), $x$ does not become bound by a quantifier that it was not bound by before (this is especially important if $t$ is a variable). For example, $x$ is a free variable in $\exists y Lyx$, but $y$ is not free for $x$ in $y$, because if we substitute $y$ for $x$ in $\exists y Lyx$, we get $\exists y Lyy$, and so now what was a free variable has become a bound variable. The axiom schema \textbf{Q1} is as follows:
 \begin{enumerate}
-    \item[Q1.\ ]$\forall x A(x) \Rightarrow A(t)$.
+    \item[Q1.\ ]$\forall x A(x) \Rightarrow A(t)$,
 \end{enumerate}
-In other words, at any point in any proof in this system, we can write the material conditional that says that if the formula $A(x)$ is true for all $x$, then $A(t)$ is true for any term or variable $t$ that is free for $x$ in $A$. To define the axiom schema \textbf{Q2}, let $A(x)$ represent any formula of first-order logic with free variable $x$, and let $t$ be any term or variable that is free for $x$ in $A$. The axiom schema is then defined as follows:
+where $A(t)$ is the result of replacing any free occurrences of $x$ in $A(x)$ with $t$. In other words, at any point in any proof in this system, we can write the material conditional that says that if the formula $A(x)$ is true for all $x$, then $A(t)$ is true for any term or variable $t$ that is free for $x$ in $A$. To define the axiom schema \textbf{Q2}, let $A(x)$ represent any formula of first-order logic with free variable $x$, and let $t$ be any term or variable that is free for $x$ in $A$. The axiom schema is then defined as follows:
 \begin{enumerate}
     \item[Q2.\ ]$A(t) \Rightarrow \exists x A(x)$.
 \end{enumerate}
@@ -182,7 +182,7 @@ $$
 
 % Implication
 \displaystyle
-\frac{\Gamma \vdash \Delta, A \quad \Gamma, B \vdash \Delta}{\Gamma, A \Rightarrow B \vdash \Delta} \quad (\Rightarrow L)
+\frac{\Gamma \vdash \Delta, A \quad \Gamma, B \vdash \Pi}{\Gamma, A \Rightarrow B \vdash \Delta,\Pi} \quad (\Rightarrow L)
 &
 \displaystyle
 \frac{\Gamma, A \vdash \Delta, B}{\Gamma \vdash \Delta, A \Rightarrow B} \quad (\Rightarrow R)
@@ -231,7 +231,6 @@ As in the case of propositional logic, it turns out that for any tautology $\tau
 Looking at the inference rules of LK, all except one have the property that if a WFF or set of WFFs appears at the top of the rule, then it also appears at the bottom. The exception is the rule Cut. This rule says that if either a WFF in $\Delta$ or the WFF $A$ can be proven from $\Gamma$, and if $A$ plus the WFFs in $\Sigma$ and be used to prove $\Pi$, then the WFFs in $\Gamma$ and $\Sigma$ can be used to prove some WFF in either $\Delta$ or $\Pi$. So we can use the inference rule to ``cut'' $A$ out of a proof. It turns out that Cut is very useful in writing quick proofs. Consider a proof of the sequent:
 $$X\Rightarrow Y, Y\Rightarrow Z \vdash X\Rightarrow Z.$$
 Just this once, we will write the proof as a sequence of sequents:
-\begin{proof} 
     \begin{enumerate}
         \item $X\vdash X$ (Axiom)
 
@@ -255,7 +254,6 @@ Just this once, we will write the proof as a sequence of sequents:
 
         \item $X \Rightarrow Y, Y \Rightarrow Z \vdash X\Rightarrow Z$ ($\Rightarrow R$ from 10, substituting $\{X \Rightarrow Y, Y \Rightarrow Z\}$ for $\Gamma$, $X$ for $A$, $Z$ for $B$, and $\emptyset$ for $\Delta$. 
     \end{enumerate}
-\end{proof}
 \noindent
 While one can prove the same sequent without Cut, doing so takes many more steps; Cut drastically simplified the proof. This invites the question:\ although Cut is pragmatically useful, is it needed to prove that any tautologies can be proven from the empty set? It turns out that the answer is ``no.'' Gentzen proved that for any sequent that can be proven in LK, there is a proof that does not use Cut. Thus, Cut is theoretically dispensable. However, it is often not \textit{practically} dispensable, as some Cut-free proofs may be so long that one would not finish writing them before the heat death of the universe (George Boolos showed this in a 1984 paper called ``Don't Eliminate Cut!'').  \par 
 
@@ -280,7 +278,7 @@ There is \textit{much} more to explore in proof theory, including the formulatio
 
     \item Prove that for any predicates $P$ and $Q$, the WFF $$\forall x Px \Rightarrow\exists x Px.$$ can be proven in the Hilbert-Ackermann proof system for classical first-order logic, by explicitly producing a proof of this WFF.
 
-    \item Show that for any predictate $P$, there is a proof of the sequent $\emptyset\vdash \forall x Px \Rightarrow\exists x Px$
+    \item Show that for any predicate $P$, there is a proof of the sequent $\emptyset\vdash \forall x Px \Rightarrow\exists x Px$
     in the proof system LK, by explicitly constructing a proof of this sequent.
 \end{enumerate}
 
