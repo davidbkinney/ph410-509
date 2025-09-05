@@ -317,14 +317,15 @@ It should be clear at this point that set theory is an \textit{extremely} rich s
 
     \item Let the function $\textsf{fusc}:\mathbbm{Z}^{+}\rightarrow\mathbbm{Z}^{+}$, where $\mathbbm{Z}^{+}$ is the set of positive integers, be defined as follows:
     \begin{equation*}
-    \textsf{fusc}:z\mapsto \textsf{fusc}(z) = \begin{cases}
-        0 & \text{if} \ z=0\\
-        1 & \text{if} \ z=1\\
-        \textsf{fusc}(2\cdot k) & \text{if} \ z\geq 1 \wedge z=2\cdot k\\
-        \textsf{fusc}((2\cdot k)+1) & \text{if} \ z\geq 1 \wedge z=\textsf{fusc}(k) + \textsf{fusc}(k+1)\\
+    \textsf{fusc}(z) =
+    \begin{cases}
+        0 & \text{if } z = 0, \\[6pt]
+        1 & \text{if } z = 1, \\[6pt]
+        \textsf{fusc}(k) & \text{if } z = 2\cdot k \ (\text{with } k \geq 1), \\[6pt]
+        \textsf{fusc}(k) + \textsf{fusc}(k+1) & \text{if } z = 2\cdot k+1 \ (\text{with } k \geq 1).
     \end{cases}
     \end{equation*}
-        Let the \textbf{lowest terms pair} $(a,b)$ in any positive rational $q$ be the pair such that for any $(c,d)\in q$, $(c,d)=(\gamma \cdot a,\gamma \cdot b)$ where $\gamma$ is an integer greater than zero. It turns out that for any positive rational $q$, its lowest terms pair $(a,b)$ is such that $(a,b)=(\textsf{fusc}(z),\textsf{fusc}(z+1))$ for some $z$. Use this fact to prove that that rational numbers $\mathbbm{Q}$ have cardinality $\aleph_{0}$ (\textit{Hint:\ you'll have to find a way to deal with negative rationals!})
+        Let the \textbf{lowest terms pair} $(a,b)$ in any positive rational $q$ be the pair such that for any $(c,d)\in q$, $(c,d)=(\gamma \cdot a,\gamma \cdot b)$ where $\gamma$ is an integer greater than zero. It turns out that for any positive rational $q$, its lowest terms pair $(a,b)$ is such that $(a,b)=(\textsf{fusc}(z),\textsf{fusc}(z+1))$ for some $z$. Moreover, for any $z$, $(\textsf{fusc}(z),\textsf{fusc}(z+1))$ is a lowest-terms pair of some rational. Use these facts to prove that that rational numbers $\mathbbm{Q}$ have cardinality $\aleph_{0}$ (\textit{Hint:\ you'll have to find a way to deal with negative rationals!})
 \end{enumerate}
 
 \end{document}
