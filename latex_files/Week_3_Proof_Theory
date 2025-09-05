@@ -1,0 +1,287 @@
+\documentclass[11pt]{article}
+
+% Packages for math and proof writing
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{bbm}
+
+% Theorem and proof environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+% Definitions, remarks, etc.
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Page formatting
+\usepackage[margin=1in]{geometry}
+
+\title{Week 3:\ Proof Theory}
+\author{David Kinney}
+\date{September 11, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+For the last two weeks, you have been producing proofs for your problem sets. We have, and will continue to, write our proofs informally, as persuasive paragraphs. However, logicians have long been interested in the systematic study of the nature of proof, in order to better understand what can and cannot be proven in a particular logical system. This systematic study of proofs is called \textbf{proof theory}. Following on last week's material, we will present proof theory here as an application of set theory. Specifically, for any logical system, we will define the set of valid proofs of that logic as a set of \textbf{sequences} (a type of set defined below) that satisfy certain properties. Intuitively, proofs are sequences of formulas that can be construction in a system of logic in which each formula in the sequences can be derived from the previous formulas. In what follows, we will get precise about exactly what that means, and present two standard ways of identifying the set of all valid proofs in the classical formulations of propositional and first-order logic.\par 
+
+
+\section{Proofs as Sequences}
+Let $I\subseteq\mathbbm{N}$ be an \textbf{initial subset} of the natural numbers. This means that for any $x\in I$, if there is a natural number $y$ such that $y<x$, then $y\in I$. Intuitively, an initial sequence is just a set of natural numbers $\{0,1,\dots\}$ that either terminates at some finite $n$ or contains all the natural numbers. Let $X$ be any set. A sequence of elements of $X$ is a function $f:I\rightarrow X$. Typically, we will use the same notation as a tuple and write the sequence $(x_{1},x_{2},\dots)$ as a shorthand for the set $\{(0,x_{1}),(1,x_{2}),\dots\}$. For any $x\in X$ and $x^{\prime}\in X$, if there is a sequence $s$ such that $(n,x)\in s$, $(n^{\prime},x^{\prime})\in s$, and $n<n^{\prime}$, then we say that $x$ comes \textbf{before} $x^{\prime}$ in $s$.\par 
+
+
+In any system of logic, we have a set $\mathcal{F}$ consisting of all the \textbf{well-formed formulas} of that logic, or WFFs. These are just the formulas that can be formed according to the grammatical rules of the logic (e.g., proper application of atomic propositions, connectives, and parenthesis in propositional logic, or proper application of predicates, terms, variables, connectives, parentheses, and quantifiers in first-order logic). Let $I$ be a finite-cardinality initial subset $I\subset \mathbbm{N}$. A \textbf{proof} is a sequence $f:I\rightarrow \mathcal{F}$. That is, it is a sequence of WFFs. However, just defining a proof as a sequences of WFFs does not tell us much. What we want are rules for determining which sequences of WFFs could as \textit{valid} proofs, according to the rules of some system of logic. Such rules are known as a \textbf{proof system}, and proof theory is study of such proof systems.\par
+
+
+\section{Proof Systems}
+A typical proof system consists of two components:\ axioms and inference rules. For any \textbf{valid proof} $(p_{1},\dots,p_{n})$, where each $p_{i}$ is a WFF in some logical system, each $p_{i}$ must either be an axiom or be derived via an inference rule from WFFs that come before $p_{i}$ in the proof. The proposition $p_{n}$ is the proposition that is proved. In what follows, we will go into precise detail on what it means for a WFF to be an axiom or to be derived from earlier WFFs via an inference rule.
+
+\subsection{Axioms}
+Consider again the set $\mathcal{F}$ of WFFs in some system of logic. The \textbf{axioms} $\mathcal{A}\subseteq\mathcal{F}$ of that system of logic are just the set of WFFs that can be written at any stage of a valid proof. As an extreme example, a very uninteresting logical system would be one in which $\mathcal{A}=\mathcal{F}$. In such a system, any WFF would be an axiom, and so all proofs would be valid. Similarly, if there were a logical system such that $\mathcal{A}=\emptyset$, then there would be no valid proofs in that system of logic.\par
+
+Strictly speaking, most systems of logic have infinitely many axioms. Consider a system of propositional logic with infinitely many WFFs in a set $\mathcal{F}$. For any proposition $p\in\mathcal{F}$, we can write the proposition $p\Rightarrow p$ at any point in a proof; in other words, $p\Rightarrow p$ is an axiom for every $p\in\mathcal{F}$. It should be clear that this yields infinitely many axioms.\par
+
+However, proofs need to be written by humans, and humans cannot memorize infinitely many axioms. So, for a set of axioms $\mathcal{A}$ to actually be useful in generating finite proofs, it must be the case that $\mathcal{A}$ can be finitely \textit{summarized}. As an example of how to build such a summary, let $\mathcal{F}$ be the set of all WFFs of some logic. Let the Greek letters $\varphi$ and $\psi$ be variables that can denote any formula in $\mathcal{F}$. Now imagine that we use the connectives of propositional logic to build a formula out $\varphi$ and $\psi$, e.g.:
+$$\varphi\Rightarrow(\psi\Rightarrow\varphi).$$
+This formula is considered an \textbf{axiom schema} if substituting any pair of WFFs in $\mathcal{F}$ for $\varphi$ and $\psi$ generates an axiom. For example, if $\varphi\Rightarrow(\psi\Rightarrow\varphi)$ is an axiom schema for some system of logic, then for any $p\in\mathcal{F}$ and $q\in\mathcal{F}$, $p\Rightarrow(q\Rightarrow p)$ is an axiom and can be written at any point in a proof.\par
+
+In principle, an axiom schema can contain any number of variables. So, to give a general definition of an axiom schema, let $\mathcal{F}$ once again be the set of WFFs in some logical system, and let $\sigma(v_{1},\dots,v_{n})$ be a formula with free variables $v_{1},\dots,v_{n}$. We say that $\sigma(v_{1},\dots,v_{n})$ is an axiom schema if for all $p_{1}\in\mathcal{F},\dots,p_{n}\in\mathcal{F}$, $\sigma(v_{1},\dots,v_{n})\in\mathcal{A}$. Thus, if $\sigma(v_{1},\dots,v_{n})$ is an axiom schema, then for any $p_{1}\in\mathcal{F},\dots,p_{n}\in\mathcal{F}$, the formula $\sigma(p_{1},\dots,p_{n})$ is an axiom, and can appear anywhere in a proof.\par 
+
+One thing that is important to note is that, usually, \textit{an axiom schema that defines axioms of a logical system is not itself an element of the set $\mathcal{F}$ containing all well-formed formulas of that logical system.} Instead, axiom schemas are meta-formulas that exist outside of $\mathcal{F}$. However, every axiom generated via an axiom schema is an element of $\mathcal{F}$.\par  
+
+
+\subsection{Inference Rules}
+As mentioned above, each proposition in a proof can either be an axiom, or derived from previous propositions in the same proof via an inference rule. Qualitatively, an inference rule says: ``given that some of the previous propositions in a proof are of some form, you can infer a proposition of some other form." Inference rules are pairs consisting of a set of WFFs and a WFF, such that the second WFF can be inferred from the first set of WFFs. Set-theoretically, if $\mathcal{F}$ is a set of WFFs, then the set of inference rules in $\mathcal{F}$ is a set:
+$$\{(X,p)\in \mathcal{P}(\mathcal{F})\times \mathcal{F}: p \ \text{can be inferred from} \ X\}$$
+In any proof producible in a system of logic, if $(X,p)$ is an inference rule and all elements of $X$ appear before some WFF $p_{i}$ in the proof, then $p_{i}$ can validly be the WFF $p$. As in the case of axioms, a system of logic may contain infinitely many inference rules. However, if there is no pattern describing all inference rules in a finite way, then that system of logic will not be very useful. Thus, as in the case of axioms, we formalize inference rules in a schematic way.
+
+To formalize an inference rule, we typically draw a relatively long horizontal line, with a set of formulas with free variables, each separated by a large space, above the line, and a single formula with free variables below the line. The interpretation of the formalism is that if the previous propositions in a proof contain instantiations of each formula above the line, then an instantiation of the formula below the line can be inferred. As a concrete example, consider the inference rule of \textit{modus ponens}. As before, let the Greek letters $\varphi$ and $\psi$ be variables that can denote any formula in some set $\mathcal{F}$. The inference rule can be formalized as follows:
+$$\frac{\varphi \quad \varphi \Rightarrow \psi}{\psi}.$$
+To illustrate how this inference rule works, suppose that we have a set of WFFs $\mathcal{F}$ with propositions $p\in\mathcal{F}$ and $q\in\mathcal{F}$. If there is a proof $(p_{1},\dots,p_{n})$ containing a $p_{i}=p$ and a $p_{j}=(p\Rightarrow q)$, then for any $k$ greater than $i$ and $j$, $p_{k}$ could be the proposition $q$.\par
+
+To generalize this definition of an inference rule, let $\sigma_{i}(v_{1},\dots,v_{n})$ be a formula with $n$ free variables. An inference rule has the general format:
+$$\frac{\sigma_{1}(v_{1},\dots,v_{n}) \quad \dots \quad \sigma_{m}(v_{1},\dots,v_{n})}{\sigma(v_{1},\dots,v_{n})}.$$
+For any $n$-tuple of WFFs $(p_{1},\dots,p_{n})\in\mathcal{F}^{n}$, if each $\sigma_{i}(p_{1},\dots,p_{n})$ in the top line of the inference rule appears in a proof, then $\sigma(p_{1},\dots,p_{n})$ can validly appear in any subsequent step of that proof.\par
+
+In what follows, we will consider two proof systems used in propositional and first order logic:\ the proof system devised by David Hilbert (1862-1943) and Wilhelm Ackermann (1896-1962), and \textit{sequent calculus} system devised by Gerhard Gentzen (1906-1943). 
+
+\section{The Hilbert-Ackermann Proof Systems}
+The style of proof system developed by Hilbert and Ackermann mostly mirrors that described above. Given a set of WFFs $\mathcal{F}$, a Hilbert-Ackermann proof system provides schema for deriving a set of axioms $\mathcal{A}\subseteq\mathcal{F}$ and inference rules $\textsf{Inf}\subseteq (\mathcal{P}(\mathcal{F})\times\mathcal{F})$. Valid proofs are then sequences of WFFs in $\mathcal{F}$ such that each WFF in the sequence is either an axiom or derivable from previous WFFs in the proof via an inference rule. In what follows, we will show how Hilbert and Ackermann specifically used the framework to define a proof system that was sufficient for propositional logic and first-order logic.\par 
+
+\subsection{Classical Propositional Logic}
+To axiomatize classical propositional logic using a Hilbert-Ackermann system, first note that any compound proposition of propositional logic that uses disjunction and conjunction connectives can by re-written using only the material conditional and negation, since $p\vee q$ has the same truth table as $\neg p \Rightarrow q$, and $p\wedge q$ has the same truth table as $\neg (p\Rightarrow \neg q)$. So, if $\mathcal{F}$ is the set of all WFFs of propositional logic, then each element of $\mathcal{F}$ can be written so as to only contain propositions formed from negation and the material conditional.\par
+
+Next, Hilbert and Ackermann put forward the following three axiom schemas (the Greek letters $\varphi$, $\psi$, and $\tau$ are used as variables that can denote any proposition):
+\begin{enumerate}
+    \item $\varphi \Rightarrow (\psi \Rightarrow \varphi)$
+
+    \item $(\varphi \Rightarrow (\psi \Rightarrow \tau)) \Rightarrow ((\varphi \Rightarrow \psi)\Rightarrow (\varphi \Rightarrow \tau))$
+
+    \item $(\neg\psi \Rightarrow \neg\varphi)\Rightarrow ((\neg\psi\Rightarrow \varphi)\Rightarrow \psi)$
+\end{enumerate}
+Thus, any instance of these three formulas is an axiom of Hilbert and Ackermann's system. The system also contains a single inference rule, modus ponens:
+$$\frac{\varphi \quad \varphi \Rightarrow \psi}{\psi}.$$
+It turns out that for any tautology of classical propositional logic, one can write a proof $(p_{1},\dots,p_{n})$ in which $p_{n}$ is that tautology, and each $p_{i}$ for $i<n$ is either an axiom (i.e., an instance of one the three axiom schemas above) or is derivable from previous WFFs in the proof using modus ponens. That is, any tautology of classical propositional logic can be proved using this remarkably simply proof system.\par 
+
+\subsection{Classical First-Order Logic}
+To extend the Hilbert-Ackermann proof system to first-order logic, we first let $\mathcal{F}$ be the set of all WFFs in first-order logic and retain the three axiom schemas above. This meant that is we can generate axioms by substituting WFFs of first-order logic for any of the Greek letters in those schemas. Next, we add three further axiom schemas needed for the specific case of first-order logic.\par 
+
+
+To define the first of these axiom schemas, let $A(x)$ represent any formula of first-order logic with free variable $x$. Next let $t$ be any term used in any formula of first-order logic, or any variable that is \textbf{free for $x$ in $A$}, meaning that when you substitute $t$ for $x$, no variable in $t$ becomes bound by a quantifier that it was not bound by before (this is especially important if $t$ is a variable). The axiom schema \textbf{Q1} is as follows:
+\begin{enumerate}
+    \item[Q1.\ ]$\forall x A(x) \Rightarrow A(t)$.
+\end{enumerate}
+In other words, at any point in any proof in this system, we can write the material conditional that says that if the formula $A(x)$ is true for all $x$, then $A(t)$ is true for any term or variable $t$ that is free for $x$ in $A$. To define the axiom schema \textbf{Q2}, let $A(x)$ represent any formula of first-order logic with free variable $x$, and let $t$ be any term or variable that is free for $x$ in $A$. The axiom schema is then defined as follows:
+\begin{enumerate}
+    \item[Q2.\ ]$A(t) \Rightarrow \exists x A(x)$.
+\end{enumerate}
+In other words, at any point in a proof in this system, we may write the material conditional stating that if the formula $A(x)$ is true for some term, or variable $t$ that is free for $x$ in $A$, then there exists some $x$ such that $A(x)$ is true. This captures the principle of \textbf{existential introduction}, allowing us to conclude the existence of a variable satisfying a property from a concrete instance.
+
+
+As for inference rules, we maintain the modus ponens inference rule defined above, only now recognize that WFFs of first-order logic will be plugged in for Greek letters in the inference rule. Next, we introduce an additional inference rule. Again, let $A(x)$ be a formula in which $x$ is a free variable, and let $\varphi$ be a WFF in which $x$ is not a free variable. We have the following new inference rule, known as \textbf{Gen}:
+$$\frac{\varphi\Rightarrow A(x)}{\varphi\Rightarrow \forall x A(x)}.$$
+In other words, if $\varphi$ entails some formula $A(x)$ in which $x$ appears as a free variable, then \textbf{Gen} tells us that we are licensed to infer that $\varphi$ entails that all $x$ satisfy $A(x)$.\par
+
+It turns out that for any tautology of classical first-order logic, one can write a proof $(p_{1},\dots,p_{n})$ in which $p_{n}$ is that tautology and each $p_{i}$ for $i<n$ is either an axiom (i.e., an instance of one the three axiom schemas for propositional logic, or \textbf{Q1}, or \textbf{Q2}) or is derivable from previous WFFs in the proof using modus ponens or \textbf{Gen}). That is, any tautology of classical first-order logic can be proved using this still strikingly simple simply proof system.
+
+\section{The Sequent Calculus LK}
+Gentzen introduced a general formula for formulating a proof theory for any logical system called the \textbf{sequent calculus}. Once again, let $\mathcal{F}$ be a set of WFFs for which we seek to define a logical system. The set of \textbf{sequents} $\mathcal{S}_{\mathcal{F}}$ is a set of formulas generated by the following rules:
+\begin{enumerate}
+    \item Every element of $\mathcal{S}_{\mathcal{F}}$ contains the turnstile symbol $\vdash$. 
+
+    \item To the left of the turnstile, there must be at least one of the following:\ a) a subset of $\mathcal{F}$ (which could be the empty set), b) an element of $\mathcal{F}$. 
+
+    \item To the right of the turnstile, there must be at least one of the following:\ a) a subset of $\mathcal{F}$ (which could be the empty set), b) an element of $\mathcal{F}$. 
+
+    \item Where more than one subset or element of $\mathcal{F}$ appears on either side of the comma, they are separated by commas. 
+\end{enumerate}
+Letting $\Gamma$ and $\Delta$ be subsets of $\mathcal{F}$ and $A$ and $B$ be elements of $\mathcal{F}$, some examples of elements of $\mathcal{S}_{\mathcal{F}}$ include:\ $\Gamma,A\vdash\Delta,B$; $\Gamma\vdash\Delta,B$; $A\vdash\Delta,B$, $\Gamma,A\vdash\Delta$, $\Gamma,A\vdash B$, $\Gamma\vdash\Delta$; $A\vdash\Delta$; $\Gamma\vdash B$; $A\vdash B$; $\emptyset\vdash\Delta$; $\emptyset\vdash B$.\par 
+
+Interpreting sequents is tricky. On the left of the symbol $\vdash$, the comma is interpreted like a conjunction. The symbol $\vdash$ can be interpreted as something like `entails' or `proves.' On the right of the symbol $\vdash$, the comma is treated like disjunction. Putting this all together, a sequent like $\Gamma,A\vdash\Delta,B$ would be interpreted as saying `assuming all elements of $\Gamma\cup\{A\}$ hold, we can prove that at least one element of $\Delta\cup\{B\}$ holds.' Thus, sequents in $\mathcal{S}_{\mathcal{F}}$ are statements about what propositions in $\mathcal{F}$ can be proven from conjunctions of other propositions in $\mathcal{F}$. A sequence of sequents $(s_{1},\dots,s_{n})\in (\mathbbm{N}\times\mathcal{S}_{\mathcal{F}})$ can then be interpreted as a kind of meta-proof: a proof about what sorts of propositions can be proven from which others.\par
+
+For any $A\in\mathcal{F}$, the sequent $\emptyset\vdash A$ asserts that $A$ is a tautology:\ it can be proven without any assumptions. If the empty set appears on the right side of $\vdash$ in any sequent, this is a contradiction, since we are asserting that at least one element of $\emptyset$ can be proven, but there are no elements of $\emptyset$.\par 
+
+One would be excused for wondering why we have defined this set of sequents. As we will see below, it turns out to offer a really powerful formalism both for representing the nature of proof and for deriving important conclusions about the nature of proof. In what follows, we will use the sequent calculus to formalize proofs in both propositional and first-order logic.\par  
+
+\subsection{Propositional Logic}
+Consider the set $\mathcal{F}$ of WFFs in propositional logic. From this we can form the set of sequents $\mathcal{S}_{\mathcal{F}}$ that assert relations of provability between sets of WFFs in propositional logic. We define a proof system for generating valid proofs in $\mathcal{S}_{\mathcal{F}}$. This proof system will be composed of the parts of Gentzen's system LK, or Logistische Kalk\"ul, needed for propositional logic. First, we have the single axiom schema:\ for all $A\in\mathcal{F}$, $A\vdash A$. This just says that any proposition $A$ can be proven from itself. Next, we have a wide array of inference rules. These include the following \textbf{structural rules}. In each structural rule, $A$ and $B$ are variables representing any element of $\mathcal{F}$, and $\Gamma$, $\Delta$, $\Sigma$ and $\Pi$ are variables representing any subset of $\mathcal{F}$ or WFF in $\mathcal{F}$. Left rules allow us to infer changes to the left side of the symbol $\vdash$, which right rules allow us to infer changes to the right side of the symbol $\vdash$. Here are all the structural rules:\par
+\vspace{12pt}
+\textbf{Weakening:}
+$$
+\frac{\Gamma \vdash \Delta}{\Gamma, A \vdash \Delta} \quad (\text{Left Weakening})
+\qquad
+\frac{\Gamma \vdash \Delta}{\Gamma \vdash \Delta, A} \quad (\text{Right Weakening})
+$$
+
+\textbf{Contraction:}
+$$
+\frac{\Gamma, A, A \vdash \Delta}{\Gamma, A \vdash \Delta} \quad (\text{Left Contraction})
+\qquad
+\frac{\Gamma \vdash \Delta, A, A}{\Gamma \vdash \Delta, A} \quad (\text{Right Contraction})
+$$
+
+\textbf{Exchange:}
+$$
+\frac{\Gamma, A, B, \Sigma \vdash \Delta}{\Gamma, B, A, \Sigma \vdash \Delta} \quad (\text{Left Exchange})
+\qquad
+\frac{\Gamma \vdash \Delta, A, B, \Pi}{\Gamma \vdash \Delta, B, A, \Pi} \quad (\text{Right Exchange})
+$$
+
+\textbf{Cut:}
+$$
+\frac{\Gamma \vdash \Delta, A \quad \Sigma, A \vdash \Pi}{\Gamma, \Sigma \vdash \Delta, \Pi} \quad (\text{Cut})
+$$
+\noindent
+In addition to the structural rules, the other inference rules include the following \textbf{logical rules} used for introducing logical connectives via inference:\par
+\vspace{12pt}
+$$
+\begin{array}{ll}
+
+% Conjunction
+\displaystyle
+\frac{\Gamma, A, B \vdash \Delta}{\Gamma, A \wedge B \vdash \Delta} \quad (\wedge L)
+&
+\displaystyle
+\frac{\Gamma \vdash \Delta, A \quad \Gamma \vdash \Delta, B}{\Gamma \vdash \Delta, A \wedge B} \quad (\wedge R)
+\\[2.5ex]
+
+% Disjunction
+\displaystyle
+\frac{\Gamma, A \vdash \Delta \quad \Gamma, B \vdash \Delta}{\Gamma, A \vee B \vdash \Delta} \quad (\vee L)
+&
+\displaystyle
+\frac{\Gamma \vdash \Delta, A, B}{\Gamma \vdash \Delta, A \vee B} \quad (\vee R)
+\\[2.5ex]
+
+% Implication
+\displaystyle
+\frac{\Gamma \vdash \Delta, A \quad \Gamma, B \vdash \Delta}{\Gamma, A \Rightarrow B \vdash \Delta} \quad (\Rightarrow L)
+&
+\displaystyle
+\frac{\Gamma, A \vdash \Delta, B}{\Gamma \vdash \Delta, A \Rightarrow B} \quad (\Rightarrow R)
+\\[2.5ex]
+
+% Negation
+\displaystyle
+\frac{\Gamma \vdash \Delta, A}{\Gamma, \neg A \vdash \Delta} \quad (\neg L)
+&
+\displaystyle
+\frac{\Gamma, A \vdash \Delta}{\Gamma \vdash \Delta, \neg A} \quad (\neg R)
+
+\end{array}
+$$
+A valid proof of sequents $(s_{1},\dots,s_{n})$ in the portion of LK needed for propositional logic is one in which each sequent is either an axiom of the form $A\vdash A$, or is such that each sequent can be derived, via an inference rule, from earlier sequents. It turns out that for any tautology $\tau$ of classical propositional logic, there is a valid proof $(s_{1},\dots,s_{n})$ in LK such that $s_{n}$ is the sequent $\emptyset\vdash\tau$.\par 
+
+\subsection{First-Order Logic}
+The full system LK provides a proof system for classical first-order logic. To define LK in its totality, we retain the single axiom schema $A\vdash A$ from above and the structural and logical rules from above. We then add the following additional logical rules, also known as \textbf{quantifier rules}:\par 
+\vspace{12pt}
+$$
+\begin{array}{ll}
+
+% Universal Quantifier
+\displaystyle
+\frac{\Gamma, A[t/x] \vdash \Delta}{\Gamma, \forall x A(x) \vdash \Delta} \quad (\forall L)
+&
+\displaystyle
+\frac{\Gamma \vdash \Delta, A[y/x]}{\Gamma \vdash \Delta, \forall x A(x)} \quad (\forall R), \; y \text{ not free in } \Gamma, \Delta, A
+\\[2.5ex]
+
+% Existential Quantifier
+\displaystyle
+\frac{\Gamma, A[y/x] \vdash \Delta}{\Gamma, \exists x A(x) \vdash \Delta} \quad (\exists L), \; y \text{ not free in } \Gamma, \Delta, A(x)
+&
+\displaystyle
+\frac{\Gamma \vdash \Delta, A[t/x]}{\Gamma \vdash \Delta, \exists x A(x)} \quad (\exists R)
+
+\end{array}
+$$
+\noindent
+Here, $A(x)$ is a formula in which $x$ is a free variable, $A[t/x]$ is the result of substituting $t$ for $x$ in the formula $A(x)$, where $t$ is a term, or variable such that $t$ is not free for $x$ in $A(x)$, and $A[y/x]$ is the result of substituting the variable $y$ for the variable $x$ in $A(x)$.\par
+
+As in the case of propositional logic, it turns out that for any tautology $\tau$ of classical first-order logic, there is a valid proof $(s_{1},\dots,s_{n})$ in LK such that $s_{n}$ is the sequent $\emptyset\vdash\tau$.
+
+\subsection{The Cut Elimination Theorem}
+Looking at the inference rules of LK, all except one have the property that if a WFF or set of WFFs appears at the top of the rule, then it also appears at the bottom. The exception is the rule Cut. This rule says that if either a WFF in $\Delta$ or the WFF $A$ can be proven from $\Gamma$, and if $A$ plus the WFFs in $\Sigma$ and be used to prove $\Pi$, then the WFFs in $\Gamma$ and $\Sigma$ can be used to prove some WFF in either $\Delta$ or $\Pi$. So we can use the inference rule to ``cut'' $A$ out of a proof. It turns out that Cut is very useful in writing quick proofs. Consider a proof of the sequent:
+$$X\Rightarrow Y, Y\Rightarrow Z \vdash X\Rightarrow Z.$$
+Just this once, we will write the proof as a sequence of sequents:
+\begin{proof} 
+    \begin{enumerate}
+        \item $X\vdash X$ (Axiom)
+
+        \item $Y\vdash Y$ (Axiom)
+
+        \item $Z\vdash Z$ (Axiom)
+
+        \item $X\vdash X, Y$ (Right Weakening from 1)
+
+        \item $X,Y \vdash Y$ (Left Weakening from 2)
+
+        \item $X,X\Rightarrow Y \vdash Y$ ($\Rightarrow L$ from 4 and 5, substituting $X$ for $\Gamma$, $Y$ for $\Delta$, $X$ for $A$, and $Y$ for $B$).
+
+        \item $Y\vdash Z, Y$ (Right Weakening from 2)
+
+        \item $Y,Z\vdash Z$ (Left Weakening from 3)
+
+        \item $Y,Y\Rightarrow Z \vdash Z$ ($\Rightarrow L$ from 7 and 8, substituting $Y$ for $\Gamma$, $Z$ for $\Delta$, $Y$ for $A$, and $Z$ for $B$).
+
+        \item $X, X \Rightarrow Y, Y \Rightarrow Z \vdash Z$ (Cut from 6 and 9, substituting $Y$ for $A$, $\{X,X\Rightarrow Y\}$ for $\Gamma$, $\emptyset$ for $\Delta$, $Y\rightarrow Z$ for $\Sigma$, and $Z$ for $\Pi$. 
+
+        \item $X \Rightarrow Y, Y \Rightarrow Z \vdash X\Rightarrow Z$ ($\Rightarrow R$ from 10, substituting $\{X \Rightarrow Y, Y \Rightarrow Z\}$ for $\Gamma$, $X$ for $A$, $Z$ for $B$, and $\emptyset$ for $\Delta$. 
+    \end{enumerate}
+\end{proof}
+\noindent
+While one can prove the same sequent without Cut, doing so takes many more steps; Cut drastically simplified the proof. This invites the question:\ although Cut is pragmatically useful, is it needed to prove that any tautologies can be proven from the empty set? It turns out that the answer is ``no.'' Gentzen proved that for any sequent that can be proven in LK, there is a proof that does not use Cut. Thus, Cut is theoretically dispensable. However, it is often not \textit{practically} dispensable, as some Cut-free proofs may be so long that one would not finish writing them before the heat death of the universe (George Boolos showed this in a 1984 paper called ``Don't Eliminate Cut!'').  \par 
+
+
+Why does this matter? Recall that any sequent with the empty set on the right side of the symbol $\vdash$ is a contradiction. If a proof system for sequents can be used to prove a contradiction, then that proof system is called \textbf{inconsistent}, and is called \textbf{consistent} otherwise. Once we remove Cut as an inference rule, it is often very easy to check that $\emptyset$ cannot appear on the right of the symbol $\vdash$ in any sequent in any valid proof of that proof system. Thus, the cut-elimination theorem is very useful for proving the consistency of any proof system. This includes LK, but also other proof systems.\par 
+
+\section{Equivalence of Hilbert-Ackermann and LK}
+It is important to clarify that the Hilbert-Ackermann proof systems for classical propositional and classical first-order logic and the sequent calculus LK for classical propositional and first-order logic are equivalent in a crucial sense. Namely, because the Hilbert-Ackermann system proves all tautologies of these logical systems, and because LK proves that any tautology of these logical systems can be proven from the empy set, both proof systems can be used to derive any tautology of both classical propositional logic and classical first-order logic. This means that the proof systems are \textbf{complete} for both of these logics.\par
+
+Given this practical equivalence between the two proof systems, why bother learning both? There are several answers. First, as we have already seen, while Hilbert-Ackermann may be a more straightforward or intuitive way of formalizing the concept of a proof, only LK, along with the Cut-Elimination theorem, allows us to quickly establish consistency. Second, and more importantly, research in philosophical logic often requires us to develop \textit{new} proof systems for non-standard logical systems beyond classical propositional and first-order logic. In some cases, it will make sense to formulate that proof system in the style of Hilbert-Ackermann. In others, it will make more sense to use a sequent calculus.\par 
+
+\section{Conclusion}
+There is \textit{much} more to explore in proof theory, including the formulation of proof theories for various non-standard logics, which we will explore in Week 6. Proof theory (of the Hilbert-Ackermann variety) will also play a crucial role in our discussion of modal logic in Week 5, and in our discussion of G\"odel's incompleteness theorems in Week 8.\par
+
+\section*{Problem Set}
+\begin{enumerate}
+    \item Prove that for any atomic proposition $p$, the WFF $p\Rightarrow p$ can be proven in the Hilbert-Ackermann proof system for classical propositional logic, by explicitly producing a proof of this WFF.
+
+    \item Charles Sanders Pierce (1839 - 1914) devised an earlier proof system for propositional logic which included the following, now known as Pierce's law, as an axiom:
+    $$\left[(p\Rightarrow q)\Rightarrow p\right]\Rightarrow p.$$
+    Show that for any atomic propositions $p$ and $q$, we can prove the sequent $$\emptyset\vdash \left[(p\Rightarrow q)\Rightarrow p\right]\Rightarrow p$$ in the system LK for propositional logic, by explicitly producing a proof of this sequent.
+
+    \item Prove that for any predicates $P$ and $Q$, the WFF $$\forall x Px \Rightarrow\exists x Px.$$ can be proven in the Hilbert-Ackermann proof system for classical first-order logic, by explicitly producing a proof of this WFF.
+
+    \item Show that for any predictate $P$, there is a proof of the sequent $\emptyset\vdash \forall x Px \Rightarrow\exists x Px$
+    in the proof system LK, by explicitly constructing a proof of this sequent.
+\end{enumerate}
+
+\end{document}
