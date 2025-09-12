@@ -1,0 +1,178 @@
+\documentclass[11pt]{article}
+
+% Packages for math and proof writing
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{bbm}
+
+% Theorem and proof environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+% Definitions, remarks, etc.
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Page formatting
+\usepackage[margin=1in]{geometry}
+
+\title{Week 5:\ Model Theory}
+\author{David Kinney}
+\date{September 23, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Last week, we explored proof theory, which provides a formal framework for devising systems to determine whether a sequence of WFFs in a formal language constitutes a valid proof of the last WFF in the sequence. However, the existence of a valid proof of a WFF tells us nothing about whether it is true. For example, we can easily use the sequent calculus system LK to prove that the following is a tautology:
+\begin{quote}
+    If the moon is made of green cheese and Elvis is alive, then Elvis is alive. 
+\end{quote}
+Of course, no proposition in that compound proposition is true. Nevertheless, the claim itself is a tautology; propositions of the form $(p\wedge q)\Rightarrow q$ are true no matter how we interpret $p$ and $q$. More generally, any tautology we might prove using standard applications of truth theory is going to be true regardless of how its constituent propositions are interpreted.\par
+
+However, consider now the following claim, which on most standard proof theories is not going to be considered a tautology:
+\begin{quote}
+    All men are mortal. 
+\end{quote}
+This claim is true, it seems, in the actual world. However, we can readily see that it is not a tautology. There are conceivable scenarios in which some men are immortal, and if this is the case, then the statement will be false. That is, whether this statement is true or false \textit{depends on what the world is like}.
+
+\textbf{Model theory} uses the tools of set theory to:\ 1) build \textit{models} of different ways the world could be, and 2) use those models to determine the truth value of WFFs of some system of logic in that world. In a nutshell, if proof theory studies the conditions under which a WFF is true in \textit{all} possible worlds, then model theory studies the conditions under which a WFF is true in a \textit{particular} possible world. Thus, while proof theory allows us to understand logic purely ``from the inside,'' without having to think about what happens in the world, model theory asks us to consider what the world has to be like for different WFFs to be true or false. This led the logician Dirk van Dalen (b.\ 1932) to comment that ``logic appears in a `sacred’ and in a `profane’ form; the sacred form is dominant in proof theory, the profane form in model theory." So, what follows is a bit of profanity. Specifically, we will examine standard approaches to model theory in classical propositional logic and classical first-order logic.\par 
+
+\section{Model Theory in Classical Propositional Logic}
+Though there are multiple ways of constructing a model theory for classical propositional logic, I will present here the version known as \textbf{possible worlds semantics}. We will return to possible worlds semantics next week when we turn to modal logic.\par 
+
+Consider a set $\mathbbm{A}$ of atomic propositions (i.e., propositions $p$, $q$, $r$, $\dots$), which may have infinite cardinality. Let the set of WFFs be the union of $\mathbbm{A}$ and all compound propositions that can be formed from any subset of the atomic propositions in $\mathbbm{A}$. For example, if $p\in\mathbbm{A}$ and $q\in\mathbbm{A}$, then $p\in\mathcal{F}$, $q\in\mathcal{F}$, and $(p\wedge q)\in\mathcal{F}$. Next, consider the set $\{T,F\}$. This is a set containing the two truth values of classical propositional logic. Let a \textbf{possible world} $w:\mathbbm{A}\rightarrow\{0,1\}$ be a function from the atomic propositions $\mathbbm{A}$ into the set consisting of the two truth values. That is, a function $w$ assigns a truth value to each atomic proposition. To illustrate, for any $p\in\mathbbm{A}$, if $w(p)=T$ then $p$ is true in $w$, whereas if $w(p)=F$ then $p$ is false in $w$.\par 
+
+
+For any atomic or compound proposition in the set of WFFs $\mathcal{F}$ of classical propositional logic, let $\varphi$ be some atomic or compound proposition in $\mathcal{F}$. We write $w\vDash \varphi$ if and only if $\varphi$ is true according to $w$ according to the truth tables of classical propositional logic. The symbols `$w\vDash \varphi$' can be read out as $w$ \textit{satisfies} $\varphi$. Let us break down what this means. Suppose that $\varphi$ is an atomic proposition. Then $w\vDash \varphi$ if and only if $w(\varphi)=T$. On the other hand, suppose that $\varphi$ is a compound proposition formed from the atomic propositions in the set $\{p,q,r,,\dots\}$. In that case $w\vDash \varphi$ if and only if each of the truth values $w(p),w(q),w(r),\dots$ are such that, according to the truth tables of classical propositional logic, when each atomic proposition in $\{p,q,r,\dots\}$ takes that truth value, then $\varphi$ is true. To be concrete, if $\varphi$ is the proposition $p\wedge q$, then $w\vDash \varphi$ if and only if $w(p)=T$ and $w(q)=T$. By contrast, if if $\varphi$ is the proposition $p\vee q$, then $w\vDash \varphi$ if and only if either $w(p)=T$ or $w(q)=T$. 
+
+
+Within this framework, a possible world $w$ provides a \textbf{model} of a way that the world could be. To spell this out, suppose that a set of WFFs $\mathcal{F}$ in classical propositional logic is capable of saying everything that could possibly said about anything that could happen in the world. Suppose further that every proposition in $\mathcal{F}$ can be formed by using the connectives of classical propositional to join together the atomic propositions in $\mathbbm{A}$. By assigning every proposition in $\mathbbm{A}$ a truth value, a possible world $w$ tells us exactly which WFFs in $\mathcal{F}$ are true and which are false. In this way, $w$ tells us everything there is to says about how a given world could be. For any set of atomic propositions $\mathbbm{A}$, let $W$ be the set of \textit{all} possible functions $w:\mathbbm{A}\rightarrow\{0,1\}$. This is the set of all possible models of the world. We will say that $\varphi$ is a \textbf{tautology} in possible worlds semantics if $w\vDash\varphi$ for \textit{all} possible worlds in $W$.\par
+
+Notice that the symbol we use for model theoretic satisfaction ($\vDash$) is different from the symbol that we used for the proof-theoretic relationship between premises and conclusion ($\vdash$). This is deliberate. We will discuss this more in Week 6, but when one defines a system of logic, one typically states both a proof theory \textit{and} a model theory for that logic. The former tells us which proofs are valid for that system of logic. The latter tells us which WFFs in that system of logic are true when a certain model of the world obtains. This means that we have two different notions of a tautology in logic. There are proof-theoretic tautologies (i.e., WFFs that can be proved from the empty set in a sequent calculus) and model-theoretic tautologies (i.e., WFFs that are satisfied by every model of the world).
+
+
+A system of logic is called \textbf{sound} if its proof theory and model theory ``line up'' in the sense that any proof-theoretic tautology is also a model-theoretic tautology. A system of logic is called \textbf{complete} if its model theory and proof theory line up in the sense that any model-theoretic tautologies is also a proof-theoretic tautologies. We will return to soundness and completeness in Week 8, when we discuss G\"odel's completeness and incompleteness theorems.
+
+
+\section{First-Order Logic}
+Model theory gets much more interesting when we consider the set of WFFs $\mathcal{F}$ that can be formed in first-order logic (i.e., the set of WFFs formed by the correct composition of terms, predicates, variables, connectives, and quantifiers). You will recall from Week 1 that we discussed how formulas of first-order logic can be true or false in a particular structure. Here, we will make this precise by introducing the notion of a signature in first-order logic, a structure that provides a model of a world that could be described by first-order logic WFFs, and an interpretation function between structures and signatures. Let us elaborate on each of these formal notions now.
+
+\subsection{Signature}
+When we discussed first-order logic in Week 1, we gave a fairly informal gloss on how to generate well-formed formulas of first-order logic. Now, we will make this idea precise, by introducing the idea of a \textbf{signature}. Informally, a signature is a set of basic building blocks that we use to build WFFs in first-order logic. More formally, let a \textbf{signature} for first-order logic be a pair $(S_{T},S_{P},\textsf{ar})$, where $S_{T}$ is a set of \textbf{constant term symbols} (i.e., symbols like $a$, $b$, $c$, etc.) and $S_{P}$ is a set of \textbf{predicates} (i.e., capital letters), and $\textsf{ar}$ is a function $\textsf{ar}:S_{P}\rightarrow\mathbbm{N}$ that tells us the \textit{arity} of each predicate. This is just a fancy way of saying the $n$ such that a given predicate is an $n$-place predicate. So, if $S_{P}$ contains a predicate $P$, then if $\textsf{ar}(P)=1$, then $P$ is one-place predicate, if $\textsf{ar}(P)=2$, then $P$ is a two-place predicate, and so on. Any time we attach $n$ terms to a predicate with arity $n$, we have a WFF of first-order logic.
+
+To illustrate how we use a signature to generate WFFs of first-order logic, suppose we had a signature $(S_{T},S_{P},\textsf{ar})$ where $S_{T}=\{a,b,c\}$, $S_{P}=\{P,Q\}$, $\textsf{ar}(P)=1$ (i.e., $P$ is a one-place predicate) and $\textsf{ar}(Q)=2$ (i.e., $Q$ is a two-place predicate). Since we can generate a WFF of first-order logic by attaching $n$ terms to a predicate with arity $n$, we can already use this signature to generate some formulas of first-order logic, such as the following:\ $Pa$, $Pb$, $Pc$, $Qab$, $Qbc$. This list is not exhaustive, but it gives us a flavor of what we can already do. Next, note that we can generate further WFFs of first-order logic by combining them using the connectives of classical propositional and first-order logic. Some examples of formulas built in this way include the following:
+$$\neg Pa$$
+$$Pb\wedge Pc$$
+$$Qab\Rightarrow Pc$$
+$$\left[\neg(Qbb\Rightarrow Pa)\wedge(Qab\vee \neg Qbc)\right]\vee Pc$$
+Again, this isn't an exhaustive list, but rather just a taste of what we can do. Next, we can go one step further by replacing each occurrence of a term in a WFF with a variable (using the same variable for each occurrence of the term. Doing this in the examples immediately above gives us the following:
+$$\neg Px$$
+$$Px\wedge Py$$
+$$Qxy\Rightarrow Pz$$
+$$\left[\neg(Qyy\Rightarrow Px)\wedge(Qxy\vee \neg Qyz)\right]\vee Pz$$
+Next, we can use quantifiers to bind each of the variables in the examples above. Some examples of how we might do this are as follows:
+$$\exists x \neg Px$$
+$$\forall x \forall y(Px\wedge Py)$$
+$$\forall x \exists y \forall z (Qxy\Rightarrow Pz)$$
+$$\exists x \forall y \exists z\left(\left[\neg(Qyy\Rightarrow Px)\wedge(Qxy\vee \neg Qyz)\right]\vee Pz\right)$$
+In principle, one can leave any variable in a WFF of first-order logic unbound by a quantifier, so that it functions as a free variable. However, for the purposes of this exposition of model theory, we will assume that all WFFs we deal with have no free variables. The set of WFFs of first-order logic with no free variables are called the \textbf{sentences} of first-order logic.\par 
+
+Finally, we can use the same connectives as we have used above to combine formulas like those given above, as in the following example:
+\small
+$$(\exists x \neg Px)\wedge [\forall x \forall y(Px\wedge Py)] \wedge [\forall x \exists y \forall z (Qxy\Rightarrow Pz)] \wedge \left[\exists x \forall y \exists z\left(\left[\neg(Qyy\Rightarrow Px)\wedge(Qxy\vee \neg Qyz)\right]\vee Pz\right)\right].$$
+\normalsize
+If we have a signature $(S_{T},S_{P},\textsf{ar})$, then we can follow this basic procedure to construct sentences of first-order logic. Thus, $(S_{T},S_{P},\textsf{ar})$ provides the basic building blocks that we need to construct sentences of first-order logic. Note that $S_{T}$ and $S_{P}$ are sometimes called the ``non-logical symbols'' used to build formulas of first order logic, to distinguish them from the quantifiers, connectives, and variables that have a clear ``logical'' role. If you don't find this distinction intuitive, don't get hung up on it.\par 
+
+We tend \textit{not} to think that there are only finitely many predicates and terms that one can use in describing the world. So, in practice, we usually assume that a signature $(S_{T},S_{P},\textsf{ar})$ is such that $S_{T}$ and $S_{P}$ have infinite cardinality. However, we usually assume that any WFF of first-order logic is of finite size, and so contains only a finite subset of the terms in $S_{T}$ and predicates in $S_{P}$.\par 
+
+In some more advanced applications of model theory, a signature is actually defined as a 4-tuple $(S_{T},S_{P},S_{F},\textsf{ar})$, where $S_{F}$ is a set of function symbols. We will not consider this more advanced setting here.
+
+
+\subsection{Structure}
+Whereas signatures provide us with the building blocks needed to construct WFFs of first-order logic, a structure provides us with a model of the sort of world that WFFs in first-order logic can describe. Formally, a \textbf{structure} is a pair $(U,\mathcal{R})$, where $U$ is a set (i.e., the universe) and $\mathcal{R}$ is a set of $n$-place relations defined on $U$. Let us now unpack what it means for $\mathcal{R}$ to be ``a set of $n$-place relations defined on $U$.'' Suppose that $\mathcal{R}=\{R_{1},R_{2},\dots\}$. Any $R_{i}\in\mathcal{R}$ is a set of $n$-tuples composed of elements of $U$. So if some $R_{i}\in\mathcal{R}$ is a two-place relation, then its elements are pairs $(x,y)$ such that $x\in U$ and $y\in U$. If some $R_{i}\in\mathcal{R}$ is a three-place relation, then its elements are pairs $(x,y,z)$ such that $x\in U$, $y\in U$, and $z\in U$. And so on. Importantly, a given $R_{i}\in\mathcal{R}$ typically will \textit{not} be the set of \textit{all} $n$-tuples composed of elements of $U$ for some $n$. Instead, $R_{i}$ will typically be a proper subset of the set of all $n$-tuples composed of elements of $U$ for some $n$. Sometimes, an $R_{i}\in\mathcal{R}$ will be a one-place relation defined on $U$. Such a relation is effectively just a subset of $U$.\par 
+
+Intuitively, a structure describes a universe of objects and sets of ways that those objects are and are not related. In that sense, it provides a \textit{model of the world}, if one wants to think of a world as nothing more than a set of objects that stand in relations to one another.\par 
+
+To illustrate with a concrete example, suppose that $U$ is the set $\mathbbm{Z}$ of all integers, and $\mathcal{R}=\{R_{>},R_{<}\}$, where $R_{>}=\{(x,y)\in\mathbbm{Z}^{2}:x>y\}$ and $R_{<}=\{(x,y)\in\mathbbm{Z}^{2}:x<y\}$. The pair $(U,\mathcal{R})$ is a fairly minimal example of a structure. If the world contained nothing but integers and the only properties of those integers were captured be the greater-than and less-than relations, then this minimal structure would be a model of the world. In practice, we know that such a model is not nearly rich enouch to represent an entire world. Thus, we will often work with structures $(U,\mathcal{R})$ such that both $U$ and $\mathcal{R}$ are infinite, meaning we assume a structure with infinitely many relations defined on an infinite universe.\par 
+
+
+
+\subsection{Interpretation}
+In model theory for first-order logic, an interpretation is a way of mapping terms in a signature to elements of the universe in a structure and mapping predicates in a signature to relations in structure. Essentially, an interpretation tells us which objects in our model of the world (i.e., elements of the universe $U$ and relations that hold between them) correspond to which terms and predicates in our signature. To summarize this in a slogan, \textit{an interpretation ties a signature to a structure that represents the world.}
+
+Formally, for a signature $(S_{T},S_{P},\textsf{ar})$ and a structure $(U,\mathcal{R})$, let an \textbf{interpretation} be a function $\textsf{Int}:(S_{T}\cup S_{P})\rightarrow(U\cup \mathcal{R})$ such that:
+\begin{itemize}
+    \item For any $a\in S_{T}$ (i.e., any term) $\textsf{Int}(a)$ is an element of $U$ (i.e., terms are interpreted as elements of the universe).
+
+    \item For any $P\in S_{P}$ (i.e., any predicate) with arity $n$, $\textsf{Int}(P)$ is an $n$-place relation in $R$ (i.e., predicates with arity $n$ are interpreted as $n$-place relations).
+\end{itemize}
+Thus, an interpretation tells us to interpret each term in a signature as referring to a particular element of the universe $U$ in our model of the world, and to interpret each predicate in a signature as a relation between elements of that universe.\par 
+
+
+\subsection{Putting It all Together}
+We are now in a position to say how the notion of a signature, a structure, and an interpretation give us all of the ingredients we need to create a model theory for first-order logic. Consider some signature $(S_{T},S_{P},\textsf{ar})$. Let $\mathcal{F}$ be the set of all sentences (i.e., formulas without free variables) that can be generated using this signature (i.e., all the sentences that can be generated by first assigning $n$ terms to predicates with arity $n$ to form propositions, then combining these propositions with logical connectives, then replacing some or all terms with variables, then binding those variables with quantifiers). A model $\mathcal{M}$ for $\mathcal{F}$ consists of a pair $((U,\mathcal{R}),\textsf{Int})$, where $(U,\mathcal{R})$ is a structure and $\textsf{Int}$ is an interpretation tying the signature $(S_{T},S_{P},\textsf{ar})$ to the structure $(U,\mathcal{R})$. In other words, a model $\mathcal{M}$ tells us what structure we are using to represent that world, and how interpret symbols in the signature $(S_{T},S_{P},\textsf{ar})$ as elements of that structure.\par
+
+
+At this stage, let us consider all the sentences in $\mathcal{F}$ that consist only of a single predicate with arity $n$ that is joined with $n$ terms. Examples include $Pa$, $Pb$, $Pc$, $Qab$, $Qbc$. These kinds of sentences, which contain no quantifiers, variables, or connectives, are called \textbf{atomic formulas}. A model of any signature that allows us to construct these sentences will tell us the truth value of every such sentence. Formally, we can think of any such sentence as a pair consisting of an $n$-place predicate $P$, and either a single term (in the case of a one-place predicate), or an $n$-tuple of terms (in the case of an $n$-place predicate where $n>1$). So, for example, the atomic formula $Pa$ is the pair $(P,a)$, and the atomic formula $Qbc$ is the pair $(Q,(b,c))$. Let $P$ be any predicate $n$-place predicate and $(a_{1},\dots,a_{n})$ be any $n$-tuple of terms. To determine whether the atomic formula $Pa_{1}\dots a_{n}$ is true according to a model $\mathcal{M}=((U,\mathcal{R}),\textsf{Int})$, consider first the interpretation $\textsf{Int}(P)$, i.e., the interpretation of the predicate $P$. This interpretation will be an $n$-place relation in $\mathcal{R}$, which in turn will be a set of $n$-tuples of elements of $U$. Next, we can consider the interpretations $\textsf{Int}(a_{1}),\dots,\textsf{Int}(a_{n})$. Each $\textsf{Int}(a_{i})$ will be an element of $U$, and so $(\textsf{Int}(a_{1}),\dots,\textsf{Int}(a_{n}))$ will be an $n$-tuple of elements of $U$. So, we can now ask:\ is $(\textsf{Int}(a_{1}),\dots,\textsf{Int}(a_{n}))\in \textsf{Int}(P)$? In other words, when we interpret the $n$-tuple of terms $(a_{1},\dots,a_{n})$ as an $n$-tuple of elements of $U$, and interpret $P$ as a set of $n$-tuples of elements of $U$, is the interpretation of $(a_{1},\dots,a_{n})$ an element of the interpretation of $P$? If the answer is `Yes,' then the atomic formula is true according to $\mathcal{M}$. If the answer is `No,' then the atomic formula is false according to $\mathcal{M}$.\par 
+
+
+To give a concrete example, consider again the signature such that $S_{T}=\{a,b,c\}$, $S_{P}=\{P,Q\}$, $\textsf{ar}(P)=1$ (i.e., $P$ is a one-place predicate) and $\textsf{ar}(Q)=2$ (i.e., $Q$ is a two-place predicate). Next, introduce a structure $(U,\mathcal{R})$ where $U=\{1,2,3\}$ and $\mathcal{R}=\{R_{1},R_{2}\}$, where $R_{1}=\{2\}$ and $R_{2}=\{(1,2),(2,2),(3,2)\}$. Now introduce an interpretation $\textsf{Int}$ such that:
+\begin{itemize}
+    \item $\textsf{Int}(a)=1$
+
+    \item $\textsf{Int}(b)=2$
+
+    \item $\textsf{Int}(c)=3$
+
+    \item $\textsf{Int}(P) = R_{1}$
+
+    \item $\textsf{Int}(Q) = R_{2}$
+\end{itemize}
+Now consider whether $Qab$ is true according to the model $\mathcal{M}=((U,\mathcal{R}),\textsf{Int})$. The predicate $Q$ is interpreted as the relation $R_{2}$. The pair $(a,b)$ is interpreted as the pair $(1,2)$. Since $(1,2)\in R_{1}$, $Qab$ is true according to $\mathcal{M}$. Similarly, $Pb$ is true according to $\mathcal{M}$, since $P$ is interpreted as $R_{1}$, $b$ is interpreted as $2$, and $2\in R_{1}$. By contrast, $Qac$ is false according to this model, since $Q$ is interpreted as $R_{2}$, the pair $(a,c)$ is interpreted as $(1,3)$, and $(1,3)\not\in R_{2}$. Similarly, $Pc$ is false according to this model, because $P$ is interpreted as $R_{1}$, $c$ is interpreted as $3$, and $3\not\in R_{1}$.\par 
+
+
+We can extend this reasoning to compound formulas formed by combining atomic formulas using connectives, using the truth tables of classical propositional logic. To see how this is done, recall that, according to the model defined above, $Qab$ is true. This means that $\neg Qab$ is false according to the same model. Moreover, since $Qab$ and $Pb$ are both true according to the model, then $Qab\wedge Pb$ is true according to the model. However, since $Pc$ is false according to the model, $Qab\wedge Pc$ is false according to that model. However, since only one disjunct must be true for a disjunction to be true, $Qab\vee Pc$ is true according to the same model. More generally, whenever we have a sentence of classical first-order logic composed of atomic formulas and connectives, the truth value of that sentence according to the model $\mathcal{M}$ is given by determining the truth value of each atomic formula according to $\mathcal{M}$, and then computing the truth value of the entire sentence according to the truth tables of classical propositional logic.\par 
+
+
+Extending this idea even further, consider now the sentences of first-order logic that can be formed from a signature by first generating a sentence composed of atomic formulas combined via connectives and then replacing terms with variables bound by quantifiers. To determine whether such a sentence is true or false according to some model $\mathcal{M}=((U,\mathcal{R}),\textsf{Int})$, we follow the following two-step procedure:
+\begin{enumerate}
+    \item Replace any variable bound by a universal quantifier with any term in $S_{T}$.
+
+    \item Determine whether there is a way to replace each variable bound by an existential quantifier with a term in $U$ such that the resulting sentence is true according to $\mathcal{M}$. If so, then the sentence is true. If not, then the sentence is false.
+\end{enumerate}
+Let us illustrate with some examples, using the same model as above. Consider the sentence $$\forall x \exists y (Qxy\Rightarrow Py).$$ Since $x$ is universally quantified, we can replace it with any term in the signature. Let's pick $c$. So now we have $$\exists y (Qcy\Rightarrow Py).$$ Is there a term in the signature that we can substitute for $y$ so that the resulting sentence is true? Yes. If we substitute $b$ for $y$, we get $(Qcb\Rightarrow Pb)$. Under the interpretation given above, $Q$ is interpreted as $R_{2}$ and $(c,b)$ is interpreted as $(3,2)$. Since $(3,2)\in R_{2}$, $Qcb$ is true. We have already seen that $Pb$ is true according to this model. So $(Qcb\Rightarrow Pb)$ has a true antecedent and consequent, and so the formula is true. Thus, $\forall x \exists y (Qxy\Rightarrow Py)$ is true according to $\mathcal{M}$.\par 
+
+
+On the other hand, sticking with the same model, consider the sentence $$\forall x \exists y (\neg Qxy \wedge Py).$$ Since $x$ is again universally quantified, we will replace it with any term in our signature. This time, let's pick $a$. So now we have
+$$\exists y (\neg Qay \wedge Py).$$ Is there a term in the signature such that we can plug it in for $y$ and generate a true sentence according to our model? No. If we try $a$, we get $\neg Qaa \wedge Pa$. Since $Q$ is interpreted as $R_{2}$, $(a,a)$ is interpreted as $(1,1)$, and $(1,1)\not\in R_{2}$, $Qaa$ is false according to this model, and so $\neg Qaa$ is true according to this model. However, since $P$ is interpreted as $R_{1}$, $a$ is interpreted as $1$, and $1\not\in R_{1}$, $Pa$ is false according to this model, and so $\neg Qaa \wedge Pa$ is false according to this model. If we try $b$, we get $\neg Qbb \wedge Pb$. We know that $Pb$ is true according to this model, but since $Q$ is interpreted as $R_{2}$, $(b,b)$ is interpreted as $(2,2)$, and $(2,2)\in R_{2}$, $Qbb$ is true according to our model, meaning that $\neg Qbb$ is false according to our model. So, $\neg Qbb \wedge Pb$. Finally, if we try $c$, we get $\neg Qbc \wedge Pc$. Since $Q$ is interpreted as $R_{2}$, $(b,c)$ is interpreted as $(2,3)$, and $(2,3)\not\in R_{2}$, $Qbc$ is false according to this model, and so $\neg Qbc$ is true according to this model. However, since we have already seen that $Pc$ is false in this model, $\neg Qbc \wedge Pc$ is also false in this model. Thus, there is no term in the signature that we can substitute for the existentially quantified variable $y$ to generate a sentence that is true according to the model $\mathcal{M}$. So, $\forall x \exists y (\neg Qxy \wedge Py)$ is false in $\mathcal{M}$.\par 
+
+
+\textbf{A caveat:\ }I have assumed here that we can map a term in the signature to every element of the universe $U$. We can't always assume that, and when we can't, things get a bit funkier. But you don't need to worry about that for now.
+
+
+For any sentence $\varphi$ in the set of all first-order logic sentences $\mathcal{F}$ that can be formed from a signature $(S_{T},S_{P},\textsf{ar})$, if $\varphi$ is true according to a model $\mathcal{M}$ for $\mathcal{F}$, then we write $\mathcal{M}\vDash\varphi$. The sentence $\varphi$ is a tautology of classical first-order logic if for \textit{any} model $\mathcal{M}$ of $\mathcal{F}$ (i.e., for any structure with any interpretation), $\mathcal{M}\vDash\varphi$. 
+
+\section{Conclusion}
+As with every topic in this course, we have only begun to scratch the surface of what is possible with model theory. As mentioned above, model theory for propositional logic will be important next week when we discuss modal logic. It will also appear in Week 6 when we discuss non-classical logics, which can sometimes be defined in terms of model theories that allow propositions to have more than one truth value, or no truth value, or truth values other than true or false. Model theory will also play a role in Week 8, when we discuss G\"odel's incompleteness theorems.\par 
+
+For those interested in exploring model theory beyond this course, the Swedish logician Per Lindstr\"om (1936-2009) proved a very famous theorem, called Lindstr\"om's Theorem, that is worth checking out. Essentially, he proved that while there are some structures that cannot be fully described using first-order logic, any logic that can describe these structures must give up some desirable model-theoretic properties that first-order logic has. Thus, the theorem shows that there is something very special about first-order logic.
+
+\section*{Problem Set}
+\begin{enumerate}
+    \item Let $\mathbbm{A}$ be a set of atomic propositions with finite or infinite cardinality. Let $W$ be the set of all possible worlds $w:\mathbbm{A}\rightarrow\{T,F\}$. Prove that the cardinality of $W$ is equal to the cardinality of the power set $\mathcal{P}(\mathbbm{A})$. (\textit{Hint:\ Remember that two sets have the same cardinality if and only if there a bijective function such that one set is the domain and the other set is the range.})
+
+    \item Consider the structure $(U^{\prime},\mathcal{R}^{\prime})$ such that $U^{\prime}$ is the set $\mathbbm{Z}$ of all integers, and $\mathcal{R}^{\prime}=\{R_{>},R_{<}\}$, where $R_{>}=\{(x,y)\in\mathbbm{Z}^{2}:x>y\}$ and $R_{<}=\{(x,y)\in\mathbbm{Z}^{2}:x<y\}$. Let $(S_{T}, S_{P},\textsf{ar})$ be any signature, and let $\mathcal{F}$ be the set of sentences that can be generated from that signature. Prove that there is no model $\mathcal{M}=((U^{\prime},\mathcal{R}^{\prime}),\textsf{Int})$ such that $\mathcal{M}\vDash \exists x Pxx$.
+
+    \item Recall the set-theoretic definition of an integer from Week 2. Consider a structure $(U,\mathcal{R})$ where $U$ is the set of natural numbers $\mathbbm{N}$ (i.e. $U=\mathbbm{N}$) and each relation in $\mathcal{R}$ is an integer (i.e., $\mathcal{R}=\mathbbm{Z}$). Thus, we can re-write the structure as $(\mathbbm{N},\mathbbm{Z})$. Let $(S_{T}, S_{P},\textsf{ar})$ be a signature such that $S_{T}$ and $S_{P}$ both have countably infinite cardinality and each $S_{P}$ has arity 2. Prove that there is a model $\mathcal{M}=((\mathbbm{N},\mathbbm{Z}),\textsf{Int})$ such that the following formula, generated from this signature, is true:\ $\forall x \forall y (Pxy\Rightarrow \neg Pyx)$. 
+
+    \item Prove that $[\exists xPx\Rightarrow \forall y Qy]\Rightarrow [\forall xPx \Rightarrow \forall y Qy]$ is a tautology of classical first-order logic in the model-theoretic sense.
+\end{enumerate}
+
+\end{document}
