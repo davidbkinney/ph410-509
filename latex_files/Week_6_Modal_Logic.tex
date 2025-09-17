@@ -1,0 +1,487 @@
+\documentclass[11pt]{article}
+
+% Packages for math and proof writing
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{bbm}
+
+% Theorem and proof environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+% Definitions, remarks, etc.
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Page formatting
+\usepackage[margin=1in]{geometry}
+
+\title{Week 6:\ Modal Logic}
+\author{David Kinney}
+\date{October 2, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+A \textbf{modality} is a particular way that some more general category is realized. For example, trains, planes, and automobiles are all modalities of transportation. By the same token, \textbf{modal logic} studies the different ways that propositions can be true.\par 
+
+In classical propositional logic, every proposition is either true or false. There is no mechanism for qualifying the \textit{extent} to which a proposition is true or false, or \textit{the way in which} a proposition is true or false.  However, we know that when we think about truth and falsity in philosophy and everyday life, there are propositions that are \textit{necessarily} true and propositions that are not, propositions that are \textit{possibly} true and propositions that are not, propositions that are \textit{known} to be true and propositions that are not, and so on. Modal logic aims to rectify this shortcoming and allow us to reason systematically about the different ways that a proposition can be true or false.\par
+
+The most common application of modal logic is the application that allows us to distinguish between propositions that are necessarily true, propositions that are possibly true, and propositions that are true \textit{simpliciter}. This is called \textbf{alethic modal logic}. Since this is the application of modal logic that one sees most often in the philosophy literature, it is the application that we will present first, before moving on to \textbf{epistemic logic}, which is an application of modal logic that allows us to distinguish between truths that are known and other truths. In what follows, I will provide an explanation of how to generate WFFs in modal logic, before exploring both proof-theoretic and model-theoretic attempts to define modal logic, along with the connections between these two approaches. I'll then move on to apply the same formal machinery to epistemic logic.\par
+
+Note that because we will be defining a variety of proof theories and model theories for modal logic, what follows is not an introduction to a single system of logic called ``modal logic,'' but rather a number of different modal \textit{logics}. Confusingly, people often say that they are studying or using modal logic when they are actually dealing with multiple modal logics, but we will have to deal with this confusion. More confusingly still, people will say ``a modal logic'' or ``a system of modal logic'' to refer to a system of modal logic with a particular proof system and model theory. Then, for a given modal logic, they will use terms like alethic modal logic or epistemic modal logic to refer to a particular interpretation of the symbols of that logic. We will just have to deal with all of this.\par
+
+
+\section{The WFFs of Modal Logic}
+Consider the standard method for forming a set of WFFs of propositional logic. We let $\mathbbm{A}$ be a set of propositions $\{p,q,r,\dots\}$, and then let the set of all WFFs be the set containing $\mathbbm{A}$ and all compound propositions that can be formed from $\mathbbm{A}$ by combining atomic propositions using the standard connectives of propositional logic. To generate the WFFs of modal logic, we take the set of of WFFs of propositional logic, and \textit{add to it} any WFF that can be formed by placing the symbol $\Box$ in front of either the entire WFF, or any compound or atomic proposition found within the WFF. To illustrate, the following are some WFFs of propositional modal logic:
+$$p$$
+$$\Box p$$
+$$\neg p$$
+$$\Box\neg p$$
+$$\neg\Box p$$
+$$(p\wedge q)$$
+$$\Box(p\wedge q)$$
+$$(\Box p\wedge q)$$
+$$(p\wedge \Box q)$$
+$$(\Box p\wedge \Box q)$$
+$$(p\vee q)$$
+$$\Box(p\vee q)$$
+$$(\Box p\vee q)$$
+$$(p\vee \Box q)$$
+$$(\Box \vee \Box q)$$
+$$(p\Rightarrow q)$$
+$$\Box(p\Rightarrow  q)$$
+$$(\Box p\Rightarrow  q)$$
+$$(p\Rightarrow  \Box q)$$
+$$(\Box p\Rightarrow  \Box q)$$
+and so on. Essentially, one can take any WFF of propositional logic, put the symbol $\Box$ in front of a lower-case letter, negation symbol $\neg$, or open parenthesis $($ and thereby generate a WFF of model logic. The WFFs of propositional logic without any boxes are also WFFs of modal logic. We will use $\mathcal{F}$ to denote the set of all WFFs of modal logic.\par
+
+As a kind of shorthand, any WFF in $\mathcal{F}$ of the form $\neg\Box\neg\varphi$ can be re-written as $\Diamond \varphi$. We can re-write any WFF of the form $\neg\Box\neg\varphi$ in this way, whether it appears as a stand-alone proposition or as part of a larger compound proposition. The symbols $\Box$ and $\Diamond$ are called \textbf{modal operators}. In alethic modal logic, for any atomic or compound proposition $\varphi$, we interpret $\Box\varphi$ as `it is necessarily the case that $\varphi$,' or `$\varphi$ is necessarily true,' or `necessarily, $\varphi$. We interpret $\Diamond\varphi$ as `it is possibly the case that $\varphi$,' `$\varphi$ is possible true,' or `possibly, $\varphi$.' Thus, in alethic modal logic, `it is possibly the case that $\varphi$' just means `its is not necessarily the case that not-$\varphi$.' If a true compound or atomic proposition $\varphi$ is not adorned with a modal operator, then we just say that it is true \textit{simpliciter}. In what follows, we will outline some possible proof theories and model theories for modal logic. To be clear, \textit{any} of the modal logics defined by these proof theories and model theories can be an alethic modal logic, as long as the operator $\Box$ is interpreted as `necessarily.'\par 
+
+
+\section{Proof Theories for Modal Logics}
+Proof theories for modal logics typically use the Hilbert-Ackermann style of proof system. The most basic proof system for a modal logic, typically called $\mathbf{K}$ after Saul Kripke (1940-2022), has \textit{modus ponens} as an inference rule, and contains the Hilbert-Ackermann propositional axiom schemas:
+\begin{enumerate}
+    \item $\varphi \Rightarrow (\psi \Rightarrow \varphi)$
+
+    \item $(\varphi \Rightarrow (\psi \Rightarrow \tau)) \Rightarrow ((\varphi \Rightarrow \psi)\Rightarrow (\varphi \Rightarrow \tau))$
+
+    \item $(\neg\psi \Rightarrow \neg\varphi)\Rightarrow ((\neg\psi\Rightarrow \varphi)\Rightarrow \psi)$
+\end{enumerate}
+Note that because we are creating a proof system for a modal logic, we can replace any of the Greek letters in these schemas with a WFF in $\mathcal{F}$ to generate an axiom. In addition, $\mathbf{K}$ contains the following inference rule, called the \textbf{Necessitation Rule}:
+$$\frac{\varphi}{\Box \varphi}.$$
+This rule states that if we can write $\varphi$ at any point in a proof in a modal logic, (i.e., $\varphi$ is an axiom or tautology of a system of modal logic), then we can also write $\Box \varphi$. This encodes the idea that anything tautological is necessarily true. Finally, $\mathbf{K}$ contains the following additional axiom schema, known as \textbf{Distribution}:
+$$\Box (\varphi\Rightarrow\psi)\Rightarrow(\Box\varphi\Rightarrow\Box\psi).$$
+Thus, in $\mathbf{K}$, we can always write a material conditional expressing that if a material conditional $(\varphi\Rightarrow\psi)$ necessarily holds, then it is the case that if $\varphi$ is necessarily true, then $\psi$ is necessarily true.\par
+
+
+Most people think that the idea of necessary truth cannot be fully expressed by the proof system $\mathbf{K}$; the system is just too weak. For example, for any $p$, the WFF $\Box p \Rightarrow p$ cannot be proven in $\mathbf{K}$, even though it is intuitively the case that if a proposition is necessarily true, then it ought to also be true \textit{simpliciter}. So, we can add the following, additional axiom schema, typically called $M$ because C.I. Lewis (1883-1964) called it the ``modal axiom,'' to the proof system $\mathbf{K}$:
+$$(M) \ \Box \varphi \Rightarrow \varphi.$$
+The proof system generated by adding $M$ to $\mathbf{K}$ is typically called $\mathbf{T}$ (because it is the ``traditional system''). If we want an even stronger proof system, we can generate the system \textbf{S4} by adding the following axiom schema, known as 4, to $\mathbf{T}$:
+$$(4) \ \Box \varphi\Rightarrow\Box\Box \varphi.$$
+In other words, in \textbf{S4}, if a proposition $\varphi$ is necessarily necessarily true, then it is necessarily true.\par 
+
+
+One very useful property of \textbf{S4} is that it allows us to replace any modal proposition of the form $\Box\dots\Box\varphi$, where $\Box\dots\Box$ denotes the repetition of $\Box$ operators, with the proposition $\Box\varphi$, wherever $\Box\dots\Box\varphi$ appears in a WFF. It also allows us to replace $\Diamond\dots\Diamond\varphi$, where $\Diamond\dots\Diamond$ denotes the repetition of $\Diamond$ operators, with the proposition $\Diamond\varphi$, wherever $\Diamond\dots\Diamond\varphi$ appears in a WFF.\par 
+
+In the case of the operator $\Box$, the reason this holds is easy to see:\ $M$ and $4$ jointly imply $\Box\varphi \iff \Box\Box \varphi$, and so for any $\Box\dots\Box\varphi$ we just replace $\Box\Box \varphi$ with $\Box\varphi$ until we are left with only $\Box\varphi$. In the case of the operator $\Diamond$, we note again that $M$ and $4$ jointly imply $\Box\varphi \iff \Box\Box \varphi$. We know from the truth table of the biconditional that this implies that $$\neg\Box\varphi \iff \neg\Box\Box \varphi.$$ If we replace $\varphi$ with $\neg\varphi$ on both sides of the schema, we get $$\neg\Box\neg\varphi \iff \neg\Box\Box \neg\varphi.$$ Since $\Diamond\varphi$ is just a shorthand for $\neg\Box\neg\varphi$, we now have $$\Diamond\varphi \iff \neg\Box\Box \neg\varphi.$$ We know that in classical propositional logic, we can re-write any proposition as its double negation. So $\Box \neg\varphi$ can be re-written as $\neg\neg\Box \neg\varphi$, and so we have $$\Diamond\varphi \iff \neg\Box\neg\neg\Box \neg\varphi.$$ Using again the fact that $\Diamond\varphi$ is just a shorthand for $\neg\Box\neg\varphi$, we have:
+$$\Diamond\varphi \iff \Diamond\Diamond\varphi.$$
+So, for any $\Diamond\dots\Diamond\varphi$ we just replace $\Diamond\Diamond \varphi$ with $\Diamond\varphi$ until we are left with only $\Diamond\varphi$.\par
+
+As an alternative to \textbf{S4}, we can construct the proof system $\mathbf{B}$, named after L.E.J. Brouwer (1881-1966), by adding the following axiom scheme, called $B$, to the system $\mathbf{T}$:
+$$(B) \ \varphi\Rightarrow\Box\Diamond \varphi.$$
+In other words, $B$ says that if $\varphi$ is true \textit{simpliciter}, then it is necessarily possibly true.\par
+
+As another alternative to \textbf{S4}, we can instead add the following axiom schema, known as 5, to $\mathbf{T}$, thereby generating the proof system \textbf{S5}:
+$$(5) \ \Diamond \varphi\Rightarrow\Box\Diamond \varphi.$$
+In other words, in \textbf{S5}, if any proposition $\varphi$ is possible, then it is necessarily possible. Interestingly, if we add the axiom schemas 4 and $B$ to $\mathbf{T}$, we get a proof system that is equivalent to \textbf{S5}:\ it proves all and only the same tautologies. We can prove this by showing that the we can prove an instance of 5 for any arbitrary proposition $p$ using only \textbf{S4} with the additional axiom schema $B$, and an instance of both $B$ and $4$ for arbitrary proposition $p$ using only \textbf{S5}. We will do this now.
+\begin{proposition}
+    We can prove $\Diamond \varphi \Rightarrow \Box\Diamond \varphi$ for arbitrary $\varphi$ using \textbf{S4} and the axiom schema $B$.
+\end{proposition}
+\begin{proof}
+    Using the axiom schema B, we can substitute the modal WFF $\Diamond \varphi$ in for $\varphi$ to yield:
+    $$\Diamond \varphi \Rightarrow\Box\Diamond \Diamond \varphi$$
+    Since we know that, in \textbf{S4}, $\Diamond \Diamond \varphi \iff \Diamond \varphi$, we can re-write this WFF as
+    $\Diamond \varphi \Rightarrow\Box\Diamond \varphi.$
+\end{proof}
+\noindent
+So, using the axioms of \textbf{S4} and the axiom $B$, we can prove any instance of the axiom $5$. Since \textbf{S4} and \textbf{S5} share all other axioms and inference rules, this means that adding the axiom $B$ to \textbf{S4} creates a proof system that can prove any WFF that \textbf{S5} can. Going the other way, we will prove that \textbf{S5} allows us to prove $B$ and $4$:
+\begin{proposition}
+    We can prove $\varphi \Rightarrow \Box\Diamond \varphi$ for arbitrary $\varphi$ using \textbf{S5}.
+\end{proposition}
+\begin{proof}
+    We start by substituting $\neg \varphi$ in the axiom schema $M$:
+    \begin{equation}
+        \Box\neg \varphi \Rightarrow \neg \varphi
+    \end{equation}
+    Next, we use contraposition to get
+    \begin{equation}
+        \neg\neg \varphi \Rightarrow \neg\Box\neg \varphi
+    \end{equation}
+    Double negation gets us
+    \begin{equation}
+        \varphi \Rightarrow \neg\Box\neg \varphi
+    \end{equation}
+    And the definition of $\Diamond$ gets us
+    \begin{equation}
+        \varphi\Rightarrow \Diamond \varphi
+    \end{equation}
+    Next, we write an instance of the axiom schema 5:
+    \begin{equation}
+        \Diamond \varphi \Rightarrow \Box\Diamond \varphi
+    \end{equation}
+    Chaining (4) and (5) yields $\varphi \Rightarrow \Box\Diamond \varphi$.
+\end{proof}
+\begin{proposition}
+    We can prove $\Box \varphi \Rightarrow \Box\Box\varphi$ for arbitrary $\varphi$ using \textbf{S5}.
+\end{proposition}
+\begin{proof}
+    We start by substituting $\neg \varphi$ in the axiom schema $5$:
+    \begin{equation}
+        \Diamond\neg \varphi \Rightarrow \Box\Diamond\neg \varphi
+    \end{equation}
+    the definition of $\Diamond$ gets us
+    \begin{equation}
+        \neg\Box\neg\neg \varphi \Rightarrow \Box\neg\Box\neg\neg \varphi
+    \end{equation}
+    Double negation gets us:
+    \begin{equation}
+        \neg\Box \varphi \Rightarrow \Box\neg\Box \varphi
+    \end{equation}
+    Contraposition and double negation yield
+    \begin{equation}
+        \neg\Box\neg\Box \varphi \Rightarrow \Box \varphi
+    \end{equation}
+    The definition of $\Diamond$ gets us
+    \begin{equation}
+        \Diamond\Box \varphi \Rightarrow \Box \varphi
+    \end{equation}
+    The necessitation rule allows us to infer:
+    \begin{equation}
+        \Box(\Diamond\Box \varphi \Rightarrow \Box \varphi)
+    \end{equation}
+    Distribution gets us
+    \begin{equation}
+        \Box\Diamond\Box \varphi \Rightarrow \Box\Box \varphi
+    \end{equation}
+    We can plug $\Box \varphi$ in for $\varphi$ in the axiom schema $B$ (which we just proved can be derived in \textbf{S4}) to get:
+    \begin{equation}
+        \Box \varphi\Rightarrow \Box\Diamond\Box \varphi 
+    \end{equation}
+    Chaining (13) and (12) gets us $\Box \varphi \Rightarrow \Box\Box \varphi$.
+\end{proof}
+\noindent
+These proofs show us that \textbf{S5} is at least as strong as \textbf{S4} and \textbf{B}; any WFFs that can proven in \textbf{S4} or \textbf{B} can proven in \textbf{S5}. It turns out that \textbf{S5} is \textit{strictly} stronger than each of \textbf{S4} and \textbf{B} as well; there are WFFs that can be proven in \textbf{S5} but not in \textbf{S4} or \textbf{B}. Finally, Propositions 2-4 show that \textbf{S5} proves all the same WFFs and the combination of \textbf{S4} and \textbf{B}.
+ 
+
+One note on these proofs:\ you will notice that I helped myself to the moves \textit{contraposition}, \textit{chaining}, and \textit{double negation}. This is acceptable because for any propositions $\varphi$ and $\psi$, the WFFs $$(\varphi\Rightarrow \psi)\Rightarrow(\neg \psi\Rightarrow \neg\varphi) \ \text{(contraposition)},$$
+$$[(\varphi\Rightarrow \psi) \wedge (\psi\Rightarrow \tau)]\Rightarrow(\varphi\Rightarrow \neg\psi) \ \text{(chaining), and}$$
+$$\neg\neg \varphi \Rightarrow \varphi \ \text{(double negation)}$$ can always be proved using just the Hilbert-Ackermann system for classical propositional logic. More generally, \textit{when writing a proof in modal logic, you can help yourself to any tautology of classical propositional logic.} Well-known ones like contraposition, chaining, and double negation can be used without further justification, but for more esoteric ones, you should provide some evidence that the tautology holds. You won't need esoteric tautologies for any proofs in the problem set.\par 
+
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{|l|l|}
+    \hline
+     Proof System  &  Axiom Schemas and Inference Rules Added to Hilbert-Ackermann\\
+     \hline
+     $\mathbf{K}$  & Necessitation Rule, Distribution\\
+     \hline
+     $\mathbf{T}$ & Everything in $\mathbf{K}$, $M$\\
+     \hline
+     \textbf{S4} & Everything in $\mathbf{T}$, 4\\
+          \hline
+     $\mathbf{B}$ & Everything in $\mathbf{T}$, B\\
+     \hline
+     \textbf{S5} & Everything in $\mathbf{T}$, 5 OR Everything in \textbf{S4}, B\\
+     \hline
+    \end{tabular}
+    \caption{Summary of Proof Systems for Propositional Model Logic}
+    \label{tab:systems}
+\end{table}
+
+
+Table~\ref{tab:systems} summarizes the five different proof systems for modal logic that we have discussed here, stating each of the axiom schemas or inference rules that they add to the Hilbert-Ackermann system for classical propositional logic. Each of these proof systems defines a different modal logic, and so you will sometimes hear or read people say things like ``the modal logic \textbf{S4}'' or ``the modal logic \textbf{B}.'' Confusingly, all the proof systems in Table 1 are also sometimes called ``systems of modal logic.'' Again, we will just have to live with this confusion.\par 
+
+
+\section{Model Theories for Modal Logic}
+Since modal logic is a propositional logic, it is not surprising that the model theory for modal logic is a version of the possible worlds semantics for classical propositional logic that we introduced last week. As we did last week, let $\mathbbm{A}$ be the set of atomic propositions of propositional logic, and let a possible world $w:\mathbbm{A}\rightarrow\{T,F\}$ be a function assigning each atomic proposition a truth value. For any WFF $\varphi$ of modal logic with \textit{no modal operators}, we write $w\vDash \varphi$ if and only if $\varphi$ is true, according to the truth tables of classical propositional logic, when each atomic proposition in $\varphi$ gets the truth value that it is assigned by the possible world $w$.\par 
+
+
+To extend this idea to modal logic, we can ask:\ for any atomic or compound proposition $\varphi$, what are the conditions under which $w\vDash \Box\varphi$? In other words, when is $\varphi$ not only true in a according to a model of the world, but necessarily true according to a model of the world? To answer this question, we will need to introduce some additional formal machinery. Let $W$ be the set of \textit{all} functions $w:\mathbbm{A}\rightarrow\{T,F\}$, i.e., the set of all possible worlds. Let $R\subseteq W^{2}$ be a set of pairs of possible worlds (recall that $W^{2}=W\times W$). We call $R$ the \textbf{accessibility relation}, and say that for any possible worlds $w$ and $w^{\prime}$, if $(w,w^{\prime})\in R$, then $w^{\prime}$ is \textbf{accessible} from $w$. For any WFF of modal logic of the form $\Box\varphi$, we will say that $w\vDash\Box\varphi$ if and only if, for every possible world $w^{\prime}$, if $w^{\prime}$ is accessible from $w$ (i.e., if $(w,w^{\prime})\in R$), then $w^{\prime}\vDash \varphi$. In under words, under the alethic interpretation of modal logic, a proposition $\varphi$ is necessarily true in a world $w$ if and only if it is true in every world $w^{\prime}$ that is accessible from $w$.\par
+
+
+As an intuition pump, one can think of the accessibility relation $R$ as picking out all the worlds that are ``close enough'' to a world $w$ that any necessary truths in $w$ also hold in those nearby worlds. For example, if $w$ is the actual world, then we might say that the laws of physics hold not only in $w$, but in all worlds that are physically accessible from $w$. This allows us to say that the laws of physics are, according to some accessibility relation $R$, necessary truths, without stipulating the the laws of physics apply in \textit{every} possible world.\par
+
+For any $\varphi$ such that it is not the case that $w\vDash \varphi$, we write $w\not\vDash \varphi$. In all the modal logics we consider here, if $w\not\vDash \varphi$ then $w\vDash \neg \varphi$.\par 
+
+
+To deal with compound propositions $\varphi$ that are composed of at least some propositions that are adorned with the model operator $\Box$, we proceed as follows. In a given possible world $w$, we the assign the truth-value $T$ to every WFF $\psi$ in the compound proposition such that, according to the relation $R$, $w\vDash\psi$. We then use the truth-tables of classical propositional logic to determine whether the compound proposition is true. To illustrate, consider the proposition $(p\wedge\Box q)$. If, according to the accessibility relation $R$, $w\vDash p$ and $w\vDash\Box q$ (i.e., $w\vDash p$ and for all $w^{\prime}$ such that $(w,w^{\prime})\in R$, $w^{\prime}\vDash q$), then $w\vDash (p\wedge\Box q)$. If, on the other hand, either $w\not\vDash p$ or $w\not\vDash\Box q$ (i.e., either $w\not\vDash p$ or there exists a $w^{\prime}$ such that $(w,w^{\prime})\in R$ but $w^{\prime}\not\vDash q$), then it is not the case that $w\vDash (p\wedge\Box q)$.
+
+
+Thus, given a pair $(W,R)$, where $W$ is the set of all possible worlds and $R\subseteq W^{2}$ is an accessibility relation, for any possible world $w\in W$ and any WFF of modal logic $\varphi$, we can say whether $w\vDash\varphi$ or $w\not\vDash\varphi$. The pair $(W,R)$ is called a \textbf{Kripke frame}, and is the standard way of developing model theory for modal logic. Philosophically, it is important to note that in defining a model theory for modal logic, we couldn't just say how a model of each possible world determines the truth or falsehood of WFFs. We also had to say how an accessibility relation defined over all possible models of the world tells us whether WFFs that include modal operators are either true or false. Thus, in many cases, whether a WFF that includes modal operators is true or false depends on exactly which accessibility relation we include in our Kripke frame. A WFF $\varphi$ of modal logic is a model-theoretic tautology according to a set of Kripke frames if and only if for all Kripke frames $(W,R)$ in the set, $w\vDash\varphi$ for all $w\in W$.\par 
+
+
+\section{Connecting the Proof Theory and Model Theory of Modal Logic}
+If we let $\mathcal{F}$ be the set of all WFFs of modal logic, then a system of modal logic is composed of:
+\begin{enumerate}
+    \item A proof theory that tells us which WFFs are proof-theoretic tautologies (i.e., which WFFs can be the terminal WFF in a sequence that contains only axioms and WFFs derived from previous WFFs in the sequence via inference rules).
+
+    \item A set of Kripke frames such that each Kripke frame $(W,R)$ that tells us which WFFs are true in which possible worlds, and therefore which WFFs are model-theoretic tautologies (i.e., which WFFs are true in every possible world in every Kripke frame).
+\end{enumerate}
+Ideally, we would like a system of modal logic to be sound. This means that any proof-theoretic tautology is a model-theoretic tautology. We would also like a system of modal logic to be complete, meaning that any model-theoretic tautology is also a proof-theoretic tautology. A beautiful thing about modal logic is that there is a very nice correspondence between our choice of accessibility relation $R$ and the proof theory that couples with a set of Kripke frames to yield a sound and complete logic. Before we explain this correspondence, however, we will first have to review some basic properties of two-place relations.\par 
+
+\subsection{Some Properties of Two-Place Relations}
+We will now review some basic properties of two-place relations. Let $X$ be any non-empty set, and let $R\subseteq X^{2}$ be any two-place relation on $X$. That is, $R$ is a set of pairs $(x,x^{\prime})$ such that $x\in X$ and $x^{\prime}\in X$. We will now list some properties that $R$ may or may not satisfy:
+
+\subsubsection{The Reflexive Property}
+A two-place relation $R\subseteq X^{2}$ is \textbf{reflexive} if and only if the following conditional holds:\ for any $x\in X$, $(x,x)\in R$. In other words, $R\subseteq X^{2}$ is a reflexive relation if and only if every $x\in X$ stands in the $R$ relation to itself. For example, the identity relation on the real numbers is reflexive, as is the greater-than-or-equal-to relation and the less-than-or-equal-to relation.
+
+\subsubsection{The Transitive Property}
+A two-place relation $R\subseteq X^{2}$ is \textbf{transitive} if and only if the following conditional holds:\ for any $x\in X$, $x^{\prime}\in X$, and $x^{\dagger}\in X$, if $(x,x^{\prime})\in R$ and  $(x^{\prime},x^{\dagger})\in R$, then $(x,x^{\dagger})\in R$. For example, the identity relation on the real numbers is transitive in addition to being symmetric, as is the greater-than-or-equal-to relation and the less-than-or-equal-to relation are all transitive in addition to being reflexive. However, the strictly-greater-than and strictly-less-than relations on the real numbers are transitive even though they are not reflexive.
+
+\subsubsection{The Symmetric Property}
+A two-place relation $R\subseteq X^{2}$ is \textbf{symmetric} if and only if the following conditional holds:\ for any $x\in X$ and $x^{\prime}\in X$, if $(x,x^{\prime})\in R$, then $(x^{\prime},x)\in R$. For example, the identity relation on the real numbers is symmetric in addition to being reflxive and transitive, but neither the greater-than-or-equal-to relation nor the less-than-or-equal-to relation is symmetric. As another example, the relationship between two people of being siblings is symmetric and transitive, but not reflexive (not everyone is their own sibling).
+
+
+\subsubsection{The Euclidean Property}
+A two-place relation $R\subseteq X^{2}$ is \textbf{Euclidean} if and only if the following conditional holds:\ for any $x\in X$, $x^{\prime}\in X$, and $x^{\dagger}\in X$, if $(x,x^{\prime})\in R$ and  $(x,x^{\dagger})\in R$, then $(x^{\prime},x^{\dagger})\in R$. For example, the property of between restaurants of being in the same neighborhood is reflexive:\ if Yellowbelly is in the same neighborhood as Dressel's, and Yellowbelly is in the same neighborhood as Pizza Via, then Dressel's is in the same neighborhood as Pizza Via.\par 
+
+
+\subsubsection{A Crucial Connection Between Properties of Two Place Relations}
+
+A nice proposition that connects these four properties of two-place relations is the following:
+\begin{proposition}
+    For any non-empty set $X$ and any non-empty relation $R\subseteq X^{2}$: 
+    \begin{enumerate}
+        \item If $R$ is Euclidean and reflexive, then it is transitive.
+
+        \item If $R$ is Euclidean and reflexive, then it is symmetric.
+
+        \item If $R$ is symmetric and transitive, then it is Euclidean.
+    \end{enumerate}
+    
+\end{proposition}
+\begin{proof}
+    Let's start by showing that if $R$ is Euclidean and reflexive, then it is transitive. For any $x\in X$, $x^{\prime}\in X$, and $x^{\dagger}\in X$, suppose that $(x,x^{\prime})\in R$ and $(x^{\prime},x^{\dagger})\in R$. Because $R$ is reflexive, we know that $(x,x)\in R$. Because $R$ is Euclidean, we derive from $(x,x^{\prime})\in R$ and $(x,x)\in R$ that $(x^{\prime},x)\in R$. Then, from $(x^{\prime},x)\in R$ and $(x^{\prime},x^{\dagger})\in R$, we derive via the Euclidean property that $(x,x^{\dagger})\in R$. Thus, if $R$ is Euclidean and reflexive, then $(x,x^{\prime})\in R$ and $(x^{\prime},x^{\dagger})\in R$ entails that $(x,x^{\dagger})\in R$, and so $R$ is transitive.\par
+
+    Next, we show that if $R$ is Euclidean and reflexive, then it is symmetric. For any $x\in X$ and $x^{\prime}\in X$, suppose that $(x,x^{\prime})\in R$. Because $R$ is reflexive, we know that $(x,x)\in R$. Since $R$ is Euclidean, it follows from $(x,x^{\prime})\in R$ and $(x,x)\in R$ that $(x^{\prime},x)\in R$. Thus, if $R$ is Euclidean and reflexive, then $(x,x^{\prime})\in R$ entails that $(x^{\prime},x)\in R$, and so $R$ is symmetric.\par
+
+    Finally, we show that if $R$ is symmetric and transitive, then it is Euclidean. For any $x\in X$, $x^{\prime}\in X$, and $x^{\dagger}\in X$, suppose that $(x,x^{\prime})\in R$ and $(x,x^{\dagger})\in R$. Because $R$ is reflexive, $(x,x^{\prime})\in R$ entails $(x^{\prime},x)\in R$. Because $R$ is transitive, $(x^{\prime},x)\in R$ and $(x,x^{\dagger})\in R$ entails $(x^{\prime},x^{\dagger})\in R$. Thus, if if $R$ is symmetric and transitive, then $(x,x^{\prime})\in R$ and $(x,x^{\dagger})\in R$ entails $(x^{\prime},x^{\dagger})\in R$, and so $R$ is Euclidean. 
+\end{proof}
+\noindent
+We will later show that this proposition effectively establishes the equivalence between \textbf{S5} and the proof system that combines \textbf{B} to \textbf{S4}.
+
+
+\subsection{Connections Between Model Theories and Proof Theories for Modal Logics}
+At last, we are able to state the connection between the model theories and proof theories that define different modal logics. We will do so over the course of a series of propositions. The first series of propositions propositions establish what kinds of Kripke frames we can use to get a sound modal logic (i.e., one such that any proof-theoretic tautology is a model-theoretic tautology) for modal logics with different proof systems. 
+
+\subsubsection{Soundness Propositions}
+We begin with the proposition showing the soundness of \textbf{K} for \textit{any} choice of Kripke frame. The proof is long, but ultimately more tedious than difficult, as soundness proofs often are:\par 
+\begin{proposition}
+    If $\varphi$ is a proof-theoretic tautology according to the proof system \textbf{K}, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$.
+\end{proposition}
+\begin{proof}
+    If $\varphi$ is a proof-theoretic tautology according to the proof system \textbf{K}, then there is a valid proof that terminates at $\varphi$ such that every WFF in the proof is either an axiom of \textbf{K} or derived from earlier WFFs in the proof using modus ponens or the Necessitation Rule. One way of generating such a proof is for $\varphi$ to be an axiom of \textbf{K}; if it is then we can just write a one-line proof. If $\varphi$ is an axiom of \textbf{K}, then it is either an instance of the three Hilbert-Ackermann axioms, or of Distribution. In the first case, $\varphi$ is a compound proposition of one of the following forms, where $\psi$, $\tau$, and $\theta$ are all WFFs of modal logic:
+    $$\psi\Rightarrow(\tau\Rightarrow\psi),$$
+    $$[\psi\Rightarrow(\tau\Rightarrow\theta)]\Rightarrow[(\psi\Rightarrow\tau)\Rightarrow(\psi\Rightarrow\theta)], \ \text{or}$$
+    $$(\neg\tau \Rightarrow \neg\psi)\Rightarrow ((\neg\tau\Rightarrow \psi)\Rightarrow \tau).$$
+    Because these are Hilbert-Ackermann axiom schemas, we know that they are true no matter the truth values of the propositions we substitute for $\psi$, $\tau$, and $\theta$ (and, in any event, this is easy to check using the truth tables of classical propositional logic). Thus, if $\varphi$ has any of these three forms, then for any $w\in W$, $w\vDash \varphi$ and so $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$. In the second case, we know that $\varphi$ has the form
+    $$\Box(\psi\Rightarrow\tau)\Rightarrow(\Box\psi\Rightarrow\Box\tau).$$
+    Suppose, for contradiction, that a WFF of this form failed to hold in a possible world $w\in W$. This would mean that:\ 1) for all $w^{\prime}\in W$ such that $(w,w^{\prime})\in R$, either $w^{\prime}\not\vDash\psi$ or $w^{\prime}\vDash\tau$ (so that the antecedent holds), but 2) there exists a $w^{\prime}\in W$ such that $(w,w^{\prime})\in R$, $w^{\prime}\vDash\psi$ and $w^{\prime}\not\vDash\tau$. These two claims are clearly in contradiction, and so a WFF $\varphi$ that is an instantiation of Distribution must hold in all $W$. Since we have made no assumptions about the relation $R$, this result holds for any $(W,R)$. Thus, if $\varphi$ is an instantiation of Distribution, then $\varphi$ is a model-theoretic tautology according any Kripke frame $(W,R)$. This means that if we can write a valid one-line proof of $\varphi$ in \textbf{K}, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$.\par 
+
+    Next, we consider the case of a valid multi-line proof in \textbf{K} $(\psi_{1},\dots,\psi_{n},\varphi)$ where a one-line proof of $\varphi$ is not possible. Suppose that a WFF $\psi_{j}$ is derived from earlier WFFs via modus ponens. This means that the proof contains WFFs $\psi_{i}$ and $(\psi_{i}\Rightarrow\psi_{j})$ that occur before $\psi_{j}$. Suppose that $\psi_{i}$ and $(\psi_{i}\Rightarrow\psi_{j})$ are model-theoretic tautologies according to all Kripke frames $(W,R)$. This means that for all Kripke frames $(W,R)$, for any $w\in W$, $w\vDash \psi_{i}$ and $w\vDash (\psi_{i}\Rightarrow\psi_{j})$. The supposition that $w\vDash (\psi_{i}\Rightarrow\psi_{j})$ entails that either $w\not\vDash \psi_{i}$ or $w\vDash \psi_{j}$. Since we have already supposed that $w\vDash \psi_{i}$, it follows that $w\vDash \psi_{j}$. Thus, if $\psi_{j}$ is derivable via modus ponens from earlier WFFs that are model-theoretic tautologies according to all Kripke frames $(W,R)$, then $\psi_{j}$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$. Similarly, suppose that the WFF $\Box\psi_{k}$ is derived from earlier WFFs via the Necessitation Rule. This means that there is a WFF $\psi_{k}$ that occurs before $\Box\psi_{k}$ in the proof. Suppose that $\psi_{k}$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$. This means that for all Kripke frames $(W,R)$, for any $w\in W$, $w\vDash \psi_{k}$. From this, it follows that no matter the elements of $R$, for any $w^{\prime}\in W$ such that $(w,w^{\prime})\in R$, $w^{\prime}\vDash\psi_{k}$. Thus, if $\Box\psi_{k}$ is derivable via the Necessitation Rule from an earlier WFF that is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$, then $\psi_{j}$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$.\par
+    
+    We now return to the valid proof in \textbf{K} $(\psi_{1},\dots,\psi_{n},\varphi)$, where a one-line proof of $\varphi$ is not possible. Because $(\psi_{1},\dots,\psi_{n},\varphi)$ is a valid proof in \textbf{K}, and because we know $\varphi$ is not an instance of the Hilbert-Ackermann axiom schemas or Distribution (or else a one-line proof would be possible), we know that $\varphi$ can be derived from earlier WFFs in the proof via either modus ponens or Necessitation. We have proved above that if the earlier WFFs used to derive $\varphi$ are model-theoretic tautologies according to all Kripke frames $(W,R)$, then, $\varphi$, which derived from them via either modus ponens or Necessitation, must also be a model-theoretic tautology according to the set of all Kripke frames $(W,R)$. Thus, if we suppose, for contradiction, that $\varphi$ is not a model-theoretic tautology according to the set of all Kripke frames $(W,R)$, then there is at least one WFF $\psi$ used to derive $\varphi$ such that $\psi$ is not a model-theoretic tautology according to the set of all Kripke frames $(W,R)$. Let $\psi_{i}$ be the earliest such WFF in the proof. The WFF $\psi_{i}$ is either an instance of the Hilbert-Ackermann axiom schemas or Distribution, in which case it is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$, or is derived from earlier WFFs via either modus ponens or Necessitation. But, by definition, these earlier WFFs are all model-theoretic tautologies according to all Kripke frames $(W,R)$, which we have proved above implies that $\psi_{i}$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$. But we already assumed that $\psi_{i}$ was not a model-theoretic tautology according to the set of all Kripke frames $(W,R)$. This is a contradiction, and so $\varphi$ must be a model-theoretic tautology according to the set of all Kripke frames $(W,R)$.
+\end{proof}
+\noindent
+The soundness of \textbf{K} no matter what Kripke frame we use as a model theory provides a philosophical argument that \textbf{K} captures something very basic about modal reasoning. Indeed, it is hard to imagine how the Distribution Axiom or the Necessitation rule could fail to hold.\par
+
+Next, we consider the set of Kripke frames that can be paired with the proof system \textbf{T} to form a sound system of modal logic. The set is captured by the following proposition:
+\begin{proposition}
+    If $\varphi$ is a proof-theoretic tautology according to the proof system \textbf{T}, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive.
+\end{proposition}
+\begin{proof}
+If $\varphi$ is a proof-theoretic tautology according to the proof system \textbf{T}, then there is a valid proof that terminates at $\varphi$ such that every WFF in the proof is either an axiom of \textbf{T} or derived from earlier WFFs in the proof using modus ponens or the Necessitation Rule. One way of generating such a proof is for $\varphi$ to be an axiom of \textbf{T}; if it is then we can just write a one-line proof. If $\varphi$ is an axiom of \textbf{T}, then it is either:
+\begin{itemize}
+    \item an instance of the three Hilbert-Ackermann axioms,
+
+    \item an instance of Distribution, or
+
+    \item and instance of $M$
+\end{itemize}
+We have proven in the proof of Proposition 5 that the first two cases entail $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$, a set that includes those Kripke frame with symmetric $R$. This leaves the third case. In such a case, $\varphi$ has the form
+$$\Box\psi\Rightarrow\psi.$$
+Suppose, for contradiction, that such a WFF failed to hold in a world $w\in W$ for Kripke frame $(W,R)$ with symmetric $R$. This would mean that:\ 1) for all $w^{\prime}\in W$ such that $(w,w^{\prime})\in R$, $w^{\prime}\vDash \psi$, and 2) $w\not\vDash\psi$. If $R$ is reflexive, then $(w,w)\in R$, and so these two conditions are in contradiction. Thus, if $\varphi$ is an instantiation of $M$, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive. This means that if there is a one-line proof of $\varphi$ in \textbf{T}, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is symmetric.\par
+
+Next, we consider the case of a valid multi-line proof in \textbf{T} $(\psi_{1},\dots,\psi_{n},\varphi)$ where a one-line proof of $\varphi$ is not possible. Since the proof is valid, $\varphi$ must be inferred from earlier premises via modus ponens or necessitation. If we run the same argument found in the last two paragraphs of the proof of proposition 5, but replace the phrase `all Kripke frames $(W,R)$' with `all Kripke frames $(W,R)$ such that $R$ is reflexive,' and the phrase `Hilbert-Ackermann axiom schemas or Distribution' with `Hilbert-Ackermann axiom schemas, Distribution, or $M$,' we get the result that $\varphi$ must be a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is symmetric. This completes the proof.
+\end{proof}
+\noindent
+Next, we consider the set of Kripke frames that can be paired with the proof system \textbf{S4} to form a sound system of modal logic. The set is captured by the following proposition:
+\begin{proposition}
+    If $\varphi$ is a proof-theoretic tautology according to the proof system \textbf{S4}, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and transitive.
+\end{proposition}
+\begin{proof}
+    If $\varphi$ is a proof-theoretic tautology according to the proof system \textbf{S4}, then there is a valid proof that terminates at $\varphi$ such that every WFF in the proof is either an axiom of \textbf{S4} or derived from earlier WFFs in the proof using modus ponens or the Necessitation Rule. One way of generating such a proof is for $\varphi$ to be an axiom of \textbf{S4}; if it is then we can just write a one-line proof. If $\varphi$ is an axiom of \textbf{S4}, then it is either:
+    \begin{itemize}
+    \item an instance of the three Hilbert-Ackermann axioms,
+    
+    \item an instance of Distribution, 
+    
+    \item an instance of $M$,
+
+    \item an instance 4
+    \end{itemize}
+    We have proven in the proof of Proposition 5 that the first two cases entail that $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$, a set that includes those Kripke frame with reflexive and transitive $R$. We have proven in the proof of Proposition 6 that the third case entails $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ with symmetric $R$, a set that includes those Kripke frame with reflexive and transitive $R$. This leaves the fourth case. In such a case, $\varphi$ has the form
+    $$\Box\psi\Rightarrow\Box\Box\psi.$$
+    Suppose, for contradiction, that such a WFF failed to hold in a world $w\in W$ for Kripke frame $(W,R)$ with reflexive and transitive $R$. This would mean that:\ 1) for all $w^{\prime}\in W$ such that $(w,w^{\prime})\in R$, $w^{\prime}\vDash \psi$, and 2) there exists a $w^{\dagger}\in W$ such that $(w^{\prime},w^{\dagger})\in R$ and $w^{\dagger}\vDash \psi$. Since $R$ is transitive, for any $w^{\prime}\in W$ such that $(w,w^{\prime})\in R$ and $w^{\dagger}\in W$ such that $(w^{\prime},w^{\dagger})\in R$, $(w,w^{\dagger})\in R$, and so these two conditions are in contradiction. This means that if there is a one-line proof of $\varphi$ in \textbf{S4}, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and transitive.\par 
+
+
+    Next, we consider the case of a valid multi-line proof in \textbf{S4} $(\psi_{1},\dots,\psi_{n},\varphi)$ where a one-line proof of $\varphi$ is not possible. Since the proof is valid, $\varphi$ must be inferred from earlier premises via modus ponens or necessitation. If we run the same argument found in the last two paragraphs of the proof of proposition 5, but replacing the phrase `all Kripke frames $(W,R)$' with `all Kripke frames $(W,R)$ such that $R$ is reflexive and transitive,' and the phrase `Hilbert-Ackermann axiom schemas or Distribution' with `Hilbert-Ackermann axiom schemas, Distribution, $M$, or 4,' we get the result that $\varphi$ must be a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and transitive. This completes the proof.
+\end{proof}
+\noindent
+By now, you should be able to see the pattern forming. By building on earlier proofs, we are able to show that if there is a one-line proof of $\varphi$ according to the relevant proof system, then it must be an instantiation of an axiom schema that guarantees it will be a model-theoretic tautology of the relevant set of Kripke frames. If there is a multiple-line proof of $\varphi$, then we know from the results about modus ponens and Necessitation in Proposition 5 that we can guarantee that $\varphi$ is a model-theoretic tautology of the relevant set of Kripke frames.\par 
+
+We can repeat the same proof pattern to establish a similar result about the kinds of Kripke frames that can be paired with the proof system $\textbf{B}$ to build a sound system of logic:
+\begin{proposition}
+    If $\varphi$ is a proof-theoretic tautology according to the proof system \textbf{B}, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and symmetric.
+\end{proposition}
+\begin{proof}
+    If $\varphi$ is a proof-theoretic tautology according to the proof system \textbf{B}, then there is a valid proof that terminates at $\varphi$ such that every WFF in the proof is either an axiom of \textbf{B} or derived from earlier WFFs in the proof using modus ponens or the Necessitation Rule. One way of generating such a proof is for $\varphi$ to be an axiom of \textbf{B}; if it is then we can just write a one-line proof. If $\varphi$ is an axiom of \textbf{B}, then it is either:
+    \begin{itemize}
+    \item an instance of the three Hilbert-Ackermann axioms,
+    
+    \item an instance of Distribution, 
+    
+    \item an instance of $M$,
+
+    \item an instance of $B$
+    \end{itemize}
+    We have proven in the proof of Proposition 5 that the first two cases entail that $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$, a set that includes those Kripke frames with reflexive and symmetric $R$. We have proven in the proof of Proposition 6 that the third case entails $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ with reflexive $R$, a set that includes those Kripke frame with reflexive and symmetric $R$. This leaves the fourth case. In such a case, $\varphi$ has the form
+    $$\psi\Rightarrow\Box\Diamond\psi.$$
+    This can be re-written as
+    $$\psi\Rightarrow\Box\neg\Box\neg\psi.$$
+    Suppose, for contradiction, that such a WFF failed to hold in a world $w\in W$ for Kripke frame $(W,R)$ with reflexive and symmetric $R$. This would mean that:\ 1) $w\vDash\psi$, and 2) it is not the case that for all $w^{\prime}\in W$ such that $(w,w^{\prime})\in R$, $w^{\prime}\vDash \neg\Box\neg\psi$. The second condition entails that there is a $w^{\prime}\in W$ such that $w^{\prime}\not\vDash \neg\Box\neg\psi$, which entails $w^{\prime}\vDash \neg\neg\Box\neg\psi$, which entails $w^{\prime}\vDash \Box\neg\psi$. This entails in turn that for all $w^{\dagger}\in W$ such that $(w^{\prime},w^{\dagger})\in R$, $w^{\dagger}\vDash\neg\psi$. However, since $(w,w^{\prime})\in R$ and $R$ is symmetric, we have $(w^{\prime},w)\in R$, and so the second condition entails $w\vDash\neg\psi$, in direct contradiction with the first condition. Thus, if there is a one-line proof of $\varphi$ in \textbf{b}, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and symmetric.\par
+
+    Next, we consider the case of a valid multi-line proof in \textbf{B} $(\psi_{1},\dots,\psi_{n},\varphi)$ where a one-line proof of $\varphi$ is not possible. Since the proof is valid, $\varphi$ must be inferred from earlier premises via modus ponens or necessitation. If we run the same argument found in the last two paragraphs of the proof of proposition 5, but replacing the phrase `all Kripke frames $(W,R)$' with `all Kripke frames $(W,R)$ such that $R$ is reflexive and symmetric,' and the phrase `Hilbert-Ackermann axiom schemas or Distribution' with `Hilbert-Ackermann axiom schemas, Distribution, $M$, or B,' we get the result that $\varphi$ must be a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and transitive. This completes the proof.
+\end{proof}
+
+We are now left only with the task of proving the following proposition, which is left as an exercise in the problem set:
+\begin{proposition}
+    If $\varphi$ is a proof-theoretic tautology according to the proof system \textbf{S5}, then $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and Euclidean.
+\end{proposition}
+
+
+\subsubsection{Completeness Propositions}
+There are similar propositions that allow us to categorize the conditions under which a set of Kripke frames can be paired with a proof system for modal logic to form a complete system of logic, which is one such that any model-theoretic tautology is also a proof theoretic tautology. Completeness results typically require more complex proofs, and so we won't get into those details here. But the relevant propositions are as follows:
+\begin{proposition}
+    If $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$, then it is a proof-theoretic tautology of the system \textbf{K}. 
+\end{proposition}
+\begin{proposition}
+    If $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive, then it is a proof-theoretic tautology of the system \textbf{T}. 
+\end{proposition}
+\begin{proposition}
+    If $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and transitive, then it is a proof-theoretic tautology of the system \textbf{S4}. 
+\end{proposition}
+\begin{proposition}
+    If $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and symmetric, then it is a proof-theoretic tautology of the system \textbf{B}. 
+\end{proposition}
+\begin{proposition}
+    If $\varphi$ is a model-theoretic tautology according to the set of all Kripke frames $(W,R)$ such that $R$ is reflexive and Euclidean, then it is a proof-theoretic tautology of the system \textbf{S5}. 
+\end{proposition}
+\noindent
+Thus, we see a tight correspondence between the properties of the accessibility relation $R$ and the kinds of pairings between Kripke frames and proof systems that generate sound and complete modal logics. This correspondence is summarized in Table~\ref{tab:accessibility}.\par 
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Proof System} & \textbf{Accessibility Relation for Sound and Complete Logic} \\
+\hline
+\textbf{K}   & None  \\
+\textbf{T}   & Reflexive        \\
+\textbf{S4}  & Reflexive + Transitive  \\
+\textbf{B}   & Reflexive + Symmetric \\
+\textbf{S5}  & Reflexive + Euclidean  \\
+\hline
+\end{tabular}
+\caption{Frame conditions and completeness of standard modal logics}\label{tab:accessibility}
+\end{table}
+
+
+Looking at Table 2, the significance of Proposition 4 for modal logic should now be clear. There, we proved that if a two-place relation is reflexive and Euclidean, then it is symmetric and transitive, and that if it is symmetric and transitive, then it is Euclidean. This effectively entails that the sound and complete system of modal logic whose model-theoretic tautologies are Kripke frames with a reflexive and Euclidean accessibility relation is equivalent to the sound and complete system of modal logic whose model-theoretic tautologies are Kripke frames with a reflexive, transitive, and symmetric accessibility relation. This is just a more model-theoretic proof of the equivalence of  \textbf{S5} and \textbf{S4} + \textbf{B} that we proved earlier in a purely proof-theoretic way.\par 
+
+
+
+\section{Epistemic Logic}
+As mentioned in the introduction, an important application of modal logic is epistemology. This application is called \textbf{epistemic modal logic} or, more typically, \textbf{epistemic logic}. At its core, epistemic logic is just modal logic with the $\Box$ operator interpreted so that $\Box\varphi$ means `$\alpha$ knows that $\varphi$,' where $\alpha$ is some agent. From a philosophical standpoint, one of the most interesting debates is over which system of modal logic represents how knowledge actually functions in epistemology.\par 
+
+It is widely agreed that if $\Box$ is interpreted as indicating knowledge, them the apt proof system of epistemic modal logic must be at least as strong as \textbf{T}. This guarantees that:
+\begin{itemize}
+    \item If a proposition is proved, $\alpha$ knows that $\varphi$. (Necessitation Rule)
+
+    \item If $\alpha$ knows that $\varphi\Rightarrow\psi$, then if they know $\varphi$, then they know $\psi$ (Distribution).
+
+    \item If $\alpha$ knows that $\varphi$, then $\varphi$ is true \textbf{simpliciter}. ($M$)
+\end{itemize}
+The third of these claims is often called ``the factivity of knowledge,'' since it states that if $\varphi$ is known, then it must be true (i.e., it must be a fact).\par 
+
+
+From a model-theoretic standpoint, if we think that something at least as strong as \textbf{T} is a good proof theory for epistemic logic, and if we want epistemic logic to be sound and complete, then we must be committed to the idea that in any set of Kripke frames that provide a sufficient model of how knowledge works, $R$ is reflexive. In epistemic logic, $R$ is known as the \textbf{epistemic accessibility} relation, such that for any $w\in R$ and $w^{\prime}\in R$, if $(w,w^{\prime})\in R$ then $w^{\prime}$ is epistemically accessible from $w$. This is usually interpreted as follows:\ if $(w,w^{\prime})\in R$, then for all an agent $\alpha$ in $w$ knows, they are in $w^{\prime}$. On this interpretation, the reflexivity of the epistemic accessibility relation seems uncontentious:\ if an agent $\alpha$ is in $w$, then for all $\alpha$ knows, they are in $w$. This is, effectively, just another statement of the factivity of knowledge.\par 
+
+
+By far the most contentious debate in philosophical applications epistemic logic is over whether \textbf{S4} is or is not too strong a proof system for epistemic logic. If \textbf{S4}, or a stronger proof system, is an apt one for epistemic modal logic, then the following must hold:
+\begin{itemize}
+    \item If $\alpha$ knows that $\varphi$, then they known that they know $\varphi$. (4)
+\end{itemize}
+This is the (in)famous \textbf{KK-Principle}. Cartesians and internalists defend it, while externalists argue against it. There is an especially famous argument by Timothy Williamson (b.\ 1955) against the KK Principle, sometimes called the ``unmarked clock'' argument. A good way to understand the understand the unmarked clock argument is through the lens of the connection between proof theory and model theory in modal logic. Note that, because of the soundness and completeness results given above, if we deny KK, we must also deny that the epistemic accessibility relation is transitive. That is, we must hold that there are worlds $w\in W$, $w^{\prime}\in W$, and $w^{\dagger}\in W$ such that:\ 1) when $\alpha$ is in $w$, for all $\alpha$ knows, $\alpha$ is in $w^{\prime}$, 2) when $\alpha$ is in $w^{\prime}$, for all $\alpha$ knows, $\alpha$ is in $w^{\dagger}$, and 3) when $\alpha$ is in $w$, it is not the case that for all $\alpha$ knows, $\alpha$ is in $w^{\dagger}$. Williamson's unmarked clock argument if meant to provide just such a case.\par
+
+
+Suppose that we look at a clock with no markings and just an hour hand. In the actual world $w$ it is 1:00pm. I look at the clock, and it looks to me like it is 1:00pm. Thus, I come to know that it is 1:00pm. However, for all I know, it could be 1:05pm; I'm not able to judge the time accurately with this clock without a margin of error of six minutes. Thus, any world $w^{\prime}$ where it is actually 1:05pm is epistemically accessible to me from my actual world where it is 1:00pm. Moreover, if it were 1:05pm (i.e., if I were in world $w^{\prime}$), then the hand of the clock would be in a slightly different place, such that, for all I would know in $w^{\prime}$, I am actually in world $w^{\dagger}$ where it is 1:10pm. Thus, $w^{\dagger}$ is epistemically accessible from $w^{\prime}$. However, it does not follow that $w^{\dagger}$ is epistemically accessible to me at $w$. It is \textit{not} the case that for all I know in $w$, where it is 1:00pm, I am actually in $w^{\dagger}$ where it is 1:10pm; the six-minute difference is outside of my margin of error. If we buy this argument, which many do not, then neither \textbf{S4} nor a system that entails \textbf{S4} like \textbf{S5} can be an apt modal logic for epistemology.\par 
+
+Next, consider whether \textbf{B} could be an apt modal logic for epistemology. From a model-theoretic perspective, the symmetry of the epistemic accessibility relation seems plausible:\ if $w^{\prime}$ is epistemically accessible to an agent $\alpha$ in $w$, then $w$, it seems, should be epistemically accessible to $\alpha$ in $w^{\prime}$. But if we want our epistemic logic to be sound and complete, then the following claim would always be true for any agent $\alpha$:
+\begin{itemize}
+    \item If $\varphi$ is true simpliciter, then $\alpha$ knows that $\Diamond \varphi$. ($B$)
+\end{itemize}
+On the standard definition of $\Diamond \varphi$ as $\neg\Box \neg \varphi$, the epistemic version of $B$ can be re-written as follows:
+\begin{itemize}
+    \item If $\varphi$ is true simpliciter, then $\alpha$ knows that they do not know that $\varphi$ is false. ($B$)
+\end{itemize}
+This seems implausible. I am sure there are plenty of true propositions such that I do not know whether or not I know that they are false. But note that this requires me to reject the symmetry of the epistemic accessibility relation.\par 
+
+
+Similarly, the Euclidean property may seem plausible for the epistemic accessibility relation:\ if two worlds $w^{\prime}$ and $w^{\dagger}$ are epistemically accessible to $\alpha$ when $\alpha$ is in $w$, then it seems that $w^{\prime}$ and $w^{\dagger}$ should be mutually epistemically accessible from each other. However, if epistemic logic is sound and complete, then the Euclidean property for epistemic accessibility entails that the following is true for any agent $\alpha$:
+\begin{itemize}
+    \item If $\Diamond\varphi$, then $\alpha$ knows that $\Diamond \varphi$. (5)
+\end{itemize}
+On the standard definition of $\Diamond \varphi$ as $\neg\Box \neg \varphi$, the epistemic version of $5$ can be re-written as follows:
+\begin{itemize}
+    \item If it is not the case that $\alpha$ knows that $\neg\varphi$, then $\alpha$ knows that it is not the case that they know that $\neg\varphi$. (5)
+\end{itemize}
+In the leadup to the invasion of Iraq by the United States in 2002, U.S.\ Defense Secretary Donald Rumsfeld (1932-2021) said:
+\begin{quote}
+    There are known unknowns; that is to say we know there are some things we do not know. But there are also unknown unknowns—the ones we don't know we don't know.
+\end{quote}
+Epistemically, it seems, he was right; we don't always know what we don't know. But the epistemic version of 5 says something close to the opposite; it asserts that if $\alpha$ doesn't know that some $\varphi$ is false, then $\alpha$ \textit{knows} that they do not know this. But rejecting 5 as an axiom schema of epistemic logic requires that we also reject the Euclidean property of the epistemic access relation.\par 
+
+\section{Conclusion}
+Of all the topics we have covered since we introduced set theory, modal logic is by far and away the topic whose notation and concepts one sees the most in the mainstream philosophy literature. Things like sequent calculi and model-theoretic signatures turn up way more in the logic journals than they do in \textit{The Philosophical Review} or \textit{N\^ous}. But modal logic turns up \textit{a lot} in the mainstream philosophy journals, and it's a topic and technique that a lot of philosophers expect other philosophers to know something about. It is also an extremely rich and philosophically interesting area of philosophical logic, and there are many more esoteric systems of modal logic to get into, as well as further philosophical interpretations of $\Box$ to explore. For example, in \textbf{deontic logic}, $\Box\varphi$ is interpreted as `it is obligatory to $\varphi$.' Formal ethicists of a deontological or Kantian persuasion have spent a long time arguing over that the correct proof theory and model theory of deontic logic ought to be. This is just one example of the myriad philosophical applications of modal logic.\par
+
+\section*{Problem Set}
+\begin{enumerate}
+    \item Prove that for any WFF of modal logic $\varphi$, $\Diamond\Box\varphi\Rightarrow\Box\Diamond\varphi$ can be proved in \textbf{B}. 
+
+    \item Prove that for any Kripke frame $(W,R)$ and any WFF of modal logic $\varphi$, if $w\vDash\Diamond \varphi$, then there is a $w^{\prime}$ that is accessible from $w$ according to $R$ (i.e., $(w,w^{\prime})\in R$) such that $w^{\prime}\vDash\neg \varphi$. 
+
+    \item Prove that for the Kripke frame $(W,R)$ such that $R=\emptyset$, $\Box \varphi$ is a model-theoretic tautology for any proposition $\varphi$. 
+
+    \item Prove Proposition 9. Your proof should follow the pattern used in the proofs of Propositions 6 through 8, with amendments made for the specific case of Proposition 9.
+\end{enumerate}
+
+\end{document}
