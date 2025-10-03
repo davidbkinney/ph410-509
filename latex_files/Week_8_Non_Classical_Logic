@@ -1,0 +1,524 @@
+\documentclass[11pt]{article}
+
+% Packages for math and proof writing
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{bbm}
+
+% Theorem and proof environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+% Definitions, remarks, etc.
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Page formatting
+\usepackage[margin=1in]{geometry}
+
+\title{Week 8:\ Non-Classical Logic}
+\author{David Kinney}
+\date{October 16th, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+When we covered modal logic last week, it was our first foray into ``non-classical'' logic. While there are no strict definitions of ``classical'' and ``non-classical'' logic, a good rule of thumb is to say that the proof theory and model theory of propositional and first-order logic that we covered in weeks 3 and 5 exhausts the category of classical logic, and that approaches outside of those systems are, in some sense, non-classical. Thus, modal logic is non-classical in the sense that it introduces an additional symbol, $\Box$, that is not found in the classical approach to propositional logic.\par 
+
+That said, my anecdotal sense is that when philosophers say that they work on non-classical logic, they typically mean that they work on systems of logic that lack at least one of the following two features of classical propositional and first-order logic:
+\begin{enumerate}
+    \item WFFs can take only one of two truth values:\ true or false.
+
+    \item WFFs can take only one truth value.
+\end{enumerate}
+Notice that modal logic does not lack either of these features. WFFs of modal logic take one and only one truth value, and that truth value is either true or false. So, in this sense, modal logic is still classical.\par 
+
+In what follows, we will introduce some systems of logic that reject one or both of these assumptions, and thus are deciddly non-classical. These systems will not exhaust the landscape of non-classical logic:\ there are many, many systems of non-classical logic out there. Specifically, we will cover intuitionistic logic, Łukasiewicz's three-valued logic, Kleene's three-valued logic, Priest's Logic of Paradox, and Belnap's First-Degree Entailment (FDE) logic. My hope is that these examples, which are some of the most well-known non-classical logics, will give you a sense both of \textit{why} we might want to explore logics that lack at last one of the two features listed above, and \textit{how} this is done in practice.\par 
+
+All of the non-classical logics we cover here will be ``propositional,'' in the sense that WFFs will be composed of atoms and connectives of classical propositional logic, with no quantifiers, variables, or predicates. While there are certainly non-classical approaches to logic that use quantifiers, variables, and predicates, for the sake of this course we will leave them to one side.\par 
+
+\section{Intuitionism}
+An important feature of classical logic is that for any WFF $\varphi$, the disjunction $\varphi\vee\neg\varphi$ is a tautology. This is known as the \textbf{law of excluded middle}, since it effectively states that $\varphi$ must either be true or false; no ``middle'' truth value is allowed. Proof-theoretically, the law of excluded middle has a very important consequence. It means that if we can prove that for some WFF $\varphi$, its negation $\neg\varphi$ is false, then it follows that $\varphi$ must be true. This inference can also be represented as \textbf{double negation elimination}:\ if we can prove that $\neg\neg\varphi$, then we can infer $\varphi$. This inference is valid in both the Hilbert-Ackermann proof system for classical logic and the sequent calculus LK. This turns out to be very cumbersome to show in Hilbert-Ackermann, but very simple to show in LK, as demonstrated by the following proof:
+
+\begin{proposition}
+    For any WFF $\varphi$, $\neg\neg\varphi\vdash\varphi$ can be validly proved in LK.
+\end{proposition}
+\begin{proof}
+    We begin with the axiom of LK:
+    \begin{equation}
+        \varphi\vdash\varphi
+    \end{equation}
+    Next, we recall the logical inference rule $\neg R$:
+    $$\frac{\Gamma,A\vdash\Delta}{\Gamma\vdash\Delta,\neg A}$$
+    If we let $\Gamma$ be the empty set and let $A$ and $\Delta$ be $\varphi$, we apply this rule to (1) to obtain:
+    \begin{equation}
+        \emptyset\vdash\varphi,\neg\varphi
+    \end{equation}
+    Notice that this is effectively a statement of the law of excluded middle:\ from nothing, we can prove either $\varphi$ or its negation. Next, recall the logical inference rule $\neg L$:
+    $$\frac{\Gamma\vdash\Delta,A}{\Gamma,\neg A\vdash\Delta}$$
+    If we let $\Gamma$ be the empty set, let $A$ be $\neg\varphi$ and let $\Delta$ be $\varphi$, we apply this rule to (2) to get:
+    \begin{equation}
+        \emptyset,\neg\neg\varphi\vdash\varphi
+    \end{equation}
+    Dropping the empty set from the left of the turnstile gets us $\neg\neg\varphi\vdash\varphi$.
+\end{proof}
+\noindent
+It is in this way that LK vindicates the strategy of proof by contradiction:\ in LK, if we can prove that the negation of $\varphi$ is false, then we can prove that $\varphi$ is true.\par 
+
+The validity of the law of excluded middle (and its close cousin, double-negation elimination) is usually taken to be justified by a \textit{realist} philosophy of logic. According to a certain style of realism about logic, a WFF $\varphi$ being a tautology is a matter of fact that we \textit{discover} by producing a proof of $\varphi$. When we produce a proof of $\neg\neg\varphi$, we effectively discover that $\varphi$ cannot be false. On the assumption that there are only two truth values, it follows that $\varphi$ must be true. Thus, by producing a proof of $\neg\neg\varphi$, the realist argues, we discover that $\varphi$ is a tautology.\par 
+
+Brouwer completely rejected this way of understanding the nature of a tautology. He held that a WFF $\varphi$ being a tautology just means that there is a proof of $\varphi$. For the intuitionist, producing a proof of $\varphi$ does not amount to the discovery that $\varphi$ is a tautology. Rather, $\varphi$ \textit{becomes} a tautology once we produce a valid proof of it. Since proving $\neg\neg\varphi$ is not the same thing, syntactically, as proving $\varphi$, it follows that proving $\neg\neg\varphi$ is not sufficient, for the intuitionist, to establish that $\varphi$ is a tautology. Clearly, the proof system LK does not capture this stronger notion of a tautology, since it allows for proof by contradiction.\par 
+
+Thus, if we want to capture the intuitionist notion of a tautology using a proof system, we will need a different proof system from LK. Thankfully, Gentzen provides just such a proof system with his sequent calculus LJ, which we turn to now.
+
+\subsection{The Sequent Calculus LJ}
+Sequents in LJ have the same interpretation as they do in LK. As reminder, let $\mathcal{F}$ be a set of WFFs for which we seek to define a logical system. The set of \textbf{sequents} $\mathcal{S}_{\mathcal{F}}$ is a set of formulas generated by the following rules:
+\begin{enumerate}
+    \item Every element of $\mathcal{S}_{\mathcal{F}}$ contains the turnstile symbol $\vdash$. 
+
+    \item To the left of the turnstile, there must be at least one of the following:\ a) a subset of $\mathcal{F}$ (which could be the empty set), b) an element of $\mathcal{F}$. 
+
+    \item To the right of the turnstile, there must be at least one of the following:\ a) a subset of $\mathcal{F}$ (which could be the empty set), b) an element of $\mathcal{F}$. 
+
+    \item Where more than one subset or element of $\mathcal{F}$ appears on either side of the turnstile, they are separated by commas. 
+\end{enumerate}
+Letting $\Gamma$ and $\Delta$ be subsets of $\mathcal{F}$ and $A$ and $B$ be elements of $\mathcal{F}$, some examples of elements of $\mathcal{S}_{\mathcal{F}}$ include:\ $\Gamma,A\vdash\Delta,B$; $\Gamma\vdash\Delta,B$; $A\vdash\Delta,B$, $\Gamma,A\vdash\Delta$, $\Gamma,A\vdash B$, $\Gamma\vdash\Delta$; $A\vdash\Delta$; $\Gamma\vdash B$; $A\vdash B$; $\emptyset\vdash\Delta$; $\emptyset\vdash B$. On the left of the symbol $\vdash$, the comma is interpreted like a conjunction. The symbol $\vdash$ can be interpreted as something like `entails' or `proves.' On the right of the symbol $\vdash$, the comma is treated like disjunction. Putting this all together, a sequent like $\Gamma,A\vdash\Delta,B$ would be interpreted as saying `assuming all elements of $\Gamma\cup\{A\}$ hold, we can prove that at least one element of $\Delta\cup\{B\}$ holds.' Thus, sequents in $\mathcal{S}_{\mathcal{F}}$ are statements about what WFFs in $\mathcal{F}$ can be proven from conjunctions of other WFFs in $\mathcal{F}$. A sequence of sequents $(s_{1},\dots,s_{n})\in (\mathbbm{N}\times\mathcal{S}_{\mathcal{F}})$ can then be interpreted as a kind of meta-proof:\ a proof about what sorts of WFFs can be proven from which others.\par
+
+As in LK, the following is an axiom schema for LJ:\ $A\vdash A$, which effectively states that any WFF can be derived from itself. Next, we introduce the following structural rules:\par 
+\vspace{12pt}
+\textbf{Weakening:}
+$$
+\frac{\Gamma \vdash A}{\Gamma, B \vdash A} \quad (\text{Left Weakening})
+$$
+
+\textbf{Contraction:}
+$$
+\frac{\Gamma, B, B \vdash A}{\Gamma, B \vdash A} \quad (\text{Left Contraction})
+$$
+
+\textbf{Exchange:}
+$$
+\frac{\Gamma, B, C, \Delta \vdash A}{\Gamma, C, B, \Delta \vdash A} \quad (\text{Left Exchange})
+$$
+
+\textbf{Cut:}
+$$
+\frac{\Gamma \vdash B \quad \Delta, B \vdash A}{\Gamma, \Delta \vdash A} \quad (\text{Cut})
+$$
+\noindent
+Note that these structural rules are what we get if we restrict the structural rules of LK to only allow for a single WFF on right-hand side of the turnstile. This reflects that fact that from an intuitionistic perspective, we are not interested in proving that one out several possible WFFs might hold; instead, we are interested in definitively proving that a single WFF holds, since this is the only way that such a WFF will be established as a tautology. Like LK, LJ has a Cut-Elimination theorem; any sequent that can be proved in LJ can be proved without using Cut.\par 
+
+We turn now to the logical inference rules of LJ. Here too, we will derive these rules by restricting LK to just those rules with a single WFF on the right of the turnstile (here $C$ also represents a single WFF):\par 
+\vspace{12pt}
+$$
+\begin{array}{ll}
+
+% Conjunction
+\displaystyle
+\frac{\Gamma, A, B \vdash C}{\Gamma, A \wedge B \vdash C} \quad (\wedge L)
+&
+\displaystyle
+\frac{\Gamma \vdash A \quad \Gamma \vdash B}{\Gamma \vdash A \wedge B} \quad (\wedge R)
+\\[2.5ex]
+
+% Disjunction
+\displaystyle
+\frac{\Gamma, A \vdash C \quad \Gamma, B \vdash C}{\Gamma, A \vee B \vdash C} \quad (\vee L)
+&
+\displaystyle
+\frac{\Gamma \vdash A}{\Gamma \vdash A \vee B} \quad (\vee R)
+\\[2.5ex]
+
+% Implication
+\displaystyle
+\frac{\Gamma \vdash A \quad \Delta, B \vdash C}{\Gamma, \Delta, A \Rightarrow B \vdash C} \quad (\Rightarrow L)
+&
+\displaystyle
+\frac{\Gamma, A \vdash B}{\Gamma \vdash A \Rightarrow B} \quad (\Rightarrow R)
+\\[2.5ex]
+
+% Negation (¬A := A → ⊥)
+\displaystyle
+\frac{\Gamma \vdash A \quad \Delta, \bot \vdash C}{\Gamma, \Delta, \neg A \vdash C} \quad (\neg L)
+&
+\displaystyle
+\frac{\Gamma, A \vdash \bot}{\Gamma \vdash \neg A} \quad (\neg R)
+\\[1.5ex]
+\end{array}
+$$
+You will notice a new symbol, $\bot$, in the statement of the logical inference rules $\neg L$ and $\neg R$. You should interpret this as ``the absurdity,'' or as some WFF that must be false. So, for example, $\neg R$ says that if the WFFs in $\Gamma$ and the WFF $A$ together prove an absurdity, then we can infer that all the WFFs in $\Gamma$ together prove $\neg A$.\par 
+
+Hold on:\ that sounds a lot like proof by contradiction! Didn't we just say that intuitionism doesn't accept this as a proof strategy? To see why $\neg R$ isn't the same as proof by contradiction, suppose that $\Gamma$, together with $\neg A$, allows us to prove the absurdity. If we follow the strategy of proof by contradiction, then we would conclude that $\Gamma$ allows us to prove $A$. However, if we follow $\neg R$, we are only allowed to infer that $\Gamma$ proves $\neg\neg A$. As we just stated, in intuitionism, $\neg\neg A$ does not imply $A$. Thus, $\neg R$ is distinct from proof by contradiction.\par
+
+
+As a final step to defining LJ, we introduce one last axiom schema:\ $\Gamma, \bot \vdash C$. This means that at any point in a proof in LJ, we can write that the WFFs in $\Gamma$, together with an absurdity, prove any WFF. Note that because $\Gamma$ can be empty, this means that we can write $\bot \vdash C$ at any point in any proof in LJ, for any WFF $C$. Note that $C$ itself can also be $\bot$ (this is helpful in the first problem in the problem set).\par 
+
+A WFF $\varphi$ of propositional logic is a proof-theoretic tautology of intuitionistic logic if and only if there is a proof of the sequent $\emptyset\vdash\varphi$ in LJ.
+    
+
+\subsection{Model Theory for Intuitionistic Logic}
+There are multiple ways of constructing a model theory for intuitionistic logic. The one we will turn to here uses a variation on the Kripke frames that we used for modal logic. However, Kripke frames for intuitionistic logic work very differently from Kripke frames in modal logic. So, it may be easiest, pedagogically speaking, if you treat them as two fundamentally different sorts of things, despite their shared name and inventor.\par 
+
+A Kripke frame in intuitionistic logic is a pair $(W,\leq)$. Instead of thinking of $W$ as a set of possible worlds, one should think of $W$ is a set containing information states, or positions that an agent might be in with respect to knowing which WFFs are tautologies. Letting $\mathbbm{A}$ be the atoms of propositional logic (which we now take to include the absurdity $\bot$), let each $w\in W$ be a function $w:\mathbbm{A}\rightarrow\{T,U\}$. For any $p\in\mathbbm{A}$, if $w(p)=T$, then this means that $p$ is tautological; we have a proof of $p$. If $w(p)=U$, then $p$ is undecided; we do not yet have a proof of $p$. The set $W$ contains all such functions, with the stipulation that for any $w\in W$, $w(\bot)=U$; the absurdity can never be proved. By dispensing with the notion of falsehood in favor of an atom being merely undecided, we relax one of the key features of classical logic listed above (i.e., that ``true'' and ``false'' are the only truth values).\par  
+
+
+The relation $\leq$ is a reflexive and transitive relation defined on $W$. This means that $\leq$ is a subset of the product $W\times W$. For any $w\in W$ and $w^{\prime}\in W$, we write $w\leq w^{\prime}$ as a shorthand for $(w,w^{\prime})\in \ \leq$. If we interpret the elements of $W$ as information states of an agent, then for any $w\in W$ and $w^{\prime}\in W$, we interpret $w\leq w^{\prime}$ as saying that an agent at $w^{\prime}$ has no less information about which WFFs are tautologies than they did at $w$. Since $\leq$ is reflexive, $w\leq w$ for all $w\in W$. Since $\leq$ is transitive, if $w\leq w^{\prime}$ and $w^{\prime}\leq w^{\dagger}$, then $w\leq w^{\dagger}$. Importantly, $\leq$ must also satisfy the following monotonicity constraint:
+\begin{quote}
+    \textbf{Monotonicity:\ }For any $w\in W$, $w^{\prime}\in W$, and $a\in\mathbbm{A}$, if $w(a)=T$ and $w\leq w^{\prime}$, then $w^{\prime}(a)=T$.
+\end{quote}
+This effectively ensures that if $w\leq w^{\prime}$, then an agent at $w^{\prime}$ has no less information about which WFFs are tautologies than they did at $w$.\par 
+
+Next, we state some conditions governing the semantic satisfaction relation $\vDash$ between information states $W$ and WFFs formed from the atoms in $\mathbbm{A}$, according to the Kripke frame $(W,\leq)$, writing $w\vDash\varphi$ for `$w$ satisfies $\varphi$' and $w\not\vDash\varphi$ for `$w$ does not satisfy $\varphi$':
+\begin{itemize}
+    \item For any $w\in W$ and $a\in\mathbbm{A}$, $w\vDash a$ if and only if $w(a)=T$.
+
+    \item For any $w\in W$, $w\not\vDash\bot$. 
+
+    \item For any WFFs $\varphi$ and $\psi$ formed from the atoms in $\mathbbm{A}$, $w\vDash \varphi\wedge \psi$ if and only if $w\vDash\varphi$ and $w\vDash\psi$.
+
+    \item For any WFFs $\varphi$ and $\psi$ formed from the atoms in $\mathbbm{A}$, $w\vDash \varphi\vee \psi$ if and only if $w\vDash\varphi$ or $w\vDash\psi$.
+
+    \item For any WFF $\varphi$ formed from the atoms in $\mathbbm{A}$, $w\vDash \neg \varphi$ if and only if there is no $w^{\prime}\in W$ such that $w\leq w^{\prime}$, $w^{\prime}\vDash\varphi$. 
+
+    \item For any WFF $\varphi$ formed from the atoms in $\mathbbm{A}$, $w\vDash \varphi\Rightarrow \psi$ if and only if for all $w^{\prime}\in W$ such that $w\leq w^{\prime}$, either $w^{\prime}\vDash\neg\varphi$ or $w^{\prime}\vDash\psi$.
+\end{itemize}
+These last two constraints deserve special attention. In classical logic, a possible world satisfies the negation of a WFF just in case it does not satisfy that WFF. But in intuitionistic logic, it is not so easy for a negation to be satisfied in an information state. For an information state $w$ to satisfy $\neg \varphi$, we must ensure that there is no information state in which an agent has at least as much information about tautologies as they have in $w$ and in which $\varphi$ is proved to be a tautology. Similarly, $w\vDash \varphi\Rightarrow \psi$ just in case any information state $w^{\prime}$ in which an agent has as at least as much information as they have in $w$ is also such that either:\ 1) there is no proof of $\varphi$ in $w^{\prime}$, or 2) there is a proof of $\psi$ in $w^{\prime}$. In other words, in intuitionistic model theory, `if $\varphi$, then $\psi$' is true in $w$ if and only if, as an agent builds on the information that they have in $w$, they either fail to ever prove $\varphi$ or they successfully prove $\psi$.\par 
+
+
+Equipped with these rules, we can determine the truth value of any compound proposition according to a Kripke frame $(W,\leq)$. Consider the following WFF:
+$$(\neg p\Rightarrow q)\vee(q\wedge p).$$
+Suppose that we are information state $w$ and that $w(p)=T$ and $w(q)=T$. If follows that $w\vDash(q\wedge p)$. It also follows from the monotonicity constraint that for any $w^{\prime}$ such that $w\leq w^{\prime}$, $w^{\prime}(q)=U$. Thus, $w\vDash(\neg p\Rightarrow q)$. This gives us $w\vDash[(\neg p\Rightarrow q)\vee(q\wedge p)]$.\par
+
+A WFF of propositional logic $\varphi$ is a tautology of intuitionistic logic if and only if it is satisfied by all information states in all intuitionistic Kripke frames. Here is an example of a proof that a WFF is a tautology of intuitionistic propositional logic:
+\begin{proposition}
+    If $p$ is an atomic proposition, then the WFF $\neg(p\wedge\neg p)$ is a tautology of intuitionistic propositional logic.
+\end{proposition}
+\begin{proof}
+    Consider any Kripke frame $(W,\leq)$ and any $w\in W$. Let $w^{\prime}$ be any information state in $W$ such that $w\leq w^{\prime}$. If, on the one hand, $w^{\prime}(p)=T$, then $w^{\prime}\vDash p$. The monotonicity constraint on $\leq$ ensures that any $w^{\dagger}$ such that $w^{\prime}\leq w^{\dagger}$ is also such that $w^{\dagger}(p)=T$. Thus, $w^{\prime}\not\vDash \neg p$, since there exists an information state $w^{\dagger}$ such that $w^{\prime}\leq w^{\dagger}$ that satisfies $p$. This means that $w^{\prime}\not\vDash(p\wedge\neg p)$. On the other hand, if $w^{\prime}(p)=U$ then $w^{\prime}\not\vDash p$, and so $w^{\prime}\not\vDash(p\wedge\neg p)$. Thus, for any information state $w^{\prime}\in W$ in any Kripke frame $(W,\leq)$ such that $w\leq w^{\prime}$, $w^{\prime}\not\vDash(p\wedge\neg p)$. This entails that $w\vDash \neg (p\wedge\neg p)$.
+\end{proof}
+\noindent
+Notice that in this proof, we assumed that there were two possible truth values for $p$:\ true or undecided. This was \textit{not} justified by appeal to anything like the law of excluded middle. Rather, it was stipulated as part of the definition of a Kripke frame for intuitionistic logic.
+
+\subsection{Soundness and Completeness}
+The following soundness and completeness result, which we will not prove here, shows the close fit between LJ and Kripke frames for intuitionistic logic:
+\begin{proposition}
+    A WFF $\varphi$ of propositional logic is such that $w\vDash\varphi$ for all $w\in W$ in all Kripke frames for intuitionistic logic $(W,\leq)$ if and only if there is a proof of the sequent $\emptyset\vdash\varphi$ in LJ.
+\end{proposition}
+\noindent
+This result is remarkable when we consider just how differently LJ and Kripke frames for intuitionistic logic are motivated. The former is motivated by seeking how to elegantly restrict LK to just those sequents where only one WFF appears to the right of a turnstile. The latter aims to model the process of information acquisition that comes from proving an increasing body of tautologies. Despite this difference in motivations, the two approaches complement each other perfectly. It's worth reflecting on the philosophical significance of this.\par 
+
+\section{Other Non-Classical Logics}
+In what follows, we will consider a family of non-classical logics that are all motivated by philosophical reasons to think that certain atomic propositions either have some third truth value other than true or false, or have both of the two classical truth values. In all of these cases, we will focus solely on the model theory of these logics, as the attempt to formulate sequent-calculi-style proof theories for these logics remains an active and complicated area of research. Moreover, we will primarily use truth tables to generate these model theories. This makes for a technically simpler, but still highly philosophically rich, investigation.
+
+\subsection{The Logic Ł3}
+The Polish logician Jan Łukasiewicz (1878-1956) devised a system of three-valued propositional logic in which propositions can be either true ($T$), false ($F$), or undetermined ($U$). His goal was to deal with atoms like `there will be a sea battle tomorrow.' These future-tense propositions, he argued, should not be assigned the truth values $T$ or $F$ at present, but should instead have an undetermined truth value. In Łukasiewicz's three-valued logic, now known as Ł3, the connectives have the following truth tables:\par
+\vspace{12pt}
+\noindent
+Negation: 
+\[
+\begin{array}{c|c}
+p & \lnot p \\
+\hline
+T & F \\
+U & U \\
+F & T \\
+\end{array}
+\]\par
+
+\noindent
+Disjunction: 
+\[
+\begin{array}{c c|c}
+p & q & p \lor q \\
+\hline
+T & T & T \\
+T & U & T \\
+T & F & T \\
+U & T & T \\
+U & U & U \\
+U & F & U \\
+F & T & T \\
+F & U & U \\
+F & F & F \\
+\end{array}
+\]\par
+
+\noindent
+Conjunction: 
+\[
+\begin{array}{c c|c}
+p & q & p \wedge q \\
+\hline
+T & T & T \\
+T & U & U \\
+T & F & F \\
+U & T & U \\
+U & U & U \\
+U & F & F \\
+F & T & F \\
+F & U & F \\
+F & F & F \\
+\end{array}
+\]\par
+
+\noindent
+Material Conditional:
+\[
+\begin{array}{c c|c}
+p & q & p \Rightarrow q \\
+\hline
+T & T & T \\
+T & U & U \\
+T & F & F \\
+U & T & T \\
+U & U & T \\
+U & F & U \\
+F & T & T \\
+F & U & T \\
+F & F & T \\
+\end{array}
+\]\par
+\noindent
+A good heuristic for understanding these truth tables is as follows. Let $T$ be the maximal truth value, let $F$ be the minimal truth value, and let $U$ be the mid-level truth value. Negation takes you from the maximum to the minimum, or from the minimum to the maximum, or keeps you in the middle. The truth value of a disjunction $p\vee q$ is always that the maximum of the truth values of $p$ and $q$. The truth value of a conjunction $p\wedge q$ is always the minimum of the truth values of $p$ and $q$. Finally, the truth table for the material conditional $p\Rightarrow q$ is designed so that $(p\Rightarrow q)\Rightarrow q$ always takes the same truth value as $p\vee q$, as demonstrated by the following truth table:
+\noindent
+\[
+\begin{array}{c c|c|c|c}
+p & q & p \Rightarrow q & (p \Rightarrow q) & p \lor q \\
+\hline
+T & T & T & T & T \\
+T & U & U & T & T \\
+T & F & F & T & T \\
+U & T & T & T & T \\
+U & U & T & U & U \\
+U & F & U & U & U \\
+F & T & T & T & T \\
+F & U & T & U & U \\
+F & F & T & F & F \\
+\end{array}
+\]\par
+\noindent
+The equivalence also holds in classical propositional logic with two truth values, and Łukasiewicz took it to be a very important one to retain when moving to a three-valued logic, since it allows us to define disjunction solely in terms of the material conditional, without requiring negation. But notice that his model theory means that another classical equivalence, namely, that $p\Rightarrow q$ is equivalent to $\neg p\vee q$, fails in Ł3, as demonstrated by the fifth row of the truth table:
+\noindent
+\[
+\begin{array}{c c|c|c}
+p & q & p \Rightarrow q & \neg p \vee q \\
+\hline
+T & T & T & T\\
+T & U & U & U \\
+T & F & F & F\\
+U & T & T & T\\
+\textbf{U} & \textbf{U} & \textbf{T} & \textbf{U}\\
+U & F & U & U\\
+F & T & T & T\\
+F & U & T & T\\
+F & F & T & T \\
+\end{array}
+\]\par
+\noindent
+This lack of equivalence leads naturally into the next non-classical logic we will discuss.
+
+\subsection{Kleene's Logic K3}
+Stephen Cole Kleene (1909-1994) was motivated to develop a three-valued logic, now called K3, by a similar, but not identical concern to Łukasiewicz. In a few weeks, we will discuss Turing machines in detail, but for now, we can think about them informally. A Turing machine is a essentially a computer that takes in input and attempts to return an output by following to a finite set of rules for transforming inputs to outputs. It halts when it finishes followings its transformation rules. Some Turing machines will run forever, without ever halting, given certain inputs. Turing famously proved that there are some inputs to a Turing machine $M_{1}$ such that no Turing machine $M_{2}$ can determine whether or not $M_{1}$ will halt on that input. Kleene felt that statements about whether $M_{1}$ will or will not halt on such an input were deserving of the truth value $U$.\par
+
+His truth tables for the propositional connectives $\neg$, $\vee$, and $\wedge$ were the same as  Łukasiewicz's. But for the material conditional, he introduced a different truth table. Where  Łukasiewicz felt that when $p$ and $q$ were both of undetermined truth value, $p\Rightarrow q$ should be true, Kleene felt that $p\Rightarrow q$ should be undetermined. Thus, the following is his truth table for the material conditional:
+\[
+\begin{array}{c c|c}
+p & q & p \Rightarrow q \\
+\hline
+T & T & T \\
+T & U & U \\
+T & F & F \\
+U & T & T \\
+U & U & U \\
+U & F & U \\
+F & T & T \\
+F & U & T \\
+F & F & T \\
+\end{array}
+\]\par
+\noindent
+As a result, for Kleene, $p\Rightarrow q$ is equivalent to $\neg p\vee q$, as demonstrated by the following truth table:
+\noindent
+\[
+\begin{array}{c c|c|c}
+p & q & p \Rightarrow q & \neg p \vee q \\
+\hline
+T & T & T & T\\
+T & U & U & U \\
+T & F & F & F\\
+U & T & T & T\\
+U & U & U & U\\
+U & F & U & U\\
+F & T & T & T\\
+F & U & T & T\\
+F & F & T & T \\
+\end{array}
+\]\par
+\noindent
+However, the equivalence of $(p\Rightarrow q)\Rightarrow q$ and $p\vee q$ fails for Kleene logic, as demonstrated by the following truth table (note the second row):
+\noindent
+\[
+\begin{array}{c c|c|c|c}
+p & q & p \Rightarrow q & (p \Rightarrow q) & p \lor q \\
+\hline
+T & T & T & T & T \\
+\textbf{T} & \textbf{U} & \textbf{U} & \textbf{U} & \textbf{T} \\
+T & F & F & T & T \\
+U & T & T & T & T \\
+U & U & T & U & U \\
+U & F & U & U & U \\
+F & T & T & T & T \\
+F & U & T & U & U \\
+F & F & T & F & F \\
+\end{array}
+\]\par
+\noindent
+Thus, when we choose between K3 and Ł3 when determine the three-valued logic we will use to deal with indeterminate truth values, we effectively choose how we should understand the relationship between the material conditional, disjunction, and negation.\par 
+
+
+\subsection{The Logic of Paradox}
+Consider the infamous \textbf{Liar sentence}, which reads as follows:
+\begin{quote}
+    This sentence is false.
+\end{quote}
+The Liar sentence gives rise to the \textbf{Liar paradox}. The sentence seems semantically unstable. If it is true, then, based on its content it is false, in which case, it is true, and so on. Similarly, if it is false, then it is true, in which case it is false, and so on. Graham Priest (b.\ 1948) proposes the Logic of Paradox, or LP, as a way of dealing with the Liar sentence. He proposes that the Liar and other sentences that cause semantic paradoxes should be understood a being both true and false. His truth tables are exactly the same as Kleene's, but with $U$ replaced by $B$, which denotes that the atom in question has both classical truth values.\par 
+
+A key feature of LP is that it does not have the property of explosion. In classical propositional logic, the following is a model-theoretic tautology for any WFFs $\varphi$ and $\psi$: $$(\varphi\wedge\neg\varphi)\Rightarrow\psi.$$
+This reflects the slogan that ``anything follows from a contradiction,'' and the model-theoretic fact from classical logic that since the antecedent of this conditional must be false, the entire conditional must be false. But note the truth table for this conditional according to LP:
+\noindent
+\[
+\begin{array}{c|c|c|c}
+\varphi & \psi & \varphi \wedge \neg \varphi & (\varphi \wedge \neg \varphi) \Rightarrow \psi \\
+\hline
+T & T & F & T \\
+T & F & F & T \\
+T & B & F & B \\
+F & T & F & T \\
+F & F & F & T \\
+F & B & F & B \\
+B & T & B & B \\
+B & F & B & B \\
+B & B & B & B \\
+\end{array}
+\]
+If we define a tautology to be a proposition that is never false, as Priest does, then $(\varphi\wedge\neg\varphi)\Rightarrow\psi$ is not a tautology in LP.\par 
+
+
+
+\subsection{Belnap's Four-Valued FDE}
+Nuel Belnap (b.\ 1930), devised a four-valued logic called first-degree entailment (FDE) that allows propositions to be true, false, both, or undetermined, effectively combining K3 and LP into a single logic. Here are its truth tables:\par 
+\vspace{12pt}
+\noindent
+% Negation
+Negation:
+\[
+\begin{array}{c|c}
+p & \lnot p \\
+\hline
+T & F \\
+F & T \\
+B & B \\
+U & U \\
+\end{array}
+\]\par
+
+% Conjunction
+Conjunction:
+\[
+\begin{array}{c c|c}
+p & q & p \wedge q \\
+\hline
+T & T & T \\
+T & B & B \\
+T & U & U \\
+T & F & F \\
+B & T & B \\
+B & B & B \\
+B & U & F \\
+B & F & F \\
+U & T & U \\
+U & B & F \\
+U & U & U \\
+U & F & F \\
+F & T & F \\
+F & B & F \\
+F & U & F \\
+F & F & F \\
+\end{array}
+\]\par
+
+% Disjunction
+Disjunction:
+\[
+\begin{array}{c c|c}
+p & q & p \vee q \\
+\hline
+T & T & T \\
+T & B & T \\
+T & U & T \\
+T & F & T \\
+B & T & T \\
+B & B & B \\
+B & U & T \\
+B & F & B \\
+U & T & T \\
+U & B & T \\
+U & U & U \\
+U & F & U \\
+F & T & T \\
+F & B & B \\
+F & U & U \\
+F & F & F \\
+\end{array}
+\]\par
+
+% Implication
+Material Conditional:
+\[
+\begin{array}{c c|c}
+p & q & p \Rightarrow q \\
+\hline
+T & T & T \\
+T & B & B \\
+T & U & U \\
+T & F & F \\
+B & T & T \\
+B & B & B \\
+B & U & U \\
+B & F & F \\
+U & T & T \\
+U & B & T \\
+U & U & U \\
+U & F & U \\
+F & T & T \\
+F & B & T \\
+F & U & T \\
+F & F & T \\
+\end{array}
+\]
+Again, a good rule of thumb for interpreting these truth tables is to treat $T$ as the maximal truth value, $F$ as the minimal truth value, and $U$ and the middle truth value. The conjunction $p\wedge q$ then returns the minimal truth value assigned to either $p$ or $q$, with the caveat that either proposition \textit{could} be assigned both $T$ and $F$, in which case its minimal truth value is $F$. The disjunction $p\vee q$ returns the maximal truth value assigned to either $p$ or $q$, with the caveat that either proposition \textit{could} be assigned both $T$ and $F$, in which case its maximal truth value is $T$. The material conditional $p\Rightarrow q$ then has the same truth table as $\neg p \vee q$.
+
+
+\section{Conclusion}
+As ever, we've only begun to scratch the surface. There are all kinds of relevance logics, non-monotonic logics, and so on the violate the rules of classicality in one way or another. Łukasiewicz himself generalized his three-valued logic to create an $n$-valued logic for any natural number $n$. There are even logics with infinitely many truth values! The important thing to take away from this, for our purposes, is to note that in all cases, each of the logicians we've covered started from a philosophical problem about the nature of truth, devised a logic that helped address that philosophical problem, and then worked through its implications. This is the point of philosophical logic:\ to devise formal tools that make help us make progress on philosophical problems. 
+
+\section*{Problem Set}
+
+\begin{enumerate}
+    \item Although $\neg\neg\varphi\Rightarrow\varphi$ is not a tautology of intuitionistic logic, $\varphi\Rightarrow\neg\neg\varphi$ is. Prove this by showing that $\emptyset\vDash\varphi\Rightarrow\neg\neg\varphi$ can be proved in LJ.
+
+    \item Prove that for all $w\in W$ in all Kripke frames for intuitionistic logic $(W,\leq)$, $w\vDash(\varphi\Rightarrow\neg\neg\varphi)$.
+
+    \item Prove that $(\neg p \vee q)\Rightarrow [(\neg p\Rightarrow q)\Rightarrow q]$ is \textit{not} a tautology of K3. 
+
+    \item Let $\mathbbm{A}$ be a countably infinite set of atomic propositions. Let $W$ be the set of all functions $w:\mathbbm{A}\rightarrow\{T,F\}$ (i.e., the set of all classical logic truth value assignments to the atoms $\mathbbm{A}$). Let $W^{\prime}$ be the set of all functions $w^{\prime}:\mathbbm{A}\rightarrow\{T,F,B\}$ (i.e., the set of all LP truth value assignments to the atoms $\mathbbm{A}$). Prove that $W$ and $W^{\prime}$ have the same cardinality. (\textit{Hint:\ Number the atoms. Then try to define a bijection between $W$ and the power set of the integers, and a bijection between and $W^{\prime}$ and the power set of the integers.}).
+\end{enumerate}
+
+\end{document}
