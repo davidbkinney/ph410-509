@@ -166,14 +166,14 @@ A WFF $\varphi$ of propositional logic is a proof-theoretic tautology of intuiti
 \subsection{Model Theory for Intuitionistic Logic}
 There are multiple ways of constructing a model theory for intuitionistic logic. The one we will turn to here uses a variation on the Kripke frames that we used for modal logic. However, Kripke frames for intuitionistic logic work very differently from Kripke frames in modal logic. So, it may be easiest, pedagogically speaking, if you treat them as two fundamentally different sorts of things, despite their shared name and inventor.\par 
 
-A Kripke frame in intuitionistic logic is a pair $(W,\leq)$. Instead of thinking of $W$ as a set of possible worlds, one should think of $W$ is a set containing information states, or positions that an agent might be in with respect to knowing which WFFs are tautologies. Letting $\mathbbm{A}$ be the atoms of propositional logic (which we now take to include the absurdity $\bot$), let each $w\in W$ be a function $w:\mathbbm{A}\rightarrow\{T,U\}$. For any $p\in\mathbbm{A}$, if $w(p)=T$, then this means that $p$ is tautological; we have a proof of $p$. If $w(p)=U$, then $p$ is undecided; we do not yet have a proof of $p$. The set $W$ contains all such functions, with the stipulation that for any $w\in W$, $w(\bot)=U$; the absurdity can never be proved. By dispensing with the notion of falsehood in favor of an atom being merely undecided, we relax one of the key features of classical logic listed above (i.e., that ``true'' and ``false'' are the only truth values).\par  
+A Kripke frame in intuitionistic logic is a pair $(W,\leq)$. Instead of thinking of $W$ as a set of possible worlds, one should think of $W$ is a set containing information states, or positions that an agent might be in with respect to knowing which WFFs are tautologies. Letting $\mathbbm{A}$ be the atoms of propositional logic (which we now take to include the absurdity $\bot$), let each $w\in W$ be a function $w:\mathbbm{A}\rightarrow\{T,U\}$. For any $p\in\mathbbm{A}$, if $w(p)=T$, then this means that $p$ is true. If $w(p)=U$, then $p$ is undecided. The set $W$ contains all such functions, with the stipulation that for any $w\in W$, $w(\bot)=U$; the absurdity can never be proved. By dispensing with the notion of falsehood in favor of an atom being merely undecided, we relax one of the key features of classical logic listed above (i.e., that ``true'' and ``false'' are the only truth values).\par  
 
 
-The relation $\leq$ is a reflexive and transitive relation defined on $W$. This means that $\leq$ is a subset of the product $W\times W$. For any $w\in W$ and $w^{\prime}\in W$, we write $w\leq w^{\prime}$ as a shorthand for $(w,w^{\prime})\in \ \leq$. If we interpret the elements of $W$ as information states of an agent, then for any $w\in W$ and $w^{\prime}\in W$, we interpret $w\leq w^{\prime}$ as saying that an agent at $w^{\prime}$ has no less information about which WFFs are tautologies than they did at $w$. Since $\leq$ is reflexive, $w\leq w$ for all $w\in W$. Since $\leq$ is transitive, if $w\leq w^{\prime}$ and $w^{\prime}\leq w^{\dagger}$, then $w\leq w^{\dagger}$. Importantly, $\leq$ must also satisfy the following monotonicity constraint:
+The relation $\leq$ is a reflexive and transitive relation defined on $W$. This means that $\leq$ is a subset of the product $W\times W$. For any $w\in W$ and $w^{\prime}\in W$, we write $w\leq w^{\prime}$ as a shorthand for $(w,w^{\prime})\in \ \leq$. If we interpret the elements of $W$ as information states of an agent, then for any $w\in W$ and $w^{\prime}\in W$, we interpret $w\leq w^{\prime}$ as saying that an agent at $w^{\prime}$ has no less information about which WFFs are true than they did at $w$. Since $\leq$ is reflexive, $w\leq w$ for all $w\in W$. Since $\leq$ is transitive, if $w\leq w^{\prime}$ and $w^{\prime}\leq w^{\dagger}$, then $w\leq w^{\dagger}$. Importantly, $\leq$ must also satisfy the following monotonicity constraint:
 \begin{quote}
     \textbf{Monotonicity:\ }For any $w\in W$, $w^{\prime}\in W$, and $a\in\mathbbm{A}$, if $w(a)=T$ and $w\leq w^{\prime}$, then $w^{\prime}(a)=T$.
 \end{quote}
-This effectively ensures that if $w\leq w^{\prime}$, then an agent at $w^{\prime}$ has no less information about which WFFs are tautologies than they did at $w$.\par 
+This effectively ensures that if $w\leq w^{\prime}$, then an agent at $w^{\prime}$ has no less information about which WFFs are true than they did at $w$.\par 
 
 Next, we state some conditions governing the semantic satisfaction relation $\vDash$ between information states $W$ and WFFs formed from the atoms in $\mathbbm{A}$, according to the Kripke frame $(W,\leq)$, writing $w\vDash\varphi$ for `$w$ satisfies $\varphi$' and $w\not\vDash\varphi$ for `$w$ does not satisfy $\varphi$':
 \begin{itemize}
@@ -189,7 +189,7 @@ Next, we state some conditions governing the semantic satisfaction relation $\vD
 
     \item For any WFF $\varphi$ formed from the atoms in $\mathbbm{A}$, $w\vDash \varphi\Rightarrow \psi$ if and only if for all $w^{\prime}\in W$ such that $w\leq w^{\prime}$, either $w^{\prime}\vDash\neg\varphi$ or $w^{\prime}\vDash\psi$.
 \end{itemize}
-These last two constraints deserve special attention. In classical logic, a possible world satisfies the negation of a WFF just in case it does not satisfy that WFF. But in intuitionistic logic, it is not so easy for a negation to be satisfied in an information state. For an information state $w$ to satisfy $\neg \varphi$, we must ensure that there is no information state in which an agent has at least as much information about tautologies as they have in $w$ and in which $\varphi$ is proved to be a tautology. Similarly, $w\vDash \varphi\Rightarrow \psi$ just in case any information state $w^{\prime}$ in which an agent has as at least as much information as they have in $w$ is also such that either:\ 1) there is no proof of $\varphi$ in $w^{\prime}$, or 2) there is a proof of $\psi$ in $w^{\prime}$. In other words, in intuitionistic model theory, `if $\varphi$, then $\psi$' is true in $w$ if and only if, as an agent builds on the information that they have in $w$, they either fail to ever prove $\varphi$ or they successfully prove $\psi$.\par 
+These last two constraints deserve special attention. In classical logic, a possible world satisfies the negation of a WFF just in case it does not satisfy that WFF. But in intuitionistic logic, it is not so easy for a negation to be satisfied in an information state. For an information state $w$ to satisfy $\neg \varphi$, we must ensure that there is no information state in which an agent has at least as much information as they have in $w$ and in which $\varphi$ is proved to be a tautology. Similarly, $w\vDash \varphi\Rightarrow \psi$ just in case any information state $w^{\prime}$ in which an agent has as at least as much information as they have in $w$ is also such that either:\ 1) there is no proof of $\varphi$ in $w^{\prime}$, or 2) there is a proof of $\psi$ in $w^{\prime}$. In other words, in intuitionistic model theory, `if $\varphi$, then $\psi$' is true in $w$ if and only if, as an agent builds on the information that they have in $w$, they either fail to ever learn $\varphi$ or they successfully learn $\psi$.\par 
 
 
 Equipped with these rules, we can determine the truth value of any compound proposition according to a Kripke frame $(W,\leq)$. Consider the following WFF:
@@ -212,7 +212,7 @@ The following soundness and completeness result, which we will not prove here, s
     A WFF $\varphi$ of propositional logic is such that $w\vDash\varphi$ for all $w\in W$ in all Kripke frames for intuitionistic logic $(W,\leq)$ if and only if there is a proof of the sequent $\emptyset\vdash\varphi$ in LJ.
 \end{proposition}
 \noindent
-This result is remarkable when we consider just how differently LJ and Kripke frames for intuitionistic logic are motivated. The former is motivated by seeking how to elegantly restrict LK to just those sequents where only one WFF appears to the right of a turnstile. The latter aims to model the process of information acquisition that comes from proving an increasing body of tautologies. Despite this difference in motivations, the two approaches complement each other perfectly. It's worth reflecting on the philosophical significance of this.\par 
+This result is remarkable when we consider just how differently LJ and Kripke frames for intuitionistic logic are motivated. The former is motivated by seeking how to elegantly restrict LK to just those sequents where only one WFF appears to the right of a turnstile. The latter aims to model the process of information acquisition that comes from proving an increasing body of truths. Despite this difference in motivations, the two approaches complement each other perfectly. It's worth reflecting on the philosophical significance of this.\par 
 
 \section{Other Non-Classical Logics}
 In what follows, we will consider a family of non-classical logics that are all motivated by philosophical reasons to think that certain atomic propositions either have some third truth value other than true or false, or have both of the two classical truth values. In all of these cases, we will focus solely on the model theory of these logics, as the attempt to formulate sequent-calculi-style proof theories for these logics remains an active and complicated area of research. Moreover, we will primarily use truth tables to generate these model theories. This makes for a technically simpler, but still highly philosophically rich, investigation.
@@ -388,7 +388,7 @@ Consider the infamous \textbf{Liar sentence}, which reads as follows:
 \begin{quote}
     This sentence is false.
 \end{quote}
-The Liar sentence gives rise to the \textbf{Liar paradox}. The sentence seems semantically unstable. If it is true, then, based on its content it is false, in which case, it is true, and so on. Similarly, if it is false, then it is true, in which case it is false, and so on. Graham Priest (b.\ 1948) proposes the Logic of Paradox, or LP, as a way of dealing with the Liar sentence. He proposes that the Liar and other sentences that cause semantic paradoxes should be understood a being both true and false. His truth tables are exactly the same as Kleene's, but with $U$ replaced by $B$, which denotes that the atom in question has both classical truth values.\par 
+The Liar sentence gives rise to the \textbf{Liar paradox}. The sentence seems semantically unstable. If it is true, then, based on its content it is false, in which case, it is true, and so on. Similarly, if it is false, then it is true, in which case it is false, and so on. Graham Priest (b.\ 1948) proposes the Logic of Paradox, or LP, as a way of dealing with the Liar sentence. He proposes that the Liar and other sentences that cause semantic paradoxes should be understood as being both true and false. His truth tables are exactly the same as Kleene's, but with $U$ replaced by $B$, which denotes that the atom in question has both classical truth values.\par 
 
 A key feature of LP is that it does not have the property of explosion. In classical propositional logic, the following is a model-theoretic tautology for any WFFs $\varphi$ and $\psi$: $$(\varphi\wedge\neg\varphi)\Rightarrow\psi.$$
 This reflects the slogan that ``anything follows from a contradiction,'' and the model-theoretic fact from classical logic that since the antecedent of this conditional must be false, the entire conditional must be false. But note the truth table for this conditional according to LP:
@@ -491,8 +491,8 @@ T & U & U \\
 T & F & F \\
 B & T & T \\
 B & B & B \\
-B & U & U \\
-B & F & F \\
+B & U & T \\
+B & F & B \\
 U & T & T \\
 U & B & T \\
 U & U & U \\
@@ -503,10 +503,28 @@ F & U & T \\
 F & F & T \\
 \end{array}
 \]
+There are two things to note about these truth tables. First, the truth table for the material conditional is just what we get if we assume that $p\Rightarrow q$ must have the same truth table as $\neg p \vee q$. However, Belnap himself did give a truth table for the material conditional as part of his four-valued logic, and so this is a bit of license taken on my part.\footnote{See ``Making Belnap’s `Useful Four-Valued Logic' Useful'' by Stucliffe et al. (2018)\ for a detailed exploration of different ways to define the material conditional for FDE.} Second, Belnap justified his truth tables for the other connectives using what he called \textbf{pair semantics}. On this approach, each truth value is associated with a pair:\ $T=(1,0)$, $F=(0,1)$, $B=(1,1)$, $U=(0,0)$. One can think of the first term in the pair as being $1$ whenever a WFF with that truth value is true, and the second term in the pair as being $1$ whenever a WFF with that truth value is false. We can then compute the truth tables for each of the connectives via the following principles:
+\begin{itemize}
+    \item If the truth value of $p$ is $(a,b)$, then the truth value of $\neg p$ is $(b,a)$.
+
+    \item If the truth value of $p$ is $(a,b)$ and the truth value of $q$ is $(c,d)$, then the truth value of $p\wedge q$ is $(\text{min}(a,c),\text{max}(b,d))$.
+
+    \item If the truth value of $p$ is $(a,b)$ and the truth value of $q$ is $(c,d)$, then the truth value of $p\wedge q$ is $(\text{max}(a,c),\text{min}(b,d))$.
+\end{itemize}
+So, for example:
+\begin{itemize}
+    \item If the truth value of $p$ is $T=(1,0)$, then the truth value of $\neg p$ is $(0,1)=F$.
+
+    \item If the truth value of $p$ is $U=(0,0)$ and the truth value of $q$ is $B=(1,1)$, then the truth value of $p\wedge q$ is $(\text{min}(0,1),\text{max}(0,1))=(0,1)=F$.
+
+    \item If the truth value of $p$ is $F=(0,1)$ and the truth value of $q$ is $B=(1,1)$, then the truth value of $p\wedge q$ is $(\text{max}(0,1),\text{min}(1,1))=(1,1)=B$.
+\end{itemize}
+As hinted below, this way of encoding truth values can be useful in a lot of contexts, including the fourth proof in this week's problem set.\par 
+
 
 
 \section{Conclusion}
-As ever, we've only begun to scratch the surface. There are all kinds of relevance logics, non-monotonic logics, and so on the violate the rules of classicality in one way or another. Łukasiewicz himself generalized his three-valued logic to create an $n$-valued logic for any natural number $n$. There are even logics with infinitely many truth values! The important thing to take away from this, for our purposes, is to note that in all cases, each of the logicians we've covered started from a philosophical problem about the nature of truth, devised a logic that helped address that philosophical problem, and then worked through its implications. This is the point of philosophical logic:\ to devise formal tools that make help us make progress on philosophical problems. 
+As ever, we've only begun to scratch the surface. There are all kinds of relevance logics, non-monotonic logics, and so on that violate the rules of classicality in one way or another. Łukasiewicz himself generalized his three-valued logic to create an $n$-valued logic for any natural number $n$. There are even logics with infinitely many truth values! The important thing to take away from this, for our purposes, is that in all cases, each of the logicians we've covered started from a philosophical problem about the nature of truth, devised a logic that helped address that philosophical problem, and then worked through its implications. This is the point of philosophical logic:\ to devise formal and logical tools that make help us make progress on philosophical problems. 
 
 \section*{Problem Set}
 
@@ -517,7 +535,7 @@ As ever, we've only begun to scratch the surface. There are all kinds of relevan
 
     \item Prove that $(\neg p \vee q)\Rightarrow [(\neg p\Rightarrow q)\Rightarrow q]$ is \textit{not} a tautology of K3. 
 
-    \item Let $\mathbbm{A}$ be a countably infinite set of atomic propositions. Let $W$ be the set of all functions $w:\mathbbm{A}\rightarrow\{T,F\}$ (i.e., the set of all classical logic truth value assignments to the atoms $\mathbbm{A}$). Let $W^{\prime}$ be the set of all functions $w^{\prime}:\mathbbm{A}\rightarrow\{T,F,B\}$ (i.e., the set of all LP truth value assignments to the atoms $\mathbbm{A}$). Prove that $W$ and $W^{\prime}$ have the same cardinality. (\textit{Hint:\ Number the atoms. Then try to define a bijection between $W$ and the power set of the integers, and a bijection between and $W^{\prime}$ and the power set of the integers.}).
+    \item Let $\mathbbm{A}$ be a countably infinite set of atomic propositions. Let $W$ be the set of all functions $w:\mathbbm{A}\rightarrow\{T,F\}$ (i.e., the set of all classical logic truth value assignments to the atoms $\mathbbm{A}$). Let $W^{\prime}$ be the set of all functions $w^{\prime}:\mathbbm{A}\rightarrow\{T,F,B\}$ (i.e., the set of all LP truth value assignments to the atoms $\mathbbm{A}$). Prove that $W$ and $W^{\prime}$ have the same cardinality. (\textit{Hint:\ Number the atoms, then use Belnap's definition of the truth values for $T$, $F$ and $B$, and convert sequences of pairs into sequences of numbers}.)
 \end{enumerate}
 
 \end{document}
