@@ -187,9 +187,9 @@ Next, we state some conditions governing the semantic satisfaction relation $\vD
 
     \item For any WFF $\varphi$ formed from the atoms in $\mathbbm{A}$, $w\vDash \neg \varphi$ if and only if there is no $w^{\prime}\in W$ such that $w\leq w^{\prime}$, $w^{\prime}\vDash\varphi$. 
 
-    \item For any WFF $\varphi$ formed from the atoms in $\mathbbm{A}$, $w\vDash \varphi\Rightarrow \psi$ if and only if for all $w^{\prime}\in W$ such that $w\leq w^{\prime}$, either $w^{\prime}\vDash\neg\varphi$ or $w^{\prime}\vDash\psi$.
+    \item For any WFF $\varphi$ formed from the atoms in $\mathbbm{A}$, $w\vDash \varphi\Rightarrow \psi$ if and only if for all $w^{\prime}\in W$ such that $w\leq w^{\prime}$, either $w^{\prime}\not\vDash\varphi$ or $w^{\prime}\vDash\psi$.
 \end{itemize}
-These last two constraints deserve special attention. In classical logic, a possible world satisfies the negation of a WFF just in case it does not satisfy that WFF. But in intuitionistic logic, it is not so easy for a negation to be satisfied in an information state. For an information state $w$ to satisfy $\neg \varphi$, we must ensure that there is no information state in which an agent has at least as much information as they have in $w$ and in which $\varphi$ is proved to be a tautology. Similarly, $w\vDash \varphi\Rightarrow \psi$ just in case any information state $w^{\prime}$ in which an agent has as at least as much information as they have in $w$ is also such that either:\ 1) there is no proof of $\varphi$ in $w^{\prime}$, or 2) there is a proof of $\psi$ in $w^{\prime}$. In other words, in intuitionistic model theory, `if $\varphi$, then $\psi$' is true in $w$ if and only if, as an agent builds on the information that they have in $w$, they either fail to ever learn $\varphi$ or they successfully learn $\psi$.\par 
+These last two constraints deserve special attention. In classical logic, a possible world satisfies the negation of a WFF just in case it does not satisfy that WFF. But in intuitionistic logic, it is not so easy for a negation to be satisfied in an information state. For an information state $w$ to satisfy $\neg \varphi$, we must ensure that there is no information state in which an agent has at least as much information as they have in $w$ and in which $\varphi$ is true. Similarly, $w\vDash \varphi\Rightarrow \psi$ just in case any information state $w^{\prime}$ in which an agent has as at least as much information as they have in $w$ is also such that either:\ 1) there is no proof of $\varphi$ in $w^{\prime}$, or 2) there is a proof of $\psi$ in $w^{\prime}$. In other words, in intuitionistic model theory, `if $\varphi$, then $\psi$' is true in $w$ if and only if, as an agent builds on the information that they have in $w$, they either fail to ever learn $\varphi$ or they successfully learn $\psi$.\par 
 
 
 Equipped with these rules, we can determine the truth value of any compound proposition according to a Kripke frame $(W,\leq)$. Consider the following WFF:
@@ -290,7 +290,7 @@ A good heuristic for understanding these truth tables is as follows. Let $T$ be 
 \noindent
 \[
 \begin{array}{c c|c|c|c}
-p & q & p \Rightarrow q & (p \Rightarrow q) & p \lor q \\
+p & q & p \Rightarrow q & (p \Rightarrow q) \Rightarrow q & p \lor q \\
 \hline
 T & T & T & T & T \\
 T & U & U & T & T \\
@@ -366,7 +366,7 @@ However, the equivalence of $(p\Rightarrow q)\Rightarrow q$ and $p\vee q$ fails 
 \noindent
 \[
 \begin{array}{c c|c|c|c}
-p & q & p \Rightarrow q & (p \Rightarrow q) & p \lor q \\
+p & q & p \Rightarrow q & (p \Rightarrow q) \Rightarrow q & p \lor q \\
 \hline
 T & T & T & T & T \\
 \textbf{T} & \textbf{U} & \textbf{U} & \textbf{U} & \textbf{T} \\
@@ -517,7 +517,7 @@ So, for example:
 
     \item If the truth value of $p$ is $U=(0,0)$ and the truth value of $q$ is $B=(1,1)$, then the truth value of $p\wedge q$ is $(\text{min}(0,1),\text{max}(0,1))=(0,1)=F$.
 
-    \item If the truth value of $p$ is $F=(0,1)$ and the truth value of $q$ is $B=(1,1)$, then the truth value of $p\wedge q$ is $(\text{max}(0,1),\text{min}(1,1))=(1,1)=B$.
+    \item If the truth value of $p$ is $F=(0,1)$ and the truth value of $q$ is $B=(1,1)$, then the truth value of $p\vee q$ is $(\text{max}(0,1),\text{min}(1,1))=(1,1)=B$.
 \end{itemize}
 As hinted below, this way of encoding truth values can be useful in a lot of contexts, including the fourth proof in this week's problem set.\par 
 
