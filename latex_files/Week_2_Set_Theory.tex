@@ -125,19 +125,19 @@ A \textbf{function} is a way of assigning each objects in one set to an object i
 
     \item Write $\rightarrow$. 
 
-    \item Write the set containing elements to which elements in the domain are assigned (this second set is called the \textbf{range} of the function).
+    \item Write the set containing elements to which elements in the domain are assigned (this second set is called the \textbf{codomain} of the function).
 \end{enumerate}
-For example, a function $f:X\rightarrow Y$ is a function such that every element of $X$ is assigned to (the term `mapped to' is also sometimes used) an element of $Y$. The set $X$ is the domain of $f$, and the set $Y$ is the range of $f$. As an example, addition on the real numbers could be introduced as a function $a:\mathbbm{R}^{2}\rightarrow \mathbbm{R}$. That is, it assigns to every pair of real numbers a single real number (i.e., their sum). For any $x$ in the domain of a function $f$, we write $f(x)$ for the element of the range that $f$ assigns to $x$.\par
+For example, a function $f:X\rightarrow Y$ is a function such that every element of $X$ is assigned to (the term `mapped to' is also sometimes used) an element of $Y$. The set $X$ is the domain of $f$, and the set $Y$ is the codomain of $f$. As an example, addition on the real numbers could be introduced as a function $a:\mathbbm{R}^{2}\rightarrow \mathbbm{R}$. That is, it assigns to every pair of real numbers a single real number (i.e., their sum). For any $x$ in the domain of a function $f$, we write $f(x)$ for the element of the codomain that $f$ assigns to $x$.\par
 
-Sometimes, we wish to be more explicit about exactly how a function $f$ maps elements of its domain to its range. In such cases, we can define the function using the $\mapsto$ symbol. As an example, let $s:\mathbbm{R}\rightarrow\mathbbm{R}$ be the square function defined on the real numbers. We can write this function as $s:x\mapsto x^{2}$. This makes it explicit that $s$ assigns each real number to its square.\par 
+Sometimes, we wish to be more explicit about exactly how a function $f$ maps elements of its domain to its codomain. In such cases, we can define the function using the $\mapsto$ symbol. As an example, let $s:\mathbbm{R}\rightarrow\mathbbm{R}$ be the square function defined on the real numbers. We can write this function as $s:x\mapsto x^{2}$. This makes it explicit that $s$ assigns each real number to its square.\par 
 
 For any function $f:X\rightarrow Y$, we can define its \textbf{inverse} as a function $f^{-1}:Y\rightarrow\mathcal{P}(X)$. That is, it maps elements of $Y$ to subsets of $X$. The explicit form of this mapping is: $$f^{-1}:y\mapsto\{x\in X: f(x)=y\}.$$ In other words, $f^{-1}(y)$ is the set of all $x$ such that $f(x)=y$.\par 
 
-For a given function $f:X\rightarrow Y$, it need not be the case that every element $y$ of the range $Y$ be such that the inverse $f^{-1}(y)$ is non-empty. Consider again the function $s:\mathbbm{R}\rightarrow\mathbbm{R}$, with the explicit mapping $s:x\mapsto x^{2}$. Since squares are always positive, for any $r\in\mathbbm{R}$ such that $r$ is negative, $s^{-1}(r)=\emptyset$. The subset of a functions range containing only those elements of the range with non-empty inverse is called the \textbf{codomain}. More precisely, for any function $f:X\rightarrow Y$, its codomain $\textsf{Cod}(f)$ is
+For a given function $f:X\rightarrow Y$, it need not be the case that every element $y$ of the codomain $Y$ be such that the inverse $f^{-1}(y)$ is non-empty. Consider again the function $s:\mathbbm{R}\rightarrow\mathbbm{R}$, with the explicit mapping $s:x\mapsto x^{2}$. Since squares are always positive, for any $r\in\mathbbm{R}$ such that $r$ is negative, $s^{-1}(r)=\emptyset$. The subset of a functions codomain containing only those elements of the codomain with non-empty inverse is called the \textbf{image}. More precisely, for any function $f:X\rightarrow Y$, its image $\textsf{Im}(f)$ is
 $\{y\in Y:f^{-1}(y)\neq\emptyset\}$.\par 
 
 
-A function $f:X\rightarrow Y$ is called \textbf{surjective} if and only if $\textsf{Cod}(f)=Y$. That is, a function is surjective if and only if every element of the range has at least one element of the domain assigned to it. A function $f:X\rightarrow Y$ is called \textbf{injective} if and only if, for every $y\in Y$, $f^{-1}(y)$ is either the empty set or contains only one element. That is, a function is injective if every element of the range is such that, at most, at least one element of the domain is mapped to it. A function is called \textbf{bijective} if and only if it is both injective and surjective.\par 
+A function $f:X\rightarrow Y$ is called \textbf{surjective} if and only if $\textsf{Im}(f)=Y$. That is, a function is surjective if and only if every element of the codomain has at least one element of the domain assigned to it. A function $f:X\rightarrow Y$ is called \textbf{injective} if and only if, for every $y\in Y$, $f^{-1}(y)$ is either the empty set or contains only one element. That is, a function is injective if every element of the codomain is such that, at most, at least one element of the domain is mapped to it. A function is called \textbf{bijective} if and only if it is both injective and surjective.\par 
 
 A function $f:X\rightarrow Y$ can be re-written as the set $\{(x,y)\in X\times Y : y=f(x)\}$. Thus, functions too are sets.\par 
 
@@ -169,7 +169,7 @@ The terminology here is confusing. The pairing axiom tells us we can define a se
 \subsection{Power Set}
 This axiom just states that every set has a power set. In first-order logic:
 $$\forall x \exists y \forall z \left[z\in y \iff \forall w (w\in z \Rightarrow w\in x)\right].$$
-Note that the formula $\forall w (w\in z \to w\in x)$ just states that $z\subseteq x$ (for all $w$, if $w$ is in $z$, then $w$ is in $x$). So, the power set axiom just says that for all sets $z$, there exists a set $y$ such that, for all sets $z$, $z$ is an element of $y$ if and only if it is a subset of $x$. This is just the power set. One can prove that every set has a unique power set (and you will do this below). 
+Note that the formula $\forall w (w\in z \to w\in x)$ just states that $z\subseteq x$ (for all $w$, if $w$ is in $z$, then $w$ is in $x$). So, the power set axiom just says that for all sets $x$, there exists a set $y$ such that, for all sets $z$, $z$ is an element of $y$ if and only if it is a subset of $x$. This is just the power set. One can prove that every set has a unique power set (and you will do this below). 
 
 
 \subsection{Union}
@@ -301,7 +301,7 @@ It should be clear at this point that set theory is an \textit{extremely} rich s
 \begin{enumerate}
     \item Prove that $\emptyset$ is a subset of all subsets of any set $X$.
 
-    \item Prove that if $X\times Y = Y\times X$, then $X=Y$.
+    \item Prove that if $X\times Y = Y\times X$, then $X=Y$ (for non-empty $X$ and $Y$).
 
     \item Use the definition of a tuple as a set to prove that for any two tuples $(a,b,c)$ and $(c,b,a)$, $(a,b,c)$ = $(c,b,a)$ if and only if $a=c$.
 
@@ -325,7 +325,7 @@ It should be clear at this point that set theory is an \textit{extremely} rich s
         \textsf{fusc}(k) + \textsf{fusc}(k+1) & \text{if } z = 2\cdot k+1 \ (\text{with } k \geq 1).
     \end{cases}
     \end{equation*}
-        Let the \textbf{lowest terms pair} $(a,b)$ in any positive rational $q$ be the pair such that for any $(c,d)\in q$, $(c,d)=(\gamma \cdot a,\gamma \cdot b)$ where $\gamma$ is an integer greater than zero. It turns out that for any positive rational $q$, its lowest terms pair $(a,b)$ is such that $(a,b)=(\textsf{fusc}(z),\textsf{fusc}(z+1))$ for some $z$. Moreover, for any $z$, $(\textsf{fusc}(z),\textsf{fusc}(z+1))$ is a lowest-terms pair of some rational. Use these facts to prove that that rational numbers $\mathbbm{Q}$ have cardinality $\aleph_{0}$ (\textit{Hint:\ you'll have to find a way to deal with negative rationals!})
+        Let the \textbf{lowest terms pair} $(a,b)$ in any positive rational $q$ be the pair such that for any $(c,d)\in q$, $(c,d)=(\gamma \cdot a,\gamma \cdot b)$ where $\gamma$ is an integer greater than zero. It turns out that for any positive rational $q$, its lowest terms pair $(a,b)$ is such that $(a,b)=(\textsf{fusc}(z),\textsf{fusc}(z+1))$ for some $z$. Moreover, for any $z$, $(\textsf{fusc}(z),\textsf{fusc}(z+1))$ is a lowest-terms pair of some rational. Use these facts to prove that the rational numbers $\mathbbm{Q}$ have cardinality $\aleph_{0}$ (\textit{Hint:\ you'll have to find a way to deal with negative rationals!})
 \end{enumerate}
 
 \end{document}
