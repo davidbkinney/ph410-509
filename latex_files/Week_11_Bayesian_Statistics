@@ -1,0 +1,254 @@
+\documentclass[11pt]{article}
+
+% Packages for math and proof writing
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{bbm}
+
+% Theorem and proof environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+% Definitions, remarks, etc.
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Page formatting
+\usepackage[margin=1in]{geometry}
+
+%tikz formatting
+
+\usepackage{tikz}
+\usetikzlibrary{patterns} % for patterns like checkerboard or hatchings
+\usepackage{caption}
+\usepackage{url}
+
+\title{Week 11:\ Bayesian Statistics}
+\author{David Kinney}
+\date{November 13th, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Last week, we discussed null hypothesis significance testing (NHST), which is the mainstream way in which science generates justified belief. However, strictly speaking, the objects of the justified beliefs produced by NHST are always \textit{negations}. That is, if a scientist runs a null hypothesis significance test and obtains a low p-value, then they arguably are justified in believing that the null hypothesis they were testing is false.\par
+
+One might hope for more than this from science. Specifically, one might hope that science would tell us, given some data that we have observed, what our degree of belief in some hypothesis should be. Some examples of the kinds of questions along these lines that we might hope that science could answer are:
+\begin{enumerate}
+    \item How likely is it that the Earth is warming due to human activity, given temperature trends over the last twenty years?
+
+    \item How likely is it that a distant planet contains living organisms, given the molecules detected in its atmosphere?
+
+    \item How likely is it that pesticides used on golf courses cause Parkinson's disease, given the geographic distribution of incidence of the disease?
+
+    \item How likely is it that a coin is fair, given that it has come up heads in 52 out of 100 tosses?
+\end{enumerate}
+Bayesian statistical analyses seek to answer questions like these. Okay, so maybe the last one isn't a question that anyone cares about the answer to, but it's one that we will answer in this reading.\par 
+
+There are two main ways that Bayesian statistics seeks to answer these questions. The first is to use Bayes' theorem to analytically derive (i.e., exactly derive) the probability that some hypothesis is true, given the observed data. However, this only works in a small number of cases. So, more often than not, we use a simulation technique called \textbf{Markov Chain Monte Carlo} (MCMC). This reading will effectively be an introduction to the theory behind these techniques. First, we will present the case where the relevant probabilities can be derived analytically. Then, we will discuss the concept of sampling from a probability distribution, before moving to a specific example of MCMC that uses coin tosses as an example. After working through that specific example, we will give a more general description of MCMC.\par 
+
+\section{Analytic Bayesian Inference}
+Sometimes, we can do Bayesian inference \textit{analytically}, meaning that we can derive an exact value for the probability of some hypothesis, given our observed data, without doing any simulations. As one example, suppose that we toss a coin 100 times, and that the coin either land heads or tails. We know that the coin has a fixed \textit{bias}:\ that is, on every toss, it has a fixed probability $\pi$ of landing heads, and a fixed probability $1-\pi$ of landing tails. Suppose that we learn that 52 of the coins have landed heads. What probability should we assign to the hypothesis that the coin is fair, in the sense that $\pi$ is between $.49$ and $.51$, inclusive? (For reasons I will explain below, we cannot define fairness as the coin having probability of landing heads of exactly $.5$.)\par 
+
+To do this, let us first define the probability space that we will use to model the coin flipping system. Let $\{H,T\}^{100}$ represent the possible outcomes of the 100 coin tosses; each element of $\{H,T\}^{100}$ is a 100-tuple such that the first term in the tuple represents the outcome of the first coin toss, the second term in the tuple represents the outcome of the second coin toss, and so on; e.g., $(H,T,\dots,T)$. Let $[0,1]$ be the set of real numbers between $0$ and $1$, inclusive. Each $\pi\in[0,1]$ represents a possible probability of the coin landing heads on a given toss, with the probability of tails being $1-\pi$. Let the sample space of our probability space be the product $\{H,T\}^{100}\times[0,1]$. This is the set of all pairs $(c,\pi)$ such that $c$ is a possible 100-tuple of coin toss outcomes and $\pi$ is a possible probability of the coin landing heads on each toss. Let $\Sigma$ be a $\sigma$-algebra on $\{H,T\}^{100}\times[0,1]$, and let $p:\Sigma\rightarrow[0,1]$ be a probability distribution.\par
+
+Let $F$ be the set of all elements of $\{H,T\}^{100}\times[0,1]$ in which the probability of the coin landing heads is between $.49$ and $.51$, exclusive. That is,
+$$F=\{(c,\pi)\in\{H,T\}^{100}\times[0,1]:\pi\in[.49,.51]\}.$$
+This is how we will represent the hypothesis that the coin is (roughly) fair. We will assume that $F\in\Sigma$, i.e., that $F$ is an element of our $\sigma$-algebra. Next, let our observed data set $D$ be the set of all elements of $\{H,T\}^{100}\times[0,1]$ in which exactly 52 coin tosses yield a heads outcome. That is,
+$$D=\{(c,\pi)\in\{H,T\}^{100}\times[0,1]:c \ \text{contains 52 heads outcomes}\}.$$
+We assume that $D\in\Sigma$. We want calculate $p(F|D)$, or the probability that the coin is fair, given that we observed 52 heads outcomes. To do this, let us first apply Bayes' theorem:
+$$p(F|D)=\frac{P(D|F)P(F)}{P(D)}.$$
+The left-hand term $p(F|D)$, or the probability of our hypothesis, given the observed data, is known as the \textbf{posterior probability}. The right-hand side numerator term $P(D|F)$, or the probability of the data, given the hypothesis, is known as the \textbf{likelihood}. The terms $P(F)$ and $P(D)$ are known as the \textbf{prior probabilities} of the hypothesis $F$ and the data $D$, respectively.\par 
+
+Our strategy will be to calculate $p(D|F)$, $p(F)$, and $p(D)$, and thereby calculate $p(F|D)$. We will start with the likelihood $p(D|F)$. There is a well-known way of calculating the probability of getting $k$ instances of one of two possible outcomes in $n$ trials, where the outcome in question has probability $\pi$; it is known as a \textbf{binomial formula}, and it is stated as follows:
+$$\binom{n}{k}\pi^{k}(1-\pi)^{n-k}.$$
+The term $\binom{n}{k}$ is known as the \textbf{binary coefficient} and is calculated as follows:
+$$\binom{n}{k}=\frac{n!}{k!(n-k)!},$$
+where, for any natural number $x\geq 1$, the \textbf{factorial} $x!$ is the product of all natural numbers $(1\cdot 2 \dots (x-1) \cdot x)$. Thus, the probability of getting 52 heads outcomes from 100 coin tosses when the probability of getting a heads from each coin toss is $\pi$ is given by the expression
+$$\binom{100}{52}\pi^{52}(1-\pi)^{100-52}.$$
+Recall that our hypothesis $F$ is that $\pi$ is between $.49$ and $.51$, inclusive. Thus, if the probability of getting a heads outcome in $52$ out of $100$ outcomes under a probability $\pi$ of a heads outcome is given by the expression above, and $D$ is the set of all cases where $52$ out of $100$ coin tosses come up heads, then $p(D|F)$ is found by evaluating the expression above for every real number $\pi$ between $.49$ and $.51$, inclusive. It turns out that this can be done by taking the Riemann integral of the expression above on the interval $[.49,.51]$ and dividing it by the length of the interval, as in the following equation:
+$$p(D|F)=\frac{1}{.51-.49}\int_{.49}^{.51}\binom{100}{52}\pi^{52}(1-\pi)^{100-52}\textrm{d}\pi\approx.073.$$
+Don't worry about having to calculate this integral. The important thing to grasp is that the integral is the limit of any finite sum of $\frac{1}{.51-.49}\binom{100}{52}\pi^{52}(1-\pi)^{100-52}$ for values of $\pi$ between $.49$ and $.51$ inclusive. This gives us the probability of obtaining our data set ($52$ heads outcomes out of $100$ coin tosses) for any probability $\pi$ between $.49$ and $.51$, inclusive, of a heads outcome on each toss.\par 
+
+Next, we calculate the prior probability $p(F)$. Note that $F$ represents the hypothesis that the probability $\pi$ of a coin coming up heads on any toss is between $.49$ and $.51$, inclusive. A typical way of assigning probabilities to sets of real numbers between $0$ and $1$, inclusive, is via a probability density function known as the \textbf{Beta distribution}. Specifically, for a given $\alpha>0$ and $\beta>0$, the function $\textsf{Beta}_{\alpha,\beta}:\mathbbm{R}\rightarrow\mathbbm{R}$ is a probability density function defined as follows:
+$$\textsf{Beta}_{\alpha,\beta}(x)=\frac{x^{\alpha-1}(1-x)^{\beta-1}}{B(\alpha,\beta)}, \ \text{where} \ B(\alpha,\beta)=\frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)}.$$
+Recall the definition of the Gamma function from last week's reading. The positive real numbers $\alpha$ and $\beta$ are known as \textbf{parameters} of the distribution that change the exact probabilities assigned to sets of real numbers between $0$ and $1$, inclusive. Specifically, for any real numbers $a$ and $b$ between $0$ and $1$, inclusive, where $b\geq a$, the probability of the full set of real numbers between $a$ and $b$, inclusive, is given by the equation
+$$p([a,b])=\int_{a}^{b}\textsf{Beta}_{\alpha,\beta}(x)\textrm{d}x.$$
+Note that when $\alpha=1$ and $\beta=1$, the Beta distribution has the following crucial property:
+$$p([a,b])=\int_{a}^{b}\textsf{Beta}_{1,1}(x)\textrm{d}x=b-a.$$
+In this sense, the parameters $\alpha=1$ and $\beta=1$ are the natural parameters for a \textit{uniform} Beta distribution over sets of possible values between $0$ and $1$. This is further demonstrated by the representation of this probability density function shown in Fig.~\ref{fig:betauniform}. Thus, a natural prior probability for the hypothesis $F$ that $\pi\in[.49,.51]$ is given by the equation:
+$$p(F)=\int_{.49}^{.51}\textsf{Beta}_{1,1}(x)\textrm{d}x=.51-.49=.02.$$
+Finally, we define the prior probability $p(D)$, or the probability of obtaining $52$ out of $100$ coin tosses under \textit{any} probability $\pi$ of a heads outcome for each coin toss. This is given by taking the Riemann integral of the binomial formula stating the probability of getting $52$ our of $100$ heads outcomes across all possible probabilities $\pi$:
+$$\frac{1}{1-0}\int_{0}^{1}\binom{100}{52}\pi^{52}(1-\pi)^{100-52}\textrm{d}\pi\approx.01.$$
+Again, don't worry about computing this integral; there are many software programs that can do this. The point is just to see that it \textit{can} be computed.\par
+
+\begin{figure}[]
+\centering
+\begin{tikzpicture}[scale=3]
+    % Axes
+    \draw[->] (-0.1,0) -- (1.2,0) node[right] {$x$};
+    \draw[->] (0,-0.1) -- (0,1.2) node[above] {$f(x)$};
+
+    % Uniform density line
+    \draw[thick,blue] (0,1) -- (1,1);
+
+    % Labels
+    \node at (0,-0.1) [below] {$0$};
+    \node at (1,-0.1) [below] {$1$};
+    \node at (-0.1,1) [left] {$1$};
+    \node at (0.5,1.1) {$\text{Beta}(1,1)$};
+\end{tikzpicture}
+\caption{Probability density function $\textsf{Beta}_{1,1}$. The probability, according to this density function, of the set of real numbers between and $a\in[0,1]$ and $b\in[0,1]$, where $b\geq a$, is equal to the area under the blue line between $a$ and $b$, which it is easy to see will be equal to $b-a$.}\label{fig:betauniform}
+\end{figure}
+
+
+
+
+
+At last, we are in a position to analytically calculate the posterior probability $p(F|D)$, via the following equation:
+$$p(F|D)=\frac{p(D|F)p(F)}{p(D)}\approx\frac{(.073)(.02)}{(.01)}=.146.$$
+Thus, in this case, we can calculate analytically that the probability that a coin is fair (in the sense of having a probability of landing heads on any toss that is between $.49$ and $.51$, inclusive) if it is observed to land heads $52$ times in $100$ tosses:\ the answer is approximately $.146$.\par 
+
+A question:\ why not calculate the probability that the coin's probability of landing heads is \textit{exactly} $.5$, given our observed data? The answer, following on our discussion of probability theory two weeks ago, is that if we want our prior probability distribution over possible values of the probability $\pi$ that the coin comes up heads to be uniform, and we want $\pi$ to be able to be any real number between $0$ and $1$, then our prior probability that $\pi$ is any \textit{exact} value will be $0$. When an element of a $\sigma$-algebra has prior probability $0$, then its posterior probability can never be anything other than $0$.\par
+
+This example is simple enough that we have well-defined integrals that allow us to compute the likelihoods and prior probabilities that in turn allow us to compute our posterior. But, we won't always be so lucky. In the next two sections, we will demonstrate how to use sampling from a probability distribution and MCMC techniques to estimate posterior probabilities in these more difficult cases.\par 
+
+\section{Sampling From a Probability Distribution}
+Intuitively, ``sampling from a probability distribution'' means picking an element from a set such that the probability of picking any element of the set depends on some probability distribution. For example, imagine that you had an urn with 100 balls in it, each labeled with a number between 1 and 100. Assuming a probability distribution $p$ such that the probability of picking each ball as $.01$, one can think of picking a ball from the urn as sampling from that probability distribution. That would be true even if $p$ assigned higher probability to picking some balls as opposed to others; whenever you obtain an outcome from a chancy or indeterminate process, you are sampling from a probability distribution.\par 
+
+More formally, consider any probability space $(\Omega,\Sigma,p)$, and let $V:\Omega\rightarrow\textsf{R}_{V}$ be a random variable that is measurable with respect to the space $(\Omega,\Sigma)$. To say that we \textbf{sample} a value $v$ from the codomain $\textsf{R}_{V}$ of the random variable $V$ means from the probability distribution $p$ that we obtain $v$ from that codomain, and the probability of obtaining a particular value $v$ is $p(V^{-1}(v))$. The phrase `$v$ is sampled from $p$' is written in formal notation as $v\sim p$.\par
+
+As a simple example, consider a roll of a single die. For a given probability space $(\Omega,\Sigma,p)$ in which $\Omega$ is a set of possible worlds in which the die is rolled, $\Sigma$ is a $\sigma$-algebra on $\Omega$, and $p:\Sigma\rightarrow[0,1]$ is a probability distribution, let $D:\Omega\rightarrow\{1,2,3,4,5,6\}$ represent the outcome of the die roll in each possible world. One can think of obtaining an outcome for the die roll (i.e., rolling the die) as \textit{sampling} a value $d\in\{1,2,3,4,5,6\}$ by sampling it from the probability distribution $p$. The phrase `$d$ is sampled from $p$' is formalized as $d\sim p$. The probability of sampling any particular $d$ is $p(D^{-1}(d))$, which is just the probability, according to $p$, that $D=d$.\par
+
+In what follows, we will use the idea of sampling from a distribution to show how Markov Chain Monte Carlo techniques allow us to make an estimate as to the probability of a hypothesis being true, given the data we observe.\par 
+
+
+\section{A Simple Example of MCMC}
+Let us add some complications to our earlier coin-flipping example. Suppose, once again, that we observe $100$ coin tosses, of which $52$ resulted in heads. However, we now know that each of these $100$ tosses was generated by the following procedure:
+\begin{enumerate}
+    \item Spin a roulette wheel that has probability $\pi_{W}$ of landing on red and probability $(1-\pi_{W})$ of landing on black.
+
+    \item If the wheel lands on red, flip a quarter, which has probability $\pi_{Q}$ of landing heads and probability $1-\pi_{Q}$ of landing on tails. The outcome of this coin toss is recorded.
+
+    \item If the wheel lands on black, flip a nickel, which has probability $\pi_{N}$ of landing heads and probability $1-\pi_{N}$ of landing on tails. The outcome of this toss is recorded.
+\end{enumerate}
+This process was repeated 100 times to get a sequence of $100$ coin tosses, of which we know that $52$ landed heads. However, we don't know which tosses were of quarters and which were of nickels. To represent this probabilistically, let our sample space be the set $$\{H,T\}^{100}\times[0,1]\times[0,1]\times[0,1].$$ Each element of this sample space is a e-tuple $(c,\pi_{W},\pi_{Q},\pi_{N})$, where $c$ is a 100-tuple representing the outcomes of 100 coin tosses, $\pi_{W}$ is the probability that the wheel lands on red, $\pi_{Q}$ is the probability that the quarter lands heads, and $\pi_{N}$ is the probability that the nickel lands heads. Going forward, for ease of notion, we let $\Omega=\{R,B\}^{100}\times\{H,T\}^{100}\times[0,1]\times[0,1]\times[0,1]$.
+
+
+Our hypothesis $F$ is now the claim that the \textit{wheel} is fair, in the sense that $\pi_{W}\in[.49,51]$. This is equivalent to the subset of the sample space
+$$F=\{(c,\pi_{W},\pi_{Q},\pi_{N})\in \Omega: \pi_{W}\in[.49,51]\}.$$
+Our data $D$ is once again that $52$ out of $100$ coin tosses came up heads. This is now equivalent to the subset of the sample space
+$$D=\{(c,\pi_{W},\pi_{Q},\pi_{N})\in \Omega: c \ \text{contains 52 heads outcomes}\}.$$
+We assume a $\sigma$-algebra $\Sigma$ of subsets of $\Omega$ such that $F\in\Sigma$ and $D\in\Sigma$, and a probability distribution $p:\Sigma\rightarrow[0,1]$. The probability of getting exactly $52$ heads outcomes from $100$ coin tosses, for fixed values of $\pi_{W}$, $\pi_{Q}$, and $\pi_{N}$, is given by the expression:
+$$\binom{100}{52}\mu(\pi_{W},\pi_{Q},\pi_{N})^{52}(1-\mu(\pi_{W},\pi_{Q},\pi_{N}))^{100-52}, \ \text{where} \ \mu(\pi_{W},\pi_{Q},\pi_{N})=\pi_{W}\pi_{Q} + (1-\pi_{W})\pi_{N}.$$
+The definition of $\mu$ ensures that the probability of heads is equal to the probability of spinning red, rolling a quarter, and getting heads, or spinning black, rolling a nickel, and getting heads. One might hope that we could calculate the likelihood $p(D|F)$ by calculating the following triple integral:
+$$p(D|F)=\frac{1}{.51-.49}\int_{.49}^{.51}\int_{0}^{1}\int_{0}^{1}\binom{100}{52}\mu(\pi_{W},\pi_{Q},\pi_{N})^{52}(1-\mu(\pi_{W},\pi_{Q},\pi_{N}))^{100-52}\textrm{d}\pi_{W}\textrm{d}\pi_{Q}\textrm{d}\pi_{N},$$
+but it turns out that the computational power needed to calculate this integral exactly is astronomical to the point of the integral simply being intractable. This is typical of integrals where the terms we integrate over are related to each other non-linearly.\par 
+
+
+So, we will use a new, simulation-based strategy. The basic idea is as follows:\ first, we will pick initial values for $\pi_{W}$, $\pi_{Q}$ and $\pi_{N}$, by sampling from a Beta distribution. Then, we will calculate the likelihood of getting exactly $52$ heads outcomes from $100$ tosses, given our sampled values of $\pi_{W}$, $\pi_{Q}$ and $\pi_{N}$. Next, we randomly, but slightly, adjust the probability distribution that we use to sample the values of $\pi_{W}$, $\pi_{Q}$ and $\pi_{N}$, and then re-sample. If the adjustment leads to a higher likelihood of getting exactly $52$ heads outcomes from $100$ tosses, then we adopt new values for $\pi_{W}$, $\pi_{Q}$ and $\pi_{N}$, and then repeat. Otherwise, we stick with our old distribution and repeat. By repeating the process many times, we converge on ``true'' parameters for a Beta distribution used to generate ``true'' values of $\pi_{W}$, $\pi_{Q}$ and $\pi_{N}$.\par 
+
+Here is the same procedure in more detail. First, we define random variables $\Pi_{W}:\Omega\rightarrow[0,1]$, $\Pi_{Q}:\Omega\rightarrow[0,1]$, $\Pi_{N}:\Omega\rightarrow[0,1]$ such that their values $\pi_{W}$, $\pi_{Q}$, and $\pi_{N}$ are just the values of these probabilities in each $\omega=(c,\pi_{W},\pi_{Q},\pi_{N})$. Next, we let $\rho_{\alpha,\beta}$ be a probability distribution, known as a Beta distribution, over possible values of $\pi_{W}$, $\pi_{Q}$, and $\pi_{N}$ such that
+$$\rho_{\alpha,\beta}([a,b])=\int_{a}^{b}\textsf{Beta}_{\alpha,\beta}(x)\textrm{d}x.$$  We will sample our initial values, $\pi_{W}$, $\pi_{Q}$, and $\pi_{N}$ from the following Beta distributions:
+    $$\pi^{(0)}_{W}\sim \rho_{\alpha^{(0)}_{W},\beta^{(0)}_{W}}$$
+    $$\pi^{(0)}_{Q}\sim \rho_{\alpha^{(0)}_{Q},\beta^{(0)}_{Q}}$$
+    $$\pi^{(0)}_{N}\sim \rho_{\alpha^{(0)}_{N},\beta^{(0)}_{N}}$$ 
+Where the parameters of each distribution are initialized so that
+$$\alpha^{(0)}_{W}=\beta^{(0)}_{W}=\alpha^{(0)}_{Q}=\beta^{(0)}_{Q}=\alpha^{(0)}_{N}=\beta^{(0)}_{N}=1.$$
+Once we have done this, we follow the following procedure, beginning at $i=0$:
+\begin{enumerate}
+    \item Calculate the probability of getting $52$ heads outcomes in $100$ tosses by evaluating the binomial formula
+    $$\binom{100}{52}\mu(\pi^{(i)}_{W},\pi^{(i)}_{Q},\pi^{(i)}_{N})^{52}(1-\mu(\pi^{(i)}_{W},\pi^{(i)}_{Q},\pi^{(i)}_{N}))^{100-52}$$
+    where $\mu(\pi^{(i)}_{W},\pi^{(i)}_{Q},\pi^{(i)}_{N})$ is defined as above. Store this likelihood as $\mathcal{L}^{(i)}$. 
+
+    \item Sample new values $\pi^{\text{new}}_{W}$, $\pi^{\text{new}}_{Q}$, and $\pi^{\text{new}}_{N}$ by sampling from the distributions:
+    $$\pi^{\text{new}}_{W}\sim \rho_{\gamma\pi^{(i)}_{W},\gamma(1-\pi^{(i)}_{W})}$$
+    $$\pi^{\text{new}}_{Q}\sim \rho_{\gamma\pi^{(i)}_{Q},\gamma(1-\pi^{(i)}_{Q})}$$
+    $$\pi^{\text{new}}_{N}\sim \rho_{\gamma\pi^{(i)}_{N},\gamma(1-\pi^{(i)}_{N})}$$
+    where $\gamma>0$ is a constant. This generates new probabilities for the processes that determine the outcome of each coin toss, where these probabilities are likely to be close to, but not the same as, our old probabilities.
+
+    \item Calculate the new likelihood 
+    $$\mathcal{L}^{\text{new}}=\binom{100}{52}\mu(\pi^{\text{new}}_{W},\pi^{\text{new}}_{Q},\pi^{\text{new}}_{N})^{52}(1-\mu(\pi^{\text{new}}_{W},\pi^{\text{new}}_{Q},\pi^{\text{new}}_{N}))^{100-52}.$$
+
+    \item Calculate the following \textbf{acceptance ratio}:
+    $$A=\frac{\textsf{Beta}_{\gamma\pi^{(i)}_{W},\gamma(1-\pi^{(i)}_{W})}(\pi^{\text{new}}_{W})\textsf{Beta}_{\gamma\pi^{(i)}_{Q},\gamma(1-\pi^{(i)}_{Q})}(\pi^{\text{new}}_{Q})\textsf{Beta}_{\gamma\pi^{(i)}_{N},\gamma(1-\pi^{(i)}_{N})}(\pi^{\text{new}}_{N})\mathcal{L}^{\text{new}}}{\textsf{Beta}_{\gamma\pi^{(i)}_{W},\gamma(1-\pi^{(i)}_{W})}(\pi^{(i)}_{W})\textsf{Beta}_{\gamma\pi^{(i)}_{Q},\gamma(1-\pi^{(i)}_{Q})}(\pi^{(i)}_{Q})\textsf{Beta}_{\gamma\pi^{(i)}_{N},\gamma(1-\pi^{(i)}_{N})}(\pi^{(i)}_{N})\mathcal{L}^{\text{(i)}}}.$$
+    This is a technical step that I will explain more in class, but for now, take it as an article of faith that this works.
+
+    \item If $A\geq 1$, then update the probabilities governing the roulette wheel, quarter flips, and nickle flips so that $$\pi^{(i+1)}_{W}=\pi^{\text{new}}_{W}, \pi^{(i+1)}_{Q}=\pi^{\text{new}}_{Q}, \pi^{(i+1)}_{N}=\pi^{\text{new}}_{N}.$$ If $\mathcal{L}^{\text{new}}<\mathcal{L}^{(i)}$, then, with probability $A$, update the probabilities governing the roulette wheel, quarter flips, and nickle flips so that $$\pi^{(i+1)}_{W}=\pi^{\text{new}}_{W}, \pi^{(i+1)}_{Q}=\pi^{\text{new}}_{Q}, \pi^{(i+1)}_{N}=\pi^{\text{new}}_{N},$$ and with probability $(1-A)$, update the probabilities governing the roulette wheel, quarter flips, and nickle flips so that $$\pi^{(i+1)}_{W}=\pi^{(i)}_{W}, \pi^{(i+1)}_{Q}=\pi^{(i)}_{Q}, \pi^{(i+1)}_{N}=\pi^{(i)}_{N}.$$
+
+    \item Repeat steps 1-4 for $i=i+1$.
+\end{enumerate}
+If we repeat this process until $i$ reaches into the thousands, then we eventually converge on probability distributions $\rho_{\alpha_{W},\beta_{W}}$, $\rho_{\alpha_{Q},\beta_{Q}}$, and $\rho_{\alpha_{N},\beta_{N}}$ that can used to estimate the true values of $\pi_{W}$, $\pi_{Q}$, and $\pi_{N}$, respectively. The process by which each parameter is updated at each step, such that the new vale of the parameter at step $i+1$ statistically depends \textit{only} on the value of the parameter at step $i$, is known as a \textbf{Markov chain}, after the mathematician Andrey Markov (1856-1922).\par 
+
+\begin{figure}
+    \centering
+    \includegraphics[scale=.2]{mcmc.png}
+    \caption{Plot of $\alpha$ and $\beta$ values for the distributions used to sample probabilities governing the wheel, nickel, and quarter in this experiment.}
+    \label{fig:mcmc}
+\end{figure}
+
+To illustrate, Fig.~\ref{fig:mcmc} shows how the values of $\alpha_{W}$, $\beta_{W}$, $\alpha_{Q}$, $\beta_{Q}$, $\alpha_{N}$, and $\beta_{N}$ change over the course of a 1000-iteration simulation. Fairly quickly, all six parameters converge on the following values: 
+$$\alpha_{W}\approx 2.25$$
+$$\beta_{W}\approx 7.75$$
+$$\alpha_{Q}\approx 2.80$$
+$$\beta_{Q}\approx 7.19$$
+$$\alpha_{N}\approx10.00$$
+$$\beta_{N}\approx 0 \ \text{($\beta_{Q}$ cannot be exactly 0, but it converges to a very low value.)}$$
+Recall that our hypothesis $F$ was that the wheel was fair, in the sense that $\pi_{W}\in[.49,.51]$. Having run our simulation, we saw that the parameters $\alpha_{W}$ and $\beta_{W}$ converged to well-defined values. These are parameters of the distribution $\rho_{\alpha_{W},\beta_{W}}$ such that sampling a probability of the wheel landing on black for that distribution tends to maximize the acceptance ratio, which occurs when the likelihood of the observed data is high. This supports the justified belief that sampling from this distribution tends to yield something close to the ``true'' value of $\pi_{W}$. At last, we can use these parameters to calculate the posterior probability $p(D|F)$:
+$$p(D|F)=\int_{.49}^{.51}\textsf{Beta}_{2.25,7.75}(\pi_{W})\textrm{d}\pi_{W}\approx .0139$$
+That is, we obtain the probability that $\pi_{W}\in[.49,.51]$ according to the Beta distribution that maximizes the likelihood of the observed data. Note that the low value for this probability is expected, given the setup. A number of heads outcomes close to $50$ does not necessarily militate in favor of a fair wheel; the wheel could be heavily biased towards red or black:\ this will still make heads and tails outcomes roughly equally likely as long as the quarter or nickel is close to fair.\par 
+
+\section{MCMC Generalized}
+The example above was a particular instance of Markov Chain Monte Carlo algorithm for estimating a posterior distribution from data. As we saw above, the algorithm depends on repeatedly sampling parameters from Markov chains; this explains the first part of the name. The second part of the name is due to the fact that a wide class of algorithms that use chance or randomness are known in statistics as ``Monte Carlo'' methods; these methods are named after a famous casino in Monaco. MCMC is just one example of a Monte Carlo algorithm in statistics. In particular, the example above is an instance of the \textbf{Metropolis-Hastings} algorithm for implementing MCMC.\par 
+
+
+Here is a high-level, generic description of how the Metropolis-Hastings algorithm for estimating a posterior distribution works:
+\begin{enumerate}
+    \item Start with initial values for the parameters that will determine your posterior distribution.
+
+    \item Sample the quantities needed to calculate the likelihood of your data; record that likelihood.
+
+    \item Propose new values for your parameters in a way that depends solely on the old values of your parameters.
+
+    \item Under the proposed new parameters, sample the quantities needed to calculate the likelihood of your data; record that likelihood.
+
+    \item Using the likelihoods obtained in steps 2 and 4, calculate an acceptance ratio, which much always be a positive number.
+
+    \item If the acceptance ratio is greater than one, adopt the new parameters proposed in step 3 as your old parameters, and repeat steps 2-5.
+
+    \item If the acceptance ratio is greater than one, then, with probability equal to the acceptance ratio $A$, adopt the new parameters proposed in step 3 as your old parameters, and repeat steps 2-5. With probability equal to $1-A$, keep the same old parameters as you had going in to this step, and repeat steps 2-5.
+
+    \item Repeat steps 2-7 thousands of times.
+
+    \item Check that your estimated parameters \textit{converge}; after some number of initial iterations of steps 2-7, there should be little movement in your parameters.
+
+    \item Calculate the mean value of your parameters for iterations $k$ through $n$, where $n$ is the total number of iterations and $k>1$ is a number set high enough so that early iterations, where there is some volatility in the parameters, are not counted (the iterations prior to $k$ are called the \textbf{burn-in period}).
+
+    \item Use the means calculated at step 10 to estimate your posterior distribution.
+\end{enumerate}
+There are other popular MCMC techniques, such as \textbf{Gibbs sampling}, that work differently from Metropolis-Hastings, but still depend on Markov chains and randomness. We won't go into Gibbs sampling here, but if you are interested in Bayesian statistics it is definitely worth knowing.\par 
+
+\section{Conclusion}
+Despite still not having mainstream status in many areas of science, Bayesian techniques allow us to do something very powerful; they allow us to obtain estimates of the posterior probability of some hypothesis, given our data, rather than just saying where or not some null hypothesis can be rejected. As Bayesian techniques are increasingly put to use in science, it is important for naturalistic philosophers to have an understanding of how they work. Moreover, for those with interests in cognitive science and philosophy of mind, there is an open and interesting question as to how much of human cognition (and non-human animal cognition) works by running MCMC-like algorithms to estimate the probability of different hypothesis about the world, given the data one has. Thus, Bayesian statistics are increasingly useful tool for a wide range of philosophical applications.\par 
+
+\section*{Problem Set}
+
+
+\begin{enumerate}
+\item Consider a measurable space $(\Omega,\Sigma)$. Let $X:\Omega\rightarrow[0,1]$ and $Y:\Omega\rightarrow[0,1]$ be any two random variables that are measurable with respect to $(\Omega,\Sigma)$. That is, each variable can take any real number between $0$ and $1$, inclusive. The values $x$ of $X$ are sampled from the Beta distribution $\rho_{1,1}$, as are the values $y$ of $Y$ (that is, $x\sim\rho_{1,1}$ and $y\sim\rho_{1,1}$). Note that $X\perp Y$. What is the joint probability that a sampled value of $X$ falls in the interval $[.2,.5]$ while a sampled value of $Y$ falls in the interval $[.3,.7]$?
+
+\item Consider the coin flipping example in Section 2. Keep everything about the example the same, but let $H$ be the hypothesis 
+$$H=\{(c,\pi)\in(\{H,T\}^{100}\times[0,1]):\pi\in[.48,.52]\}.$$
+Note that:
+$$\frac{1}{.52-.48}\int_{.48}^{.52}\binom{100}{52}\pi^{52}(1-\pi)^{100-52}\textrm{d}\pi\approx.144.$$
+Calculate an approximate value of $p(H|D)$, where, as in Section 2, $D$ is the event that 52 out of 100 coin tosses yield a heads result.
+
+\end{enumerate}
+
+\end{document}
