@@ -53,9 +53,9 @@ Consider a very simple design for an experiment:\ participants are placed into o
 To represent this set-theoretically, let $n_{1}\in\mathbbm{N}$ be the number of people in the first group and let $n_{2}\in\mathbbm{N}$ be the number of people in the second group. Let $[1,n_{1}]\subset\mathbbm{N}$ be the set of all natural numbers greater than or equal to $1$ and less than or equal to $n_{1}$. Let $[1,n_{2}]\subset\mathbbm{N}$ be the set of all natural numbers greater than or equal to $1$ and less than or equal to $n_{2}$. Let $G_{1}$ be the set of all functions $g_{1}:[1,n_{1}]\rightarrow\mathbbm{R}$. For every $i\in[1,n_{1}]$, $g_{1}(i)$ represents the score assigned to the shoes by the $i$-th member of the first group. For example, if $g_{1}(1)=6$, this means that the first member of the first group assigned the shoes a score of 6; if $g_{1}(2)=4$, this means that the first member of the first group assigned the shoes a score of 4; and so on. Let $G_{2}$ be the set of all functions $g_{2}:[1,n_{2}]\rightarrow\mathbbm{R}$.  For every $i\in[1,n_{2}]$, $g_{2}(i)$ represents the score assigned to the shoes by the $i$-th member of the second group group. For example, if $g_{2}(1)=5$, this means that the first member of the second group assigned the shoes a score of 6; if $g_{2}(2)=7$, this means that the first member of the first group assigned the shoes a score of 7; and so on. Thus, any data set obtained after running this experiment can be represented as a pair $(g_{1},g_{2})\in (G_{1}\times G_{2})$.\par
 
 \subsection{Means and Standard Deviations}
-As a next step, we will define functions that calculate the mean score in each of the two groups. Let $\mu_{1}:G_{1}\rightarrow\mathbbm{R}_{\geq1}$ (where $\mathbbm{R}_{\geq1}$ is the set of real numbers greater than or equal to 1) be a function whose value is obtained via the following equation:
+As a next step, we will define functions that calculate the mean score in each of the two groups. Let $\mu_{1}:G_{1}\rightarrow\mathbbm{R}$ be a function whose value is obtained via the following equation:
 $$\mu_{1}(g_{1})=\frac{1}{n_{1}}\sum_{i=1}^{n_{1}}g_{1}(i).$$
-This should be read as ``$\frac{1}{n_{1}}$ times the sum of all $f(i)$ for natural numbers $i$ between $1$ and $n_{1}$, inclusive.'' In a nutshell, this is just the average score assigned to the shoes by each member of the first group. Similarly, we define a function $\mu_{2}:G_{2}\rightarrow\mathbbm{R}_{\geq1}$ that is calculated as follows:
+This should be read as ``$\frac{1}{n_{1}}$ times the sum of all $f(i)$ for natural numbers $i$ between $1$ and $n_{1}$, inclusive.'' In a nutshell, this is just the average score assigned to the shoes by each member of the first group. Similarly, we define a function $\mu_{2}:G_{2}\rightarrow\mathbbm{R}$ that is calculated as follows:
 $$\mu_{2}(g_{2})=\frac{1}{n_{2}}\sum_{i=1}^{n_{2}}g_{2}(i).$$
 Next, we define a \textbf{standard deviation} function $s_{1}:G_{1}\rightarrow\mathbbm{R}_{\geq 0}$ whose value is calculated as follows:
 $$s_{1}(g_{1})=\sqrt{\frac{1}{n_{1}-1}\sum_{i=1}^{n_{1}}\left(g_{1}(i)-\mu(g_{1})\right)^{2}}.$$
@@ -78,9 +78,9 @@ Consider the product $G_{1}\times G_{2}$, representing the set of all possible e
 The next step will be to define a probability distribution $p:\Sigma\rightarrow[0,1]$ such $p(t^{-1}(x))$ is defined for any $x\in\mathbbm{R}$. However, before we can do this, we will have to introduce a few additional mathematical concepts, namely the Riemann integral and the Gamma function.\par 
 
 \subsubsection{The Riemann Integral}
-Last week, we discussed the Lebesgue integral. Here, we define a different version of the integral, known as the Riemann integral, named after Bernhard Riemann who we also mentioned last week. Let $h$ be any function whose codomain is the set $\mathbbm{R}$ of all real numbers. Let $a\in\mathbbm{R}$ and $b\in\mathbbm{R}$ be any two real numbers such that $a\leq b$. Let $P$ be a sequence of points $(p_{0},\dots,p_{n})$ such that $p_{1}=a$, $p_{n}=b$, and $p_{i-1}<p_{i}$ for all natural numbers $i$ between $1$ and $n$, inclusive. The sequence $P$ is called a \textbf{partition} of the set of all real numbers in the interval $[a,b]$. The \textbf{norm} $||P||$ of a partition $P$ is given by equation:
-$$||P||=\max_{1\leq i\leq n}(p_{i}-p_{i+1}).$$
-The right-hand side of this equation should be read as ``the maximum value of $(p_{i}-p_{i+1})$ for any $i$ between 1 and $n$, inclusive.''\par 
+Last week, we discussed the Lebesgue integral. Here, we define a different version of the integral, known as the Riemann integral, named after Bernhard Riemann who we also mentioned last week. Let $h$ be any function whose codomain is the set $\mathbbm{R}$ of all real numbers. Let $a\in\mathbbm{R}$ and $b\in\mathbbm{R}$ be any two real numbers such that $a\leq b$. Let $P$ be a sequence of points $(p_{0},\dots,p_{n})$ such that $p_{0}=a$, $p_{n}=b$, and $p_{i-1}<p_{i}$ for all natural numbers $i$ between $1$ and $n$, inclusive. The sequence $P$ is called a \textbf{partition} of the set of all real numbers in the interval $[a,b]$. The \textbf{norm} $||P||$ of a partition $P$ is given by equation:
+$$||P||=\max_{1\leq i\leq n}(p_{i}-p_{i-1}).$$
+The right-hand side of this equation should be read as ``the maximum value of $(p_{i}-p_{i-1})$ for any $i$ between 1 and $n$, inclusive.''\par 
 
 
 \begin{figure}[]
@@ -200,7 +200,7 @@ We are nearly in a position to define a probability distribution on the set $\Si
 $$p(\{\omega\in\Omega:V(\omega)\in [a,b]\})=\int_{a}^{b}f_{V}(x)\textrm{d}x,$$
 where the right-hand side of this equation is a Riemann integral. In other words, the probability that $V$ takes a value in the interval $[a,b]$ is equal to the Riemann integral of the probability density function $f_{V}$ over the same interval.\par 
 
-Let us consider again the random variable $t:(G_{1}\times G_{2})\rightarrow \mathbbm{R}_{\geq0}$, defined in Sec.~\ref{subsec:tstat} above. Let $\nu=n_{1}+n_{2}-2$. We define a probability density function $f_{t}:\mathbbm{R}\rightarrow\mathbbm{R}_{\geq0}$ that is calculated as follows:
+Let us consider again the random variable $t:(G_{1}\times G_{2})\rightarrow \mathbbm{R}$, defined in Sec.~\ref{subsec:tstat} above. Let $\nu=n_{1}+n_{2}-2$. We define a probability density function $f_{t}:\mathbbm{R}\rightarrow\mathbbm{R}_{\geq0}$ that is calculated as follows:
 $$f_{t}(x)=\frac{\Gamma\left(\frac{\nu+1}{2}\right)}{\sqrt{\pi\nu}\Gamma\left(\frac{\nu}{2}\right)}\left(1+\frac{x^{2}}{\nu}\right)^{\frac{-\nu+1}{2}}.$$
 For our purposes, it is not important to know the details of how this probability density function derived. What \textit{is} important is to know that it defines a very natural probability distribution over $\Sigma$, \textit{under the null hypothesis that the two groups should have the same mean}. To see this, let us define a probability distribution $p_{H_{0}}:\Sigma\rightarrow[0,1]$, such that for any set $S\in\Sigma$, $p_{H_{0}}(S)$ is the probability of our experiment producing a result in $S$, under the null hypothesis that there should be no difference in means between the two groups' evaluations of the shoes.\par 
 
@@ -265,21 +265,21 @@ This shows that $(G_{1}\times G_{2},\Sigma,p_{H_{0}})$ is indeed a probability s
 Suppose we have run our experiment, and obtained the value of the t-statistic for our observed data set. We now seek to calculate the \textbf{p-value} of our results. In a \textbf{two-tailed} t-test, this is the probability, under the assumption that the null hypothesis is true, of obtaining a value for $t$ whose absolute value is greater than or equal to the absolute value of the t-statistic for the data that we actually observed. To formalize this, let $(g^{*}_{1},g^{*}_{2})$ be our observed data set, and let $t^{*}=t((g^{*}_{1},g^{*}_{2}))$ be the value of the $t$-statistic that we actually obtain. We want to calculate the probability, under the null hypothesis, of observing any data set $(g_{1},g_{2})$ such that $|t((g_{1},g_{2}))|\in[|t^{*}|,\infty]$.\par 
 
 Concretely, if $t^{*}$ is positive, then the p-value associated with a test that returns to the t-statistic $t^{*}$ is the probability
-$$p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [t^{*},\infty]\} \ \text{or} \ -t((g_{1},g_{2}))\in [-\infty,-t^{*}]\}).$$
+$$p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [t^{*},\infty]\} \ \text{or} \ t((g_{1},g_{2}))\in [-\infty,-t^{*}]\}).$$
 This can be re-written as:
-$$p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [t^{*},\infty]\} \cup \{(g_{1},g_{2})\in(G_{1}\times G_{2}):-t((g_{1},g_{2}))\in [-\infty,-t^{*}]\}).$$
+$$p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [t^{*},\infty]\} \cup \{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-\infty,-t^{*}]\}).$$
 Countable additivity means we can re-write this as
 \begin{multline*}
-    p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [t^{*},\infty]\}) \\ + p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):-t((g_{1},g_{2}))\in [-\infty,-t^{*}\}).
+    p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [t^{*},\infty]\}) \\ + p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-\infty,-t^{*}\}).
 \end{multline*}
 Finally, the definition of $p_{H_{0}}$ allows us to calculate this as the sum of the Riemann integrals
 $$\int_{t}^{\infty}f_{t}(x)\textrm{d}x + \int_{-\infty}^{-t}f_{t}(x)\textrm{d}x,$$
 where $f_{t}$ is the probability density function for the t-distribution. This, is the p-value for our two-sample, two-tailed t-test. On the other hand, if $t^{*}$ is negative, then $t^{*}$ is the probability
-$$p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-t^{*},\infty]\} \ \text{or} \ -t((g_{1},g_{2}))\in [-\infty,t^{*}]\}).$$
+$$p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-t^{*},\infty]\} \ \text{or} \ t((g_{1},g_{2}))\in [-\infty,t^{*}]\}).$$
 This can be re-written as:\par
-$$p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-t^{*},\infty]\} \cup \{(g_{1},g_{2})\in(G_{1}\times G_{2}):-t((g_{1},g_{2}))\in [-\infty,t^{*}]\}).$$
+$$p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-t^{*},\infty]\} \cup \{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-\infty,t^{*}]\}).$$
 \begin{multline*}
-    p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-t^{*},\infty]\}) \\ + p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):-t((g_{1},g_{2}))\in [-\infty,t^{*}\}).
+    p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-t^{*},\infty]\}) \\ + p_{H_{0}}(\{(g_{1},g_{2})\in(G_{1}\times G_{2}):t((g_{1},g_{2}))\in [-\infty,t^{*}\}).
 \end{multline*}
 Finally, the definition of $p_{H_{0}}$ allows us to calculate this as the sum of the Riemann integrals
 $$\int_{-t}^{\infty}f_{t}(x)\textrm{d}x + \int_{-\infty}^{t}f_{t}(x)\textrm{d}x.$$
