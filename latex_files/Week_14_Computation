@@ -1,0 +1,243 @@
+\documentclass[11pt]{article}
+
+% Packages for math and proof writing
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{bbm}
+
+% Theorem and proof environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+% Definitions, remarks, etc.
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Page formatting
+\usepackage[margin=1in]{geometry}
+
+%tikz formatting
+
+\usepackage{tikz}
+\usetikzlibrary{patterns} % for patterns like checkerboard or hatchings
+\usepackage{caption}
+\usepackage{url}
+
+\title{Week 14:\ Computation}
+\author{David Kinney}
+\date{November 20th, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Of all the formal methods studied in this course, this week's topic, computation, has clearly had the largest impact on society. This is largely due to the extremely important role of digital computers in contemporary society, which are physical machines built using the same theoretical principles that we will study here. That said, computers and computation have long played an important role in philosophy. In particular, the debate over whether the mind is a computer, and, if so, what kind of computer it is, occupies significant space in contemporary discussions in philosophy of mind, philosophy of cognitive science, and philosophy of neuroscience. At the same time, as will be clear from what follows, the very questions that spurred the early development of computation are deeply philosophical in nature.\par
+
+Here is the plan for this reading:\ we will start by informally introducing the concept of a computable function, before moving on to a formal definition in terms of Turing machines. As part of that introduction of Turing machines, we will work through a concrete example of Turing machine that adds two natural numbers together. From there, we will consider Turing's famous result, using the Turing machine formalism, showing that first-order logic is not decidable. Finally, we will introduce some of the basics of computational complexity theory.\par 
+
+\section{Computable Functions, Intuitively}
+You will recall from our discussion of set theory in Week 2 that if $X$ and $Y$ are sets, then a \textbf{function} $f:X\rightarrow Y$ is a set of pairs $f\subset (X\times Y)$. Each $x\in X$ appears exactly once in a pair $(x,y)\in f$. Another way to write each pair in $f$ is $(x,f(x))$, where $f(x)\in Y$ is the element of $Y$ to which the function $f$ maps $x$. For example, if $f:\mathbbm{N}\rightarrow\mathbbm{N}$ is the square function on the natural numbers, such that $f(x)=x^{2}$ for all $x\in\mathbbm{N}$, then $f$ is the set of pairs $$f=\{(0,0),(1,1),(2,4),(3,9),(4,16),(5,25),\dots\}.$$
+This way of writing out the square function makes clear an important, intuitive fact about this function:\ given any element $x$ of its domain, there is a rule we can follow to obtain the value of $f(x)$. Specifically, we multiply $x$ by itself, and thereby obtain $x^{2}=f(x)$. In this sense, the square function defined on the domain of natural numbers is a \textbf{computable function}. Given any input in its domain, we can follow a finite set of steps to obtain the value of the function for that input. In other words, there is an \textit{algorithm} that we can follow that \textit{computes} the value of the function for any input.\par
+
+This is the basic idea behind the concept of a computable function:\ we can follow a process, like a recipe or algorithm, to compute inputs from outputs. On a computational theory of mind, one might think (to greatly simplify things) that this is essentially what our minds do:\ follow a finite set of steps to convert perceptual inputs into behavioral outputs. As it stands, though, this is still an informal notion. In what follows, we will present one historically important way of making this idea precise:\ the Turing machine.\par 
+
+\section{Turing Machines}
+The following model of computation was famously invented by Alan Turing (1912-1954) in an attempt to settle the question of whether first-order logic is decidable; we will return to this question below. Today, Turing machines are seen as an abstract representation of any digital computer. Fundamentally, a Turing machine can be defined set-theoretically. However, it is helpful to ground our thinking by having in mind a concrete, physical implementation of Turing machine. Such a machine consists of a \textit{tape} that is divided into cells. Each cell is either blank or inscribed with a single symbol from some alphabet. Nothing will be lost by thinking of that alphabet as containing two symbols: $0$ or $1$. The tape can contain infinitely many cells, but only finitely many are not blank. The cells of the tape are arranged from left to right. The Turing machine contains a \textit{head}, which starts in a particular \textit{state}. The head then reads a cell of the tape and, depending on the symbol it reads and the internal rules of the particular Turing machine, it can:\ 1) erase the contents of the cell it has read and write in a new symbol from the alphabet in that same cell, 2) move one cell left or right, and 3) change to a different state. Certain states are known as \textit{halting states}:\ once the machine reaches this state, it stops running.\par
+
+The input to the Turing machine is physically realized by the symbols written on the tape when it is first fed into the Turing machine. The head starts at the leftmost cell of the tape that is not blank. The machine then follows its rules for writing, re-writing and moving around the tape until it reaches a halting state. What is left on the tape once the machine halts is the output of the Turing machine. It is in this way that the Turing machine can be said to compute a function:\ if we can write out any input to a function using a finite number of symbols from some alphabet, then we can design a Turing machine that follows a set of rules for erasing and re-writing those symbols, finally halting once the tape contains the appropriate output.\par 
+
+Set-theoretically, a Turing machine is a 7-tuple $(\Gamma,b,\Sigma,Q,q_{0},F,\delta)$. You may see the terms of this 7-tuple written in a different order in different sources, but this doesn't matter. Here is what each term of the 7-tuple represents:
+\begin{itemize}
+    \item $\Gamma$ is the \textbf{alphabet} of the Turing machine, such that each element of $\Gamma$ can appear on a cell of the Turing machine's tape.
+
+    \item $b\in\Gamma$ is the element of $\Gamma$ designated as the `blank' symbol. It is the only symbol that can appear infinitely many times on the tape of the Turing machine.
+
+    \item $\Sigma\subseteq(\Gamma\setminus\{b\})$ is the set of non-blank symbols in the alphabet that are allowed to appear on the input of the Turing machine (i.e., the non-blank symbols that are allowed to appear on the tape before the Turing machine starts running). Very often, this will just be the set of all non-blank symbols in the alphabet, so that $\Sigma=(\Gamma\setminus\{b\})$.
+
+    \item $Q$ is the set of \textbf{states} that the head of the Turing machine can be in.
+
+    \item $q_{0}\in Q$ is the \textbf{initial state} of the head of the Turing machine. This is just the state that the Turing machine starts in. 
+
+    \item $F\subset Q$ is the set of \textbf{halting states} of the Turing machine. If the Turing machine finds itself in one of these states, it halts.
+
+    \item $\delta$ is the \textbf{transition function} $\delta:((Q\setminus F)\times \Gamma)\rightarrow (\Gamma\times\{L,R\}\times Q)$. The set $\{L,R\}$ represents the directions `left' and `right.' Thus, the transition function takes as input a pair $(q,\gamma)$, where $q$ is the non-halting state that the head of the Turing machine is in at a given time, and $\gamma$ is the symbol in the cell that the head is currently reading. The transition function then outputs a triple $\delta(q,\gamma)=(\gamma^{\prime},D,q^{\prime})$, where:
+    \begin{itemize}
+        \item $\gamma^{\prime}$ is the symbol that the head replaces $\gamma$ with in the cell that it is currently reading (if $\gamma=\gamma^{\prime}$, then the head effectively does not change the contents of the cell that it is reading). 
+
+        \item $D$ is the direction, left or right, that the head moves in after reading, and potentially changing, the contents of the cell it was reading.
+
+        \item $q^{\prime}$ is the updated state of the head. If $q^{\prime}\in F$ (i.e., if $q^{\prime}$ is a `final' or `halting' state of the machine), then the machine halts. Otherwise, it reads the contents of the cell it has just moved to, and uses the transition function to figure out its next move.
+    \end{itemize}
+\end{itemize}
+This is the full description of a Turing machine. As we will see below, there are good reasons to believe that we can use this framework to compute the output of a function from its input for every function where this is possible. However, this presentation is also decidedly abstract. In the next section, we will make it more concrete with an example.\par
+
+\section{Example:\ An Adding Machine}
+Consider the addition function $f_{\textsf{Add}}:\mathbbm{N}^{2}\rightarrow\mathbbm{N}$. This function takes as input a pair of two natural numbers, and returns their sum as output. We will now show how to implement this function as a Turing machine. The first step is to define an alphabet $\Gamma$. We will be able to use a very simple alphabet $\Gamma=\{b,0\}$, where $b$ is the blank symbol. Pairs of natural numbers $(n_{1},n_{2})$ in the domain of $f_{\textsf{Add}}$ are represented left-to-right by a string of $n_{1}$ zeros, followed by a blank symbol $b$, followed by a string of $n_{2}$ zeros. For example, the pair $(3,2)$ would be written as follows, where commas represent the boundaries of the cells on the tape of the Turing machine:\ $$\dots,b,b,0,0,0,b,0,0,b,b,\dots$$
+The ellipses represent that there are infinitely many blank cells to the left and right of the leftmost and rightmost zero on the tape. It should be clear from this presentation that the set $\Sigma$ of non-blank cells that can appear on the tape as input is just $\Sigma=\{0\}$.\par 
+
+Next, we define a set of states $Q=\{A,B,C,\text{HALT}\}$, and define the initial state $q_{0}$ so that $q_{0}=A$. On their own, the names of these states don't mean much, but their role in the operation of the Turing will become clear when we define the transition function. The set of final states $F$ is, unsurprisingly, just $F=\{\text{HALT}\}$.\par 
+
+It remains to define the crucial transition function $\delta$ the governs the operations of the head of the Turing machine. We will define it first in an informal, rule-based way, and then in a purely formal way. First, the rule-based, slightly informal definition:
+\begin{itemize}
+    \item If the head is in state $A$ and reads $0$, then the transition function $\delta$ says to replace the $0$ with $b$, move right, and change to state $B$.
+
+    \item If the head is in state $A$ and reads $b$, then the transition function $\delta$ says to leave the $b$ as is, move right, and change to state $B$.
+
+    \item If the head is in state $B$ and reads $0$, then the transition function $\delta$ says to leave the $0$ as is, move right, and remain in state $B$.
+
+    \item If the head is in state $B$ and reads $b$, then the transition function $\delta$ says to replace it with a $0$, move right, and change to state $C$.
+
+    \item If the head is in state $C$ and reads $0$, then the transition function $\delta$ says to leave the $0$ as is, move right, and remain in state $C$.
+
+    \item If the head is in state $C$ and reads $b$, then the transition function $\delta$ says to leave the $b$ as is, move right, and change to state $\text{HALT}$.
+\end{itemize}
+Though these rules do suffice to effectively define the transition function $\delta$, we can also define it fully formally, as follows:
+\begin{equation*}
+    \delta:(q,\gamma)\mapsto\delta(q,\gamma)=\begin{cases}
+        (b,R,B) & \text{if $q=A$}  \\
+        (0,R,B) & \text{if $q=B$ and $\gamma=0$}  \\
+        (0,R,C) & \text{if $q=B$ and $\gamma=b$}  \\
+        (0,R,C) & \text{if $q=C$ and $\gamma=0$}  \\
+        (b,R,\text{HALT}) & \text{if $q=C$ and $\gamma=b$}
+    \end{cases}
+\end{equation*}
+This gives us a completely formal definition of the transition function for this Turing machine. In what follows, we will show, via example, how it implements addition on the natural numbers.\par 
+
+
+Consider again the input $(3,2)$, which, as we saw above, appears on the tape of the Turing machine as follows:
+$$\dots,b,b,0,0,0,b,0,0,b,b,\dots$$
+Throughout this example, we will underline the cell that the head of the Turing machine is currently reading. Since the head starts with the leftmost non-blank cell, the tape of the Turing machine initially appears as follows:
+$$\dots,b,b,\underline{0},0,0,b,0,0,b,b,\dots$$
+The machine begins in state A. Thus, when it reads the symbol $0$, it follows the rule of its transition function and replaces that $0$ with a blank symbol $b$, moves to the right, and changes to state $B$. Thus, the tape of the Turing machine now appears as follows:
+$$\dots,b,b,b,\underline{0},0,b,0,0,b,b,\dots$$
+The machine is now in state $B$, and so, following the rules of its transition function, it leaves the symbol $0$ as it is, moves one cell to the right, and remains in state $B$, so that the Turing machine now appears as follows:
+$$\dots,b,b,b,0,\underline{0},b,0,0,b,b,\dots$$
+Since the machine is still in state $B$, it once again leaves the symbol $0$ as it is, moves one cell to the right, and remains in state $B$, so that the Turing machine now appears as follows:
+$$\dots,b,b,b,0,0,\underline{b},0,0,b,b,\dots$$
+Since the machine is still in state $B$, it follows the rules of its transition function and replaces the blank symbol $b$ as with a $0$, moves one cell to the right, and changes to state $C$, so that the Turing machine now appears as follows
+$$\dots,b,b,b,0,0,0,\underline{0},0,b,b,\dots$$
+The machine is now in state $C$, and so, following the rules of its transition function, it leaves the symbol $0$ as it is, moves one cell to the right, and remains in state $c$, so that the Turing machine now appears as follows:
+$$\dots,b,b,b,0,0,0,0,\underline{0},b,b,\dots$$
+Since the machine is still in state $C$, it once again leaves the symbol $0$ as it is, moves one cell to the right, and remains in state $C$, so that the Turing machine now appears as follows:
+$$\dots,b,b,b,0,0,0,0,0,\underline{b},b,\dots$$
+Since the machine is in state $C$, it follows that rules of its transition function and leave the blank symbol $b$ as it is, moves one cell to the right, and changes to the state $\text{HALT}$, so that the Turing machine now appears as follows:
+$$\dots,b,b,b,0,0,0,0,0,b,\underline{b},\dots$$
+Since the Turing machine has entered a final state, it is now done computing. When we look at what is on the tape, we see that it contains a single sequence of five zeros. This is a representation of the number $5$. Thus, as one would expect from a machine that calculates sums, we entered as input a representation of the pair $(3,2)$ and received as output a representation of the number $5$.
+
+It should be clear that if we enter as input to this Turing machine any string of $n_{1}$ zeros, followed by a blank symbol $b$, followed by a string of $n_{2}$ zeros, then the machine will halt after converting this pair of strings into a single string of $n_{1}+n_{2}$ zeros. In this sense, it implements an algorithm for computing the function addition $f_{\textsf{Add}}:\mathbbm{N}^{2}\rightarrow\mathbbm{N}$ in a finite number of steps, showing that addition is a computable function.\par 
+
+
+\section{Turing Computable Functions}
+Now that we understand what Turing machines are and how they work, we can give a general definition of a computable function. Consider any function of the form $f:\mathbbm{N}^{k}\rightarrow\mathbbm{N}$, where $k$ is a natural number greater than $0$. Recall that $\mathbbm{N}^{k}$ is just the product of the natural numbers with itself $k-1$ times, so that $\mathbbm{N}^{1}=\mathbbm{N}$, $\mathbbm{N}^{2}=\mathbbm{N}\times\mathbbm{N}$ (i.e., the set of all pairs of natural numbers), $\mathbbm{N}^{3}=\mathbbm{N}\times\mathbbm{N}\times\mathbbm{N}$ (i.e., the set of all triples of natural numbers), and so on. Let the \textbf{input encoding} $\textsf{Enc}_{\text{I}}:\mathbbm{N}^{k}\rightarrow\Gamma^{*}$ be a function from $k$-tuples of natural numbers to the set $\Gamma^{*}$ of all initial inputs to a Turing machine with alphabet $\Gamma$. That is, $\Gamma^{*}$ is the set of all tapes that can be constructed using infinitely many blank symbols $b$ and finitely many non-blank symbols in $\Gamma$. Let the \textbf{output encoding} $\textsf{Enc}_{\text{O}}:\mathbbm{N}\rightarrow\Gamma^{*}$ be a function that converts natural numbers into elements of $\Gamma^{*}$. 
+\begin{definition}
+    The function $f:\mathbbm{N}^{k}\rightarrow\mathbbm{N}$ is \textbf{Turing computable} if and only if there is an input encoding $\textsf{Enc}_{\text{I}}$, an output encoding $\textsf{Enc}_{\text{O}}$, and a Turing machine $T$ such that, for any $\mathbf{x}\in\mathbbm{N}^{k}$, if $T$ receives as input $\textsf{Enc}_{\text{I}}(\mathbf{x})$, it generates the output $\textsf{Enc}_{\text{O}}(f(\mathbf{x}))$ and then halts.
+\end{definition}
+\noindent
+This rigorously defines the notion of a function whose inputs can be calculated from its outputs via a finite algorithm, if by a ``finite algorithm'' we mean a Turing machine. Note that some sources will treat my definition a Turing computable function as the definition of a \textbf{total Turing computable function}, and also define a different class of functions called a \textbf{partial Turing computable function}. To keep things simple, I'm only considering total Turing computable functions here, and just calling them `Turing computable functions.'\par 
+
+
+Wait a minute! Are we saying that the \textit{only} functions that are Turing computable are defined on pairs of natural numbers? Surely we can compute functions on rational numbers, integers, etc., and even on things that are not numbers at all. Indeed, we can often compute such functions. To show how we do so, let $f:X\rightarrow Y$ be any function that we intuitively believe is computable. To show that it can, in fact, be computed by a Turing machine, we define injective functions $g:X\rightarrow\mathbbm{N}^{k}$ and $h:Y\rightarrow\mathbbm{N}$ that effectively encode the elements of the domain $X$ as $k$-tuples of natural numbers and the elements of codomain $Y$ as natural numbers. If $f$ is computable, then there is a Turing machine $T$ that allows us to do the following, for any $x\in X$:
+\begin{enumerate}
+    \item Encode $x$ as a $k$-tuple of natural numbers $g(x)\in\mathbbm{N}^{k}$.
+
+    \item Encode $g(x)$ as an input tape $\textsf{Enc}_{\text{I}}(g(x))$.
+
+    \item Generate the tape $\textsf{Enc}_{\text{O}}(n)$, where $n$ is some natural number, and then halt.
+
+    \item Given the natural number $n$ whose encoding the Turing machine halted on, obtain the inverse $h^{-1}(n)$. Since $h$ is an injection, if $h^{-1}(n)$ is non-empty (which we will stipulate that it is), then it will be a singleton subset of $Y$. 
+    
+    \item If $h^{-1}(n)=\{f(x)\}$, then we have successfully computed $f(x)$ for input $x$.
+\end{enumerate}
+We know that it will possible to define an injective function from any countable set into either $\mathbbm{N}^{k}$ or $\mathbbm{N}$. Thus, we can effectively extend the definition of a Turing computable function to all intuitively computable functions whose domain and codomain are countable sets.\par 
+
+\section{The Undecidability of First-Order Logic}
+When Turing first came up with the Turing machine formalism, he did so primarily to answer a pressing question in the foundations of logic, first posed in 1928 by David Hilbert and Wilhelm Ackermann (the same duo who came up with the proof system that we have studied in several weeks of this course). The question, which they called the \textbf{Entscheidungsproblem} (or ``decision problem''), can be stated as follows:
+\begin{quote}
+    Let $\mathcal{F}$ be the set of WFFs of first-order logic. Let $f:\mathcal{F}\rightarrow\{0,1\}$ be a function such that $f(\varphi)=1$ if the formula $\varphi\in\mathcal{F}$ is a proof-theoretic tautology (i.e., a tautology according to the Hilbert-Ackermann proof system for first-order logic, or the sequent calculus LK) and $f(\varphi)=0$ otherwise. Is there a finite algorithm that can take as input any WFF $\varphi\in\mathcal{F}$ of first-order logic and return the value of $f(\varphi)$?
+\end{quote}
+If the answer to this question were `yes,' then it would be possible, in principle, to ``automate'' every proof in first-order logic, thereby providing a kind of ``recipe for reasoning,'' or at least the kind of reasoning that can be done in first-order logic. However, it turns out that the answer is `no.' Specifically, in 1936 both Turing and Alonzo Church (1903-1995) proved that no matter how we encode the WFFs of first-order logic using the alphabet of a Turing machine (and there are many ways of doing this), \textit{no} Turing machine can be constructed that outputs $1$ whenever the encoded WFF is a tautology and $0$ whenever it is not a tautology. This supports the conclusion that first-order logic is \textbf{undecidable}.\par 
+
+While the details of Turing's proof are complicated (and Church's are even more so), he proceeds by first introducing the concept of a Turing machine. He then stipulates (but, importantly, does not prove) what is now called the \textbf{Church-Turing thesis}, which states that the functions that can be computed by any finite algorithm are just the Turing computable functions. He then shows that there are some WFFs of first-order logic such that, no matter how they are encoded, no Turing machine can determine whether they are tautologies. Importantly, these WFFs have a self-referential property. They define a Turing machine and then state whether or not that Turing machine, when given a certain input, whether it halts. Turing then proves that no Turing machine can say, for every possible description of any other Turing machine and an input to that Turing machine, whether the described Turing machine would halt when given the described input. Thus, Turing and Church effectively invented the theoretical framework that provides the foundation for all modern computing because they wanted to answer a question that was primarily about the nature of first-order logic.\par 
+
+
+In the paragraph section, we defined the Church-Turing thesis, which states that the function that can be computed by any finite algorithm and just those that can be computed by a Turing machine (i.e., the Turing computable functions). Why should we believe that this is true? Couldn't there be some sort of finite algorithm for computing a function that humans can intuitively follow, but which cannot be implement by a Turing machine. After all, a Turing machine is very limited in what it can do:\ it can only proceed one symbol at a time, and only move right or left in single steps. Surely there are algorithms that it can't implement?\par
+
+Despite the pull of this skeptical intuition, there are some good reasons to think that the Church-Turing thesis holds. The first one is simply inductive:\ we have yet to find a procedure that is intuitively computable that cannot implemented on Turing machine. For some more complex computations, actually defining the Turing machine is incredibly tedious, and yet it can be done. The second class of reasons is that the set of Turing computable functions has been found to be equivalent to \textit{other} sets of functions that seem like good candidates for a description of the functions that can be computed by a finite algorithm. These equivalence relations are beyond the scope of this introduction. However, the three most important such results are:
+\begin{itemize}
+    \item The equivalence between the set of partial Turing computable functions and the set of general recursive functions.
+
+    \item The equivalence between the set of Turing computable functions and the programs of the simply-typed $\lambda$-calculus. 
+
+    \item The equivalence between the set of computable functions and the set of functions that can be proven to exist in an intuitionistic proof system for Peano arithmetic
+\end{itemize}
+All of these results are extremely cool and very much worth studying in their own right if you are interested in computation.\par  
+
+
+\section{Computational Complexity}
+A very important task for a computer is to determine whether some element of a set $X$ is also an element of some set $Y\subset X$. To represent this task set-theoretically, let $\mathbf{1}_{Y}:X\rightarrow\{0,1\}$ be the \textbf{indicator function} for the set $Y$. It is defined so that, for any $x\in X$, $\mathbf{1}_{Y}(x)=1$ if $x\in Y$ and  $\mathbf{1}_{Y}(x)=0$ otherwise. If this function is Turing computable, then a Turing machine is capable of determining, for any $x\in X$, whether it is also the case that $x\in Y$. If so, then we say that the \textbf{decision problem} of determining whether an element of $X$ is also in $Y$ is computable.\par 
+
+
+However, we might also want to measure how \textit{hard} it is for a Turing machine to solve the decision problem of determining whether an element of some set $X$ is also an element of some set $Y$. One common way of doing this is by placing a decision problem into a \textbf{complexity class}. In order to do this, we will need to introduce a few additional formal notions:
+\begin{itemize}
+    \item Let $\mu:X\rightarrow\mathbbm{N}$ be a measure of the \textbf{size} of each $x\in X$. One can think of this as the number of cells on the tape of a Turing machine that are needed to represent an encoding of $x$.
+
+    \item Let $t_{\mathbf{1}_{Y}}(x,T)$ be the \textbf{time} that it takes a Turing machine $T$ to compute $\mathbf{1}_{Y}$(x). Intuitively, we can let $\tau$ be some hypothetical amount of time that it takes for the head of the Turing machine $T$ to move one cell to the left or right. The value of $t_{T,Y}(x)$ is then $\tau$ times the number of movements of $T$'s head that are needed to compute the value of $\mathbf{1}_{Y}(x)$. 
+ \end{itemize}
+\begin{definition}
+    The decision problem of determining whether an element of some set $X$ is also an element of some set $Y$ is in the complexity class $\textsf{P}$ if and only if there exists a Turing machine $T$ such that maximum value of $t_{\mathbf{1}_{Y}}(x,T)$ for any $x\in X$ can be expressed as a polynomial function of the size of $x$. In other words, there exists an $r\in\mathbbm{N}$ and an $n$-tuple of coefficients $(c_{0},\dots,c_{r})\in\mathbbm{R}^{r}$ such that, for some Turing machine $T$ and all $x\in X$,
+$$t_{\mathbf{1}_{Y}}(x,T)\leq\sum_{i=0}^{r}c_{i}\mu(x)^{i}=c_{r}\mu(x)^{r}+c_{r-1}\mu(x)^{r-1}+\dots+c_{0}.$$
+\end{definition}
+Decision problems that fall into this category are generally thought to be \textbf{tractable}, since the amount of time that it takes to solve them grows manageably as the size of the input grows. Many basic computational problems, such as determining whether the sum of two numbers is equal to a third value, are in \textsf{P}. We say that problems in \textsf{P} can be \textbf{solved in polynomial time}.\par 
+
+
+Next, we will define the set of decision problems that can be computed in \textbf{non-deterministic polynomial time}, also known as the complexity class $\textsf{NP}$. To define this class, consider any decision problem $\mathbf{1}_{Y}:X\rightarrow\{0,1\}$. Next, we define a set of \textbf{witnesses} $W$ for the decision problem, and define a \textbf{verifier} $v_{Y}:(X\times W)\rightarrow\{0,1\}$, which is a function such that:
+\begin{itemize}
+    \item For any $x\in X$ such that $x\in Y$, there exists a witness $w$ such that $v_{Y}(x,w)=1$.
+
+    \item For any $x\in X$ such that $x\not\in Y$, there does not exist a witness $w$ such that $v_{Y}(x,w)=1$.
+\end{itemize}
+In other words, if there is a witness that allows us to \textit{verify} that $x\in Y$, then the verifier will detect it, and if such a witness cannot exist, then the verifier will not detect it. As an example, consider the famous \textbf{subset-sum problem}. In this problem, we are given a finite set of integers $S$ and must determine whether $S$ contains a subset whose elements sum to $0$. This can be described as the decision problem of computing $\mathbf{1}_{\Lambda}:U\rightarrow\{0,1\}$, where $U$ is the set of all finite sets of integers and $$\Lambda=\{S\in U:\text{there exists an $S^{\prime}\subset S$ such that the elements of $S^{\prime}$ sum to 0}\}.$$ 
+That is, we have to determine whether a given finite subset of the integers contains a subset that sums to $0$. For a given set $S$, it may be that it is not so easy to figure out whether this is true, as in the case of the set:
+$$S=\{17,-3,8,-12,5,-15,10\}.$$
+However, if we are given the witness $w=\{-12,-3,5,10\}$, we can immediately check that the witness is a set of numbers that sums to $0$, and is a subset of $S$, thereby verifying that $\mathbf{1}_{\Lambda}(S)=1$. Thus, we can construct a verifier $v_{\Lambda}:(U\times U)\rightarrow\{0,1\}$ such that $v_{
+\Lambda}(S,w)=1$ if the witness $w\in U$ is a subset of $S\in U$ and the elements of $w$ sum to $0$. Otherwise, $v_{
+\Lambda}(S,w)=0$.\par 
+
+Let $\nu:W\rightarrow\mathbbm{N}$ be a measure of the size of any witness. Let $t_{\mathbf{v}_{Y}}(x,w,T)$ be the amount of time that it takes a Turing machine that computes the verifier function $t_{\mathbf{v}_{Y}}$ to compute $t_{\mathbf{v}_{Y}}(x,w,T)$.
+\begin{definition}
+    The decision problem of determining whether an element of some set $X$ is also an element of some set $Y$ is in the complexity class $\textsf{NP}$ if and only if there exists a Turing machine $T$, a set of witnesses $W$, and a verifier $v_{Y}:(X\times W)\rightarrow\{0,1\}$ such that such that maximum value of $t_{\mathbf{v}_{Y}}(x,w,T)$ for any $x\in X$ and any $w\in W$ can be expressed as a polynomial function of the size of $w$. In other words, there exists an $r\in\mathbbm{N}$ and an $n$-tuple of coefficients $(c_{0},\dots,c_{r})\in\mathbbm{R}^{r}$ such that, for some Turing machine $T$, all $x\in X$, and all $w\in W$
+$$t_{\mathbf{v}_{Y}}(x,w,T)\leq\sum_{i=0}^{r}c_{i}\nu(w)^{i}=c_{r}\nu(w)^{r}+c_{r-1}\nu(w)^{r-1}+\dots+c_{0}.$$
+\end{definition}
+\noindent
+Thus, \textsf{NP} is the class of decision problems that can be verified in polynomial time. Such problems are said to be computable in non-deterministic polynomial time since, if we are able to randomly (i.e., non-deterministically) sample witnesses, then for any $x\in Y$, we can determine that it is in $Y$ by randomly sampling witnesses until we find one that allows us to verify that $x\in Y$. The time this takes will be less than the polynomial upper bound on the time it takes to compute the verifier, times the number of samples needed to find a verifying witness; this will, itself, be a polynomial.\par 
+
+Clearly, $\textsf{P}\subset \textsf{NP}$, since any problem that can solved in polynomial time can be verified in polynomial time, with the witness being the empty set. But does $\textsf{P}=\textsf{NP}$? If you can answer this question, then you will owe me dinner, because the Clay Mathematics Institute will pay you one million dollars. Note that if $\textsf{P}=\textsf{NP}$, then every problem that can be verified in an polynomial time, for every possible input, can also be solved in polynomial, for every possible input, without the help of a witness. For many problems known to be in $\textsf{NP}$, such as the subset-sum problem described above, there are no known algorithms that allow us to directly solve the problem, without a witness, for all possible inputs, an an amount of time that is a polynomial of the size of the input. Indeed, the subset-sum problem is known to be in the set of \textbf{\textsf{NP}-Complete} problems. These are problems in $\textsf{NP}$ such that, if they can be solved in polynomial time, then \textit{every} problem in $\textsf{NP}$ can be solved in polynomial time. In the problem set, you will prove an important fact about \textsf{NP}-Complete decision problems.\par 
+
+Most people who study this stuff for a living seem to think that $\textsf{P}\neq\textsf{NP}$. To my mind, one of the most beautiful ways of defending this hunch comes from the computer scientist Scott Aaronson (b.\ 1981) who writes:
+\begin{quote}
+    If $\textsf{P}=\textsf{NP}$, then the world would be a profoundly different place than we usually assume it to be. There would be no special value in ``creative leaps,'' no fundamental gap between solving a problem and recognizing the solution once it's found. Everyone who could appreciate a symphony would be Mozart.
+\end{quote}
+I think this puts the state of things well. If it turns out that there aren't at least \textit{some} problems such that it is easy to recognize a solution to the problem but difficult to produce such a solution without deploying a guess-and-check strategy, then this would strike most of us as deeply incongruous with the experience we all share of doing things with our minds. Of course, this doesn't prove that $\textsf{P}\neq\textsf{NP}$, but I still think it is a compelling reason for believing that $\textsf{P}\neq\textsf{NP}$.
+
+\section{Conclusion}
+To my mind, what Turing and colleagues did in the 1930s provides perhaps the strongest case for the value of formal philosophy. Their work effectively defined the contemporary notion of computation, but, for most of them, their motivations were \textit{not} practical. They were not really trying to build anything like pocket calculators or laptops or data centers. Instead, they were interested in deeply philosophical questions about the nature of logic, reason, thought, and proof. Turing in particular came up with an evocative, ingenious, and rigorous way of defining the notion of a finite algorithm in his successful attempt to answer the Entscheidungsproblem in the negative. That framework became the foundation of modern computing. The magnitude of the impact---both positive and negative---of what he and his colleagues invented is enormous, but we shouldn't lose sight of the fact that, from the outside, he and his colleagues' whole research program would have looked very obscure and difficult, without much obvious import for even the rest of philosophy, to say nothing of society at large. When we tinker with formalizations of philosophical concepts, we never know where all that tinkering will take us.
+
+
+\section*{Problem Set}
+\begin{enumerate}
+\item Consider the Turing machine for addition described in Section 4. Prove that if we enter as input to this Turing machine any string of $n_{1}$ zeros, followed by a blank symbol $b$, followed by a string of $n_{2}$ zeros, the head of the machine will always reach the state $\text{HALT}$.
+
+\item Give a formal definition of a Turing machine such that, when its tape initial tape contains an input consisting of a string of $n_{1}$ zeros, followed by a blank symbol $b$, followed by a string of $n_{2}$ zeros, the machine changes the symbols on the tape to a single string of $n_{1}+n_{2}+1$ symbols, and then halts. In other words, define a Turing machine $T$ such that, for any input pair $(n_{1},n_{2})$, $T$ calculates $n_{1}+n_{2}+1$.
+
+\item Prove that if a single \textsf{NP}-Complete decision problem is in \textsf{P}, then $\textsf{P}=\textsf{NP}$. \textit{(You should be able to do this in a few English sentences, helping yourself to the definitions of the complexity classes \textsf{P} and \textsf{NP}.)}
+
+
+\end{enumerate}
+
+\end{document}
