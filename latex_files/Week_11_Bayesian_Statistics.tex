@@ -58,7 +58,7 @@ Sometimes, we can do Bayesian inference \textit{analytically}, meaning that we c
 
 To do this, let us first define the probability space that we will use to model the coin flipping system. Let $\{H,T\}^{100}$ represent the possible outcomes of the 100 coin tosses; each element of $\{H,T\}^{100}$ is a 100-tuple such that the first term in the tuple represents the outcome of the first coin toss, the second term in the tuple represents the outcome of the second coin toss, and so on; e.g., $(H,T,\dots,T)$. Let $[0,1]$ be the set of real numbers between $0$ and $1$, inclusive. Each $\pi\in[0,1]$ represents a possible probability of the coin landing heads on a given toss, with the probability of tails being $1-\pi$. Let the sample space of our probability space be the product $\{H,T\}^{100}\times[0,1]$. This is the set of all pairs $(c,\pi)$ such that $c$ is a possible 100-tuple of coin toss outcomes and $\pi$ is a possible probability of the coin landing heads on each toss. Let $\Sigma$ be a $\sigma$-algebra on $\{H,T\}^{100}\times[0,1]$, and let $p:\Sigma\rightarrow[0,1]$ be a probability distribution.\par
 
-Let $F$ be the set of all elements of $\{H,T\}^{100}\times[0,1]$ in which the probability of the coin landing heads is between $.49$ and $.51$, exclusive. That is,
+Let $F$ be the set of all elements of $\{H,T\}^{100}\times[0,1]$ in which the probability of the coin landing heads is between $.49$ and $.51$, inclusive. That is,
 $$F=\{(c,\pi)\in\{H,T\}^{100}\times[0,1]:\pi\in[.49,.51]\}.$$
 This is how we will represent the hypothesis that the coin is (roughly) fair. We will assume that $F\in\Sigma$, i.e., that $F$ is an element of our $\sigma$-algebra. Next, let our observed data set $D$ be the set of all elements of $\{H,T\}^{100}\times[0,1]$ in which exactly 52 coin tosses yield a heads outcome. That is,
 $$D=\{(c,\pi)\in\{H,T\}^{100}\times[0,1]:c \ \text{contains 52 heads outcomes}\}.$$
@@ -138,7 +138,7 @@ Let us add some complications to our earlier coin-flipping example. Suppose, onc
 
     \item If the wheel lands on black, flip a nickel, which has probability $\pi_{N}$ of landing heads and probability $1-\pi_{N}$ of landing on tails. The outcome of this toss is recorded.
 \end{enumerate}
-This process was repeated 100 times to get a sequence of $100$ coin tosses, of which we know that $52$ landed heads. However, we don't know which tosses were of quarters and which were of nickels. To represent this probabilistically, let our sample space be the set $$\{H,T\}^{100}\times[0,1]\times[0,1]\times[0,1].$$ Each element of this sample space is a e-tuple $(c,\pi_{W},\pi_{Q},\pi_{N})$, where $c$ is a 100-tuple representing the outcomes of 100 coin tosses, $\pi_{W}$ is the probability that the wheel lands on red, $\pi_{Q}$ is the probability that the quarter lands heads, and $\pi_{N}$ is the probability that the nickel lands heads. Going forward, for ease of notion, we let $\Omega=\times\{H,T\}^{100}\times[0,1]\times[0,1]\times[0,1]$.
+This process was repeated 100 times to get a sequence of $100$ coin tosses, of which we know that $52$ landed heads. However, we don't know which tosses were of quarters and which were of nickels. To represent this probabilistically, let our sample space be the set $$\{H,T\}^{100}\times[0,1]\times[0,1]\times[0,1].$$ Each element of this sample space is a e-tuple $(c,\pi_{W},\pi_{Q},\pi_{N})$, where $c$ is a 100-tuple representing the outcomes of 100 coin tosses, $\pi_{W}$ is the probability that the wheel lands on red, $\pi_{Q}$ is the probability that the quarter lands heads, and $\pi_{N}$ is the probability that the nickel lands heads. Going forward, for ease of notion, we let $\Omega=\{H,T\}^{100}\times[0,1]\times[0,1]\times[0,1]$.
 
 
 Our hypothesis $F$ is now the claim that the \textit{wheel} is fair, in the sense that $\pi_{W}\in[.49,51]$. This is equivalent to the subset of the sample space
@@ -180,7 +180,7 @@ Once we have done this, we follow the following procedure, beginning at $i=0$:
     $$A=\frac{\textsf{Beta}_{\gamma\pi^{(i)}_{W},\gamma(1-\pi^{(i)}_{W})}(\pi^{\text{new}}_{W})\textsf{Beta}_{\gamma\pi^{(i)}_{Q},\gamma(1-\pi^{(i)}_{Q})}(\pi^{\text{new}}_{Q})\textsf{Beta}_{\gamma\pi^{(i)}_{N},\gamma(1-\pi^{(i)}_{N})}(\pi^{\text{new}}_{N})\mathcal{L}^{\text{new}}}{\textsf{Beta}_{\gamma\pi^{(i)}_{W},\gamma(1-\pi^{(i)}_{W})}(\pi^{(i)}_{W})\textsf{Beta}_{\gamma\pi^{(i)}_{Q},\gamma(1-\pi^{(i)}_{Q})}(\pi^{(i)}_{Q})\textsf{Beta}_{\gamma\pi^{(i)}_{N},\gamma(1-\pi^{(i)}_{N})}(\pi^{(i)}_{N})\mathcal{L}^{\text{(i)}}}.$$
     This is a technical step that I will explain more in class, but for now, take it as an article of faith that this works.
 
-    \item If $A\geq 1$, then update the probabilities governing the roulette wheel, quarter flips, and nickle flips so that $$\pi^{(i+1)}_{W}=\pi^{\text{new}}_{W}, \pi^{(i+1)}_{Q}=\pi^{\text{new}}_{Q}, \pi^{(i+1)}_{N}=\pi^{\text{new}}_{N}.$$ If $\mathcal{L}^{\text{new}}<\mathcal{L}^{(i)}$, then, with probability $A$, update the probabilities governing the roulette wheel, quarter flips, and nickle flips so that $$\pi^{(i+1)}_{W}=\pi^{\text{new}}_{W}, \pi^{(i+1)}_{Q}=\pi^{\text{new}}_{Q}, \pi^{(i+1)}_{N}=\pi^{\text{new}}_{N},$$ and with probability $(1-A)$, update the probabilities governing the roulette wheel, quarter flips, and nickle flips so that $$\pi^{(i+1)}_{W}=\pi^{(i)}_{W}, \pi^{(i+1)}_{Q}=\pi^{(i)}_{Q}, \pi^{(i+1)}_{N}=\pi^{(i)}_{N}.$$
+    \item If $A\geq 1$, then update the probabilities governing the roulette wheel, quarter flips, and nickle flips so that $$\pi^{(i+1)}_{W}=\pi^{\text{new}}_{W}, \pi^{(i+1)}_{Q}=\pi^{\text{new}}_{Q}, \pi^{(i+1)}_{N}=\pi^{\text{new}}_{N}.$$ If $A< 1$, then, with probability $A$, update the probabilities governing the roulette wheel, quarter flips, and nickle flips so that $$\pi^{(i+1)}_{W}=\pi^{\text{new}}_{W}, \pi^{(i+1)}_{Q}=\pi^{\text{new}}_{Q}, \pi^{(i+1)}_{N}=\pi^{\text{new}}_{N},$$ and with probability $(1-A)$, update the probabilities governing the roulette wheel, quarter flips, and nickle flips so that $$\pi^{(i+1)}_{W}=\pi^{(i)}_{W}, \pi^{(i+1)}_{Q}=\pi^{(i)}_{Q}, \pi^{(i+1)}_{N}=\pi^{(i)}_{N}.$$
 
     \item Repeat steps 1-4 for $i=i+1$.
 \end{enumerate}
@@ -200,8 +200,8 @@ $$\alpha_{Q}\approx 2.80$$
 $$\beta_{Q}\approx 7.19$$
 $$\alpha_{N}\approx10.00$$
 $$\beta_{N}\approx 0 \ \text{($\beta_{Q}$ cannot be exactly 0, but it converges to a very low value.)}$$
-Recall that our hypothesis $F$ was that the wheel was fair, in the sense that $\pi_{W}\in[.49,.51]$. Having run our simulation, we saw that the parameters $\alpha_{W}$ and $\beta_{W}$ converged to well-defined values. These are parameters of the distribution $\rho_{\alpha_{W},\beta_{W}}$ such that sampling a probability of the wheel landing on black for that distribution tends to maximize the acceptance ratio, which occurs when the likelihood of the observed data is high. This supports the justified belief that sampling from this distribution tends to yield something close to the ``true'' value of $\pi_{W}$. At last, we can use these parameters to calculate the posterior probability $p(D|F)$:
-$$p(D|F)=\int_{.49}^{.51}\textsf{Beta}_{2.25,7.75}(\pi_{W})\textrm{d}\pi_{W}\approx .0139$$
+Recall that our hypothesis $F$ was that the wheel was fair, in the sense that $\pi_{W}\in[.49,.51]$. Having run our simulation, we saw that the parameters $\alpha_{W}$ and $\beta_{W}$ converged to well-defined values. These are parameters of the distribution $\rho_{\alpha_{W},\beta_{W}}$ such that sampling a probability of the wheel landing on black for that distribution tends to maximize the acceptance ratio, which occurs when the likelihood of the observed data is high. This supports the justified belief that sampling from this distribution tends to yield something close to the ``true'' value of $\pi_{W}$. At last, we can use these parameters to calculate the posterior probability $p(F|D)$:
+$$p(F|D)=\int_{.49}^{.51}\textsf{Beta}_{2.25,7.75}(\pi_{W})\textrm{d}\pi_{W}\approx .0139$$
 That is, we obtain the probability that $\pi_{W}\in[.49,.51]$ according to the Beta distribution that maximizes the likelihood of the observed data. Note that the low value for this probability is expected, given the setup. A number of heads outcomes close to $50$ does not necessarily militate in favor of a fair wheel; the wheel could be heavily biased towards red or black:\ this will still make heads and tails outcomes roughly equally likely as long as the quarter or nickel is close to fair.\par 
 
 \section{MCMC Generalized}
@@ -220,9 +220,9 @@ Here is a high-level, generic description of how the Metropolis-Hastings algorit
 
     \item Using the likelihoods obtained in steps 2 and 4, calculate an acceptance ratio, which must always be a positive number.
 
-    \item If the acceptance ratio is greater than one, adopt the new parameters proposed in step 3 as your old parameters, and repeat steps 2-5.
+    \item If the acceptance ratio is greater than or equal to one, adopt the new parameters proposed in step 3 as your old parameters, and repeat steps 2-5.
 
-    \item If the acceptance ratio is greater than one, then, with probability equal to the acceptance ratio $A$, adopt the new parameters proposed in step 3 as your old parameters, and repeat steps 2-5. With probability equal to $1-A$, keep the same old parameters as you had going in to this step, and repeat steps 2-5.
+    \item If the acceptance ratio is less than one, then, with probability equal to the acceptance ratio $A$, adopt the new parameters proposed in step 3 as your old parameters, and repeat steps 2-5. With probability equal to $1-A$, keep the same old parameters as you had going in to this step, and repeat steps 2-5.
 
     \item Repeat steps 2-7 thousands of times.
 
