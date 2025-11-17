@@ -39,7 +39,7 @@
 \section{Introduction}
 Of all the formal methods studied in this course, this week's topic, computation, has clearly had the largest impact on society. This is largely due to the extremely important role of digital computers in contemporary society, which are physical machines built using the same theoretical principles that we will study here. That said, computers and computation have long played an important role in philosophy. In particular, the debate over whether the mind is a computer, and, if so, what kind of computer it is, occupies significant space in contemporary discussions in philosophy of mind, philosophy of cognitive science, and philosophy of neuroscience. At the same time, as will be clear from what follows, the very questions that spurred the early development of computation are deeply philosophical in nature.\par
 
-Here is the plan for this reading:\ we will start by informally introducing the concept of a computable function, before moving on to a formal definition in terms of Turing machines. As part of that introduction of Turing machines, we will work through a concrete example of Turing machine that adds two natural numbers together. From there, we will consider Turing's famous result, using the Turing machine formalism, showing that first-order logic is not decidable. Finally, we will introduce some of the basics of computational complexity theory.\par 
+Here is the plan for this reading:\ we will start by informally introducing the concept of a computable function, before moving on to a formal definition in terms of Turing machines. As part of that introduction to Turing machines, we will work through a concrete example of a Turing machine that adds two natural numbers together. From there, we will consider Turing's famous result, using the Turing machine formalism, showing that first-order logic is not decidable. Finally, we will introduce some of the basics of computational complexity theory.\par 
 
 \section{Computable Functions, Intuitively}
 You will recall from our discussion of set theory in Week 2 that if $X$ and $Y$ are sets, then a \textbf{function} $f:X\rightarrow Y$ is a set of pairs $f\subset (X\times Y)$. Each $x\in X$ appears exactly once in a pair $(x,y)\in f$. Another way to write each pair in $f$ is $(x,f(x))$, where $f(x)\in Y$ is the element of $Y$ to which the function $f$ maps $x$. For example, if $f:\mathbbm{N}\rightarrow\mathbbm{N}$ is the square function on the natural numbers, such that $f(x)=x^{2}$ for all $x\in\mathbbm{N}$, then $f$ is the set of pairs $$f=\{(0,0),(1,1),(2,4),(3,9),(4,16),(5,25),\dots\}.$$
@@ -122,7 +122,7 @@ Since the machine is still in state $B$, it once again leaves the symbol $0$ as 
 $$\dots,b,b,b,0,0,\underline{b},0,0,b,b,\dots$$
 Since the machine is still in state $B$, it follows the rules of its transition function and replaces the blank symbol $b$ as with a $0$, moves one cell to the right, and changes to state $C$, so that the Turing machine now appears as follows
 $$\dots,b,b,b,0,0,0,\underline{0},0,b,b,\dots$$
-The machine is now in state $C$, and so, following the rules of its transition function, it leaves the symbol $0$ as it is, moves one cell to the right, and remains in state $c$, so that the Turing machine now appears as follows:
+The machine is now in state $C$, and so, following the rules of its transition function, it leaves the symbol $0$ as it is, moves one cell to the right, and remains in state $C$, so that the Turing machine now appears as follows:
 $$\dots,b,b,b,0,0,0,0,\underline{0},b,b,\dots$$
 Since the machine is still in state $C$, it once again leaves the symbol $0$ as it is, moves one cell to the right, and remains in state $C$, so that the Turing machine now appears as follows:
 $$\dots,b,b,b,0,0,0,0,0,\underline{b},b,\dots$$
@@ -166,7 +166,7 @@ If the answer to this question were `yes,' then it would be possible, in princip
 While the details of Turing's proof are complicated (and Church's are even more so), he proceeds by first introducing the concept of a Turing machine. He then stipulates (but, importantly, does not prove) what is now called the \textbf{Church-Turing thesis}, which states that the functions that can be computed by any finite algorithm are just the Turing computable functions. He then shows that there are some WFFs of first-order logic such that, no matter how they are encoded, no Turing machine can determine whether they are tautologies. Importantly, these WFFs have a self-referential property. They define a Turing machine and then state whether or not that Turing machine, when given a certain input, whether it halts. Turing then proves that no Turing machine can say, for every possible description of any other Turing machine and an input to that Turing machine, whether the described Turing machine would halt when given the described input. Thus, Turing and Church effectively invented the theoretical framework that provides the foundation for all modern computing because they wanted to answer a question that was primarily about the nature of first-order logic.\par 
 
 
-In the paragraph section, we defined the Church-Turing thesis, which states that the function that can be computed by any finite algorithm and just those that can be computed by a Turing machine (i.e., the Turing computable functions). Why should we believe that this is true? Couldn't there be some sort of finite algorithm for computing a function that humans can intuitively follow, but which cannot be implement by a Turing machine. After all, a Turing machine is very limited in what it can do:\ it can only proceed one symbol at a time, and only move right or left in single steps. Surely there are algorithms that it can't implement?\par
+In the previous paragraph, we defined the Church-Turing thesis, which states that the functions that can be computed by any finite algorithm are just those that can be computed by a Turing machine (i.e., the Turing computable functions). Why should we believe that this is true? Couldn't there be some sort of finite algorithm for computing a function that humans can intuitively follow, but which cannot be implement by a Turing machine? After all, a Turing machine is very limited in what it can do:\ it can only proceed one symbol at a time, and only move right or left in single steps. Surely there are algorithms that it can't implement?\par
 
 Despite the pull of this skeptical intuition, there are some good reasons to think that the Church-Turing thesis holds. The first one is simply inductive:\ we have yet to find a procedure that is intuitively computable that cannot implemented on Turing machine. For some more complex computations, actually defining the Turing machine is incredibly tedious, and yet it can be done. The second class of reasons is that the set of Turing computable functions has been found to be equivalent to \textit{other} sets of functions that seem like good candidates for a description of the functions that can be computed by a finite algorithm. These equivalence relations are beyond the scope of this introduction. However, the three most important such results are:
 \begin{itemize}
@@ -174,7 +174,7 @@ Despite the pull of this skeptical intuition, there are some good reasons to thi
 
     \item The equivalence between the set of Turing computable functions and the programs of the simply-typed $\lambda$-calculus. 
 
-    \item The equivalence between the set of computable functions and the set of functions that can be proven to exist in an intuitionistic proof system for Peano arithmetic
+    \item The equivalence between the set of computable functions and the set of functions that can be proven to exist in an intuitionistic proof system for Peano arithmetic.
 \end{itemize}
 All of these results are extremely cool and very much worth studying in their own right if you are interested in computation.\par  
 
@@ -196,7 +196,7 @@ $$t_{\mathbf{1}_{Y}}(x,T)\leq\sum_{i=0}^{r}c_{i}\mu(x)^{i}=c_{r}\mu(x)^{r}+c_{r-
 Decision problems that fall into this category are generally thought to be \textbf{tractable}, since the amount of time that it takes to solve them grows manageably as the size of the input grows. Many basic computational problems, such as determining whether the sum of two numbers is equal to a third value, are in \textsf{P}. We say that problems in \textsf{P} can be \textbf{solved in polynomial time}.\par 
 
 
-Next, we will define the set of decision problems that can be computed in \textbf{non-deterministic polynomial time}, also known as the complexity class $\textsf{NP}$. To define this class, consider any decision problem $\mathbf{1}_{Y}:X\rightarrow\{0,1\}$. Next, we define a set of \textbf{witnesses} $W$ for the decision problem, and define a \textbf{verifier} $v_{Y}:(X\times W)\rightarrow\{0,1\}$, which is a function such that:
+Next, we will define the set of decision problems that can be computed in \textbf{non-deterministic polynomial time}, also known as the complexity class $\textsf{NP}$. To define this class, consider any decision problem $\mathbf{1}_{Y}:X\rightarrow\{0,1\}$. Next, we define a set of \textbf{witnesses} $W$ for the decision problem and define a \textbf{verifier} $v_{Y}:(X\times W)\rightarrow\{0,1\}$, which is a function such that:
 \begin{itemize}
     \item For any $x\in X$ such that $x\in Y$, there exists a witness $w$ such that $v_{Y}(x,w)=1$.
 
@@ -209,7 +209,7 @@ However, if we are given the witness $w=\{-12,-3,5,10\}$, we can immediately che
 \Lambda}(S,w)=1$ if the witness $w\in U$ is a subset of $S\in U$ and the elements of $w$ sum to $0$. Otherwise, $v_{
 \Lambda}(S,w)=0$.\par 
 
-Let $\nu:W\rightarrow\mathbbm{N}$ be a measure of the size of any witness. Let $t_{\mathbf{v}_{Y}}(x,w,T)$ be the amount of time that it takes a Turing machine that computes the verifier function $t_{\mathbf{v}_{Y}}$ to compute $t_{\mathbf{v}_{Y}}(x,w,T)$.
+Let $\nu:W\rightarrow\mathbbm{N}$ be a measure of the size of any witness. Let $t_{\mathbf{v}_{Y}}(x,w,T)$ be the amount of time that it takes a Turing machine that computes the verifier function $\mathbf{v}_{Y}$ to compute $\mathbf{v}_{Y}(x,w,T)$.
 \begin{definition}
     The decision problem of determining whether an element of some set $X$ is also an element of some set $Y$ is in the complexity class $\textsf{NP}$ if and only if there exists a Turing machine $T$, a set of witnesses $W$, and a verifier $v_{Y}:(X\times W)\rightarrow\{0,1\}$ such that such that maximum value of $t_{\mathbf{v}_{Y}}(x,w,T)$ for any $x\in X$ and any $w\in W$ can be expressed as a polynomial function of the size of $w$. In other words, there exists an $r\in\mathbbm{N}$ and an $n$-tuple of coefficients $(c_{0},\dots,c_{r})\in\mathbbm{R}^{r}$ such that, for some Turing machine $T$, all $x\in X$, and all $w\in W$
 $$t_{\mathbf{v}_{Y}}(x,w,T)\leq\sum_{i=0}^{r}c_{i}\nu(w)^{i}=c_{r}\nu(w)^{r}+c_{r-1}\nu(w)^{r-1}+\dots+c_{0}.$$
@@ -235,7 +235,7 @@ To my mind, what Turing and colleagues did in the 1930s provides perhaps the str
 
 \item Give a formal definition of a Turing machine such that, when its tape initial tape contains an input consisting of a string of $n_{1}$ zeros, followed by a blank symbol $b$, followed by a string of $n_{2}$ zeros, the machine changes the symbols on the tape to a single string of $n_{1}+n_{2}+1$ symbols, and then halts. In other words, define a Turing machine $T$ such that, for any input pair $(n_{1},n_{2})$, $T$ calculates $n_{1}+n_{2}+1$.
 
-\item Prove that if a single \textsf{NP}-Complete decision problem is in \textsf{P}, then $\textsf{P}=\textsf{NP}$. \textit{(You should be able to do this in a few English sentences, helping yourself to the definitions of the complexity classes \textsf{P} and \textsf{NP}.)}
+\item Prove that if a single \textsf{NP}-Complete decision problem is in \textsf{P}, then $\textsf{P}=\textsf{NP}$. \textit{(You should be able to do this in a few English sentences, helping yourself to the definitions of the complexity classes \textsf{P} and \textsf{NP}, as well as the definition of an \textsf{NP}-Complete problem.)}
 
 
 \end{enumerate}
